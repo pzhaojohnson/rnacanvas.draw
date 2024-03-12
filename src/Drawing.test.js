@@ -20,4 +20,15 @@ describe('Drawing class', () => {
     drawing.appendTo(container);
     expect(container.contains(drawing.svgDocDOMNode)).toBeTruthy();
   });
+
+  test('remove method', () => {
+    let drawing = new Drawing();
+
+    let container = document.createElement('div');
+    drawing.appendTo(container);
+
+    expect(container.contains(drawing.svgDocDOMNode)).toBeTruthy();
+    drawing.remove();
+    expect(container.contains(drawing.svgDocDOMNode)).toBeFalsy();
+  });
 });

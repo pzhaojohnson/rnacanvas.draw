@@ -24,4 +24,11 @@ export class Drawing {
   appendTo(container: HTMLElement): void {
     this.svgDoc.addTo(container);
   }
+
+  /**
+   * Removes the drawing from its parent container node.
+   */
+  remove(): void {
+    this.svgDoc.remove();
+  }
 }
