@@ -17,4 +17,11 @@ export class Drawing {
   get svgDocDOMNode() {
     return this.svgDoc.node;
   }
+
+  /**
+   * Appends the drawing to the container element.
+   */
+  appendTo(container: HTMLElement): void {
+    this.svgDoc.addTo(container);
+  }
 }
