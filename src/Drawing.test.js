@@ -42,4 +42,30 @@ describe('Drawing class', () => {
     expect(drawing.svgDoc.attr('width')).toBe('1589.22px');
     expect(drawing.svgDoc.attr('height')).toBe('2402.36px');
   });
+
+  test('horizontalClientScaling getter', () => {
+    let drawing = new Drawing();
+
+    drawing.svgDoc.viewbox(0, 0, 1812, 900);
+
+    Object.defineProperty(drawing.svgDocDOMNode, 'getBoundingClientRect', {
+      value: () => ({ width: 1693 }),
+      writable: true,
+    });
+
+    expect(drawing.horizontalClientScaling).toBeCloseTo(1693 / 1812);
+  });
+
+  test('verticalClientScaling getter', () => {
+    let drawing = new Drawing();
+
+    drawing.svgDoc.viewbox(0, 0, 600, 907);
+
+    Object.defineProperty(drawing.svgDocDOMNode, 'getBoundingClientRect', {
+      value: () => ({ height: 1184 }),
+      writable: true,
+    });
+
+    expect(drawing.verticalClientScaling).toBeCloseTo(1184 / 907);
+  });
 });

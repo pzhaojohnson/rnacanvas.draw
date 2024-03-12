@@ -2,6 +2,8 @@ import * as SVG from '@svgdotjs/svg.js';
 
 import { Scaling } from '@rnacanvas/draw.svg';
 
+import { HorizontalClientScaling, VerticalClientScaling } from '@rnacanvas/draw.svg';
+
 /**
  * A two-dimensional nucleic acid structure drawing.
  */
@@ -41,5 +43,23 @@ export class Drawing {
    */
   setScaling(scaling: number) {
     (new Scaling(this.svgDoc)).set(scaling);
+  }
+
+  /**
+   * The horizontal scaling factor of the drawing
+   * going from the coordinate system of its SVG document (as determined by its view box)
+   * to the client coordinate system (i.e., the coordinate system used by methods such as `getBoundingClientRect`).
+   */
+  get horizontalClientScaling(): number {
+    return (new HorizontalClientScaling(this.svgDoc)).get();
+  }
+
+  /**
+   * The vertical scaling factor of the drawing
+   * going from the coordinate system of its SVG document (as determined by its view box)
+   * to the client coordinate system (i.e., the coordinate system used by methods such as `getBoundingClientRect`).
+   */
+  get verticalClientScaling(): number {
+    return (new VerticalClientScaling(this.svgDoc)).get();
   }
 }
