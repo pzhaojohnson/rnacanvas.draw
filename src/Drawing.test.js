@@ -31,4 +31,15 @@ describe('Drawing class', () => {
     drawing.remove();
     expect(container.contains(drawing.svgDocDOMNode)).toBeFalsy();
   });
+
+  test('setScaling method', () => {
+    let drawing = new Drawing();
+
+    drawing.svgDoc.viewbox(0, 0, 729, 1102);
+
+    drawing.setScaling(2.18);
+
+    expect(drawing.svgDoc.attr('width')).toBe('1589.22px');
+    expect(drawing.svgDoc.attr('height')).toBe('2402.36px');
+  });
 });

@@ -1,5 +1,7 @@
 import * as SVG from '@svgdotjs/svg.js';
 
+import { Scaling } from '@rnacanvas/draw.svg';
+
 /**
  * A two-dimensional nucleic acid structure drawing.
  */
@@ -30,5 +32,14 @@ export class Drawing {
    */
   remove(): void {
     this.svgDoc.remove();
+  }
+
+  /**
+   * Sets the horizontal and vertical scaling of the drawing
+   * (as determined by the view box and width and height attributes of its SVG document)
+   * to the specified scaling factor.
+   */
+  setScaling(scaling: number) {
+    (new Scaling(this.svgDoc)).set(scaling);
   }
 }
