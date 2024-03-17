@@ -9,57 +9,52 @@ import { HorizontalClientScaling, VerticalClientScaling } from '@rnacanvas/draw.
  */
 export class Drawing {
   /**
-   * The SVG document of the drawing.
+   * The actual DOM node of the SVG document that is the drawing.
    *
    * Nucleic acid structures are to be drawn on this.
    */
-  readonly svgDoc = new SVG.Svg();
+  readonly domNode = (new SVG.Svg()).node;
 
   /**
-   * The actual DOM node of the SVG document of the drawing.
+   * Appends the SVG document that is the drawing to the container node.
    */
-  get svgDocDOMNode() {
-    return this.svgDoc.node;
+  appendTo(container: Node): void {
+    container.appendChild(this.domNode);
   }
 
   /**
-   * Appends the drawing to the container element.
-   */
-  appendTo(container: HTMLElement): void {
-    this.svgDoc.addTo(container);
-  }
-
-  /**
-   * Removes the drawing from its parent container node.
+   * Removes the SVG document that is the drawing from its parent container node.
+   *
+   * Has no effect if the SVG document that is the drawing had no parent container node to begin with.
    */
   remove(): void {
-    this.svgDoc.remove();
+    this.domNode.remove();
   }
 
   /**
    * Sets the horizontal and vertical scaling of the drawing
-   * (as determined by the view box and width and height attributes of its SVG document)
+   * (as determined by the view box and width and height attributes of the SVG document that is the drawing)
    * to the specified scaling factor.
    */
   setScaling(scaling: number) {
-    (new Scaling(this.svgDoc)).set(scaling);
+    (new Scaling(this.domNode)).set(scaling);
   }
 
   /**
    * The horizontal scaling factor of the drawing
-   * going from the coordinate system of its SVG document (as determined by its view box)
+   * going from the coordinate system of the SVG document that is the drawing (as determined by its view box)
    * to the client coordinate system (i.e., the coordinate system used by methods such as `getBoundingClientRect`).
    */
   get horizontalClientScaling(): number {
-    return (new HorizontalClientScaling(this.svgDoc)).get();
+    return (new HorizontalClientScaling(this.domNode)).get();
   }
 
   /**
    * The vertical scaling factor of the drawing
-   * going from the coordinate system of its SVG document (as determined by its view box)
+   * going from the coordinate system of the SVG document that is the drawing (as determined by its view box)
    * to the client coordinate system (i.e., the coordinate system used by methods such as `getBoundingClientRect`).
    */
   get verticalClientScaling(): number {
-    return (new VerticalClientScaling(this.svgDoc)).get();
+    return (new VerticalClientScaling(this.domNode)).get();
   }
 }
