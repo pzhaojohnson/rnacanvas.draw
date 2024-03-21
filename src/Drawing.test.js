@@ -115,4 +115,28 @@ describe('Drawing class', () => {
     expect(drawing.allPrimaryBonds[3]).toBe(pb);
     expect(drawing.domNode.childNodes[6]).toBe(pb.domNode);
   });
+
+  test('appendSecondaryBond method', () => {
+    let drawing = new Drawing();
+
+    let bs = [1, 2, 3, 4, 5, 6, 7, 8].map(() => Nucleobase.create('g'));
+    expect(bs.length).toBe(8);
+
+    // add some elements to append after
+    drawing.appendSecondaryBond(StraightBond.between(bs[0], bs[3]));
+    drawing.appendSecondaryBond(StraightBond.between(bs[0], bs[5]));
+    drawing.appendBase(Nucleobase.create('G'));
+    drawing.appendBase(Nucleobase.create('b'));
+    drawing.appendPrimaryBond(StraightBond.between(bs[2], bs[3]));
+
+    let sb = StraightBond.between(bs[6], bs[3]);
+
+    expect(drawing.allSecondaryBonds.includes(sb)).toBeFalsy();
+    expect(drawing.domNode.contains(sb.domNode)).toBeFalsy();
+
+    drawing.appendSecondaryBond(sb);
+
+    expect(drawing.allSecondaryBonds[2]).toBe(sb);
+    expect(drawing.domNode.childNodes[5]).toBe(sb.domNode);
+  });
 });

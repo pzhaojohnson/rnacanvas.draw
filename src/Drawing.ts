@@ -96,4 +96,23 @@ export class Drawing {
     pb.appendTo(this.domNode);
     this.allPrimaryBonds.push(pb);
   }
+
+  /**
+   * All secondary bonds in the drawing.
+   *
+   * Secondary bonds are meant to convey base-pairs in the secondary structure of a drawing
+   * and are expected to affect the layout of bases in the drawing.
+   *
+   * This array also effectively orders the secondary bonds in the drawing.
+   */
+  allSecondaryBonds: StraightBond<Nucleobase>[] = [];
+
+  /**
+   * Appends the secondary bond to both the SVG document that is the drawing
+   * and to the drawing's array of all secondary bonds.
+   */
+  appendSecondaryBond(sb: StraightBond<Nucleobase>): void {
+    sb.appendTo(this.domNode);
+    this.allSecondaryBonds.push(sb);
+  }
 }
