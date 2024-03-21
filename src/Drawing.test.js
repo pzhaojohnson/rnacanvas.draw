@@ -6,6 +6,20 @@ import { Drawing } from './Drawing';
 
 import { Nucleobase } from '@rnacanvas/draw.bases';
 
+import { StraightBond } from '@rnacanvas/draw.bonds';
+
+if (!SVGElement.prototype.getBBox) {
+  SVGElement.prototype.getBBox = () => ({ x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0 });
+}
+
+if (!SVGElement.prototype.getTotalLength) {
+  SVGElement.prototype.getTotalLength = () => 0;
+}
+
+if (!SVGElement.prototype.getPointAtLength) {
+  SVGElement.prototype.getPointAtLength = () => ({ x: 0, y: 0 });
+}
+
 describe('Drawing class', () => {
   test('appendTo method', () => {
     let drawing = new Drawing();
@@ -75,5 +89,30 @@ describe('Drawing class', () => {
 
     expect(drawing.allBasesSorted[3]).toBe(b);
     expect(drawing.domNode.childNodes[3]).toBe(b.domNode);
+  });
+
+  test('appendPrimaryBond method', () => {
+    let drawing = new Drawing();
+
+    let bs = [1, 2, 3, 4, 5, 6, 7, 8].map(() => Nucleobase.create('C'));
+    expect(bs.length).toBe(8);
+
+    // add some elements to append after
+    drawing.appendBase(bs[0]);
+    drawing.appendPrimaryBond(StraightBond.between(bs[0], bs[1]));
+    drawing.appendBase(bs[3]);
+    drawing.appendPrimaryBond(StraightBond.between(bs[1], bs[2]));
+    drawing.appendPrimaryBond(StraightBond.between(bs[5], bs[3]));
+    drawing.appendBase(bs[5]);
+
+    let pb = StraightBond.between(bs[2], bs[6]);
+
+    expect(drawing.allPrimaryBonds.includes(pb)).toBeFalsy();
+    expect(drawing.domNode.contains(pb.domNode)).toBeFalsy();
+
+    drawing.appendPrimaryBond(pb);
+
+    expect(drawing.allPrimaryBonds[3]).toBe(pb);
+    expect(drawing.domNode.childNodes[6]).toBe(pb.domNode);
   });
 });

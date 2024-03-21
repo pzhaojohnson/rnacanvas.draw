@@ -6,6 +6,8 @@ import { HorizontalClientScaling, VerticalClientScaling } from '@rnacanvas/draw.
 
 import type { Nucleobase } from '@rnacanvas/draw.bases';
 
+import type { StraightBond } from '@rnacanvas/draw.bonds';
+
 /**
  * A two-dimensional nucleic acid structure drawing.
  */
@@ -74,5 +76,24 @@ export class Drawing {
   appendBase(b: Nucleobase): void {
     b.appendTo(this.domNode);
     this.allBasesSorted.push(b);
+  }
+
+  /**
+   * All primary bonds in the drawing.
+   *
+   * Primary bonds are intended to connect consecutive bases
+   * and to convey the sequence of bases in the drawing.
+   *
+   * This array also effectively orders the primary bonds in the drawing.
+   */
+  allPrimaryBonds: StraightBond<Nucleobase>[] = [];
+
+  /**
+   * Appends the primary bond both to the SVG document that is the drawing
+   * and to the drawing's array of all primary bonds.
+   */
+  appendPrimaryBond(pb: StraightBond<Nucleobase>): void {
+    pb.appendTo(this.domNode);
+    this.allPrimaryBonds.push(pb);
   }
 }
