@@ -4,6 +4,8 @@ import { Scaling } from '@rnacanvas/draw.svg';
 
 import { HorizontalClientScaling, VerticalClientScaling } from '@rnacanvas/draw.svg';
 
+import type { Nucleobase } from '@rnacanvas/draw.bases';
+
 /**
  * A two-dimensional nucleic acid structure drawing.
  */
@@ -56,5 +58,21 @@ export class Drawing {
    */
   get verticalClientScaling(): number {
     return (new VerticalClientScaling(this.domNode)).get();
+  }
+
+  /**
+   * All bases in the drawing.
+   *
+   * The ordering of bases in this array is the ordering of bases in the drawing itself.
+   */
+  allBasesSorted: Nucleobase[] = [];
+
+  /**
+   * Appends the base both to the SVG document that is the drawing
+   * and to the drawing's (ordered) array of nucleobases.
+   */
+  appendBase(b: Nucleobase): void {
+    b.appendTo(this.domNode);
+    this.allBasesSorted.push(b);
   }
 }

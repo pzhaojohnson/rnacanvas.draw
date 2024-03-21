@@ -4,6 +4,8 @@
 
 import { Drawing } from './Drawing';
 
+import { Nucleobase } from '@rnacanvas/draw.bases';
+
 describe('Drawing class', () => {
   test('appendTo method', () => {
     let drawing = new Drawing();
@@ -54,5 +56,24 @@ describe('Drawing class', () => {
     drawing.domNode.getBoundingClientRect = () => ({ height: 1184 });
 
     expect(drawing.verticalClientScaling).toBeCloseTo(1184 / 907);
+  });
+
+  test('appendBase method', () => {
+    let drawing = new Drawing();
+
+    // add some bases to append after
+    drawing.appendBase(Nucleobase.create('A'));
+    drawing.appendBase(Nucleobase.create('C'));
+    drawing.appendBase(Nucleobase.create('G'));
+
+    let b = Nucleobase.create('b');
+
+    expect(drawing.allBasesSorted.includes(b)).toBeFalsy();
+    expect(drawing.domNode.contains(b.domNode)).toBeFalsy();
+
+    drawing.appendBase(b);
+
+    expect(drawing.allBasesSorted[3]).toBe(b);
+    expect(drawing.domNode.childNodes[3]).toBe(b.domNode);
   });
 });
