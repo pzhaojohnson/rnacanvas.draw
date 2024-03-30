@@ -57,6 +57,14 @@ describe('Drawing class', () => {
     expect(drawing.minY).toBe(-23.09613);
   });
 
+  test('width getter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { width: 1902.340826 } };
+
+    expect(drawing.width).toBe(1902.340826);
+  });
+
   test('setScaling method', () => {
     let drawing = new Drawing();
 

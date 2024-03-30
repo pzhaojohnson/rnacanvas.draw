@@ -54,6 +54,16 @@ export class Drawing {
   }
 
   /**
+   * The width of the drawing in the coordinate system of the drawing
+   * (i.e., the width of the view box of the SVG document that is the drawing).
+   *
+   * Note that this is different from the width attribute of the SVG document that is the drawing.
+   */
+  get width(): number {
+    return this.domNode.viewBox.baseVal.width;
+  }
+
+  /**
    * Sets the horizontal and vertical scaling of the drawing
    * (as determined by the view box and width and height attributes of the SVG document that is the drawing)
    * to the specified scaling factor.
