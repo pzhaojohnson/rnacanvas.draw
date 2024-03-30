@@ -36,6 +36,15 @@ export class Drawing {
   }
 
   /**
+   * The minimum X coordinate in the coordinate system of the drawing.
+   *
+   * Is the same as the minimum X coordinate of the view box of the SVG document that is the drawing.
+   */
+  get minX(): number {
+    return this.domNode.viewBox.baseVal.x;
+  }
+
+  /**
    * Sets the horizontal and vertical scaling of the drawing
    * (as determined by the view box and width and height attributes of the SVG document that is the drawing)
    * to the specified scaling factor.

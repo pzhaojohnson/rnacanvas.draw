@@ -41,6 +41,14 @@ describe('Drawing class', () => {
     expect(container.contains(drawing.domNode)).toBeFalsy();
   });
 
+  test('minX getter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { x: 180.2753 } };
+
+    expect(drawing.minX).toBe(180.2753);
+  });
+
   test('setScaling method', () => {
     let drawing = new Drawing();
 
