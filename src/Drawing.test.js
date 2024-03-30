@@ -65,6 +65,14 @@ describe('Drawing class', () => {
     expect(drawing.width).toBe(1902.340826);
   });
 
+  test('height getter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { height: 3214.889701 } };
+
+    expect(drawing.height).toBe(3214.889701);
+  });
+
   test('setScaling method', () => {
     let drawing = new Drawing();
 

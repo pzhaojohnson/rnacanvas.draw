@@ -64,6 +64,16 @@ export class Drawing {
   }
 
   /**
+   * The height of the drawing in the coordinate system of the drawing
+   * (i.e., the height of the view box of the SVG document that is the drawing).
+   *
+   * Note that this is different from the height attribute of the SVG document that is the drawing.
+   */
+  get height(): number {
+    return this.domNode.viewBox.baseVal.height;
+  }
+
+  /**
    * Sets the horizontal and vertical scaling of the drawing
    * (as determined by the view box and width and height attributes of the SVG document that is the drawing)
    * to the specified scaling factor.
