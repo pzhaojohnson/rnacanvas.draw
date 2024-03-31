@@ -89,6 +89,15 @@ describe('Drawing class', () => {
     expect(drawing.height).toBe(3214.889701);
   });
 
+  test('horizontalScaling getter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { width: 1603.472 } };
+    drawing.domNode.width = { baseVal: { value: 1288.4278 } };
+
+    expect(drawing.horizontalScaling).toBeCloseTo(1288.4278 / 1603.472);
+  });
+
   test('setScaling method', () => {
     let drawing = new Drawing();
 

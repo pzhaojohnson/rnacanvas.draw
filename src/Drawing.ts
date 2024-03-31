@@ -92,6 +92,17 @@ export class Drawing {
   }
 
   /**
+   * The horizontal scaling factor of the drawing
+   * (as determined by the width and view box width attributes of the SVG document that is the drawing).
+   */
+  get horizontalScaling(): number {
+    let viewBoxWidth = this.width;
+    let widthAttribute = this.domNode.width.baseVal.value;
+
+    return widthAttribute / viewBoxWidth;
+  }
+
+  /**
    * Sets the horizontal and vertical scaling of the drawing
    * (as determined by the view box and width and height attributes of the SVG document that is the drawing)
    * to the specified scaling factor.
