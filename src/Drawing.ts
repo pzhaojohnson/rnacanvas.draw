@@ -77,6 +77,27 @@ export class Drawing {
   }
 
   /**
+   * Adjusts the width of the view box of the SVG document that is the drawing
+   * to change its maximum X coordinate.
+   *
+   * Maintains the view box minimum X coordinate.
+   *
+   * Also maintains the horizontal scaling of the drawing.
+   */
+  set maxX(maxX) {
+    // the new width
+    let width = maxX - this.minX;
+
+    // cache
+    let horizontalScaling = this.horizontalScaling;
+
+    this.domNode.setAttribute('viewBox', `${this.minX} ${this.minY} ${width} ${this.height}`);
+
+    // restore horizontal scaling
+    this.domNode.setAttribute('width', (horizontalScaling * width).toString());
+  }
+
+  /**
    * The minimum Y coordinate in the coordinate system of the drawing.
    *
    * Is the same as the minimum Y coordinate of the view box of the SVG document that is the drawing.

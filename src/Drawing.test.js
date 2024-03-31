@@ -72,6 +72,20 @@ describe('Drawing class', () => {
     expect(drawing.maxX).toBeCloseTo((-18.39104) + 555.38194);
   });
 
+  test('maxX setter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { x: 12.08, y: -18.4, width: 8819, height: 2369 } };
+    drawing.domNode.width = { baseVal: { value: 6607 } };
+
+    drawing.maxX = 12005;
+
+    expect(drawing.domNode.getAttribute('viewBox')).toBe('12.08 -18.4 11992.92 2369');
+
+    // maintained horizontal scaling
+    expect(drawing.domNode.getAttribute('width')).toBe('8984.830756321579');
+  });
+
   test('minY getter', () => {
     let drawing = new Drawing();
 
