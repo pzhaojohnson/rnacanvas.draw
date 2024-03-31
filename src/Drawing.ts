@@ -45,6 +45,15 @@ export class Drawing {
   }
 
   /**
+   * The maximum X coordinate in the coordinate system of the drawing.
+   *
+   * Is the same as the maximum X coordinate of the view box of the SVG document that is the drawing.
+   */
+  get maxX(): number {
+    return this.minX + this.width;
+  }
+
+  /**
    * The minimum Y coordinate in the coordinate system of the drawing.
    *
    * Is the same as the minimum Y coordinate of the view box of the SVG document that is the drawing.
