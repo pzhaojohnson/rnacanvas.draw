@@ -107,6 +107,29 @@ export class Drawing {
   }
 
   /**
+   * Sets the minimum Y coordinate of the view box of the SVG document that is the drawing.
+   *
+   * Also adjusts the height of the view box to maintain its maximum Y coordinate.
+   *
+   * Also maintains the vertical scaling of the drawing
+   * by adjusting the height attribute of the SVG document that is the drawing.
+   */
+  set minY(minY) {
+    let maxY = this.maxY;
+
+    // the new height
+    let height = maxY - minY;
+
+    // cache
+    let verticalScaling = this.verticalScaling;
+
+    this.domNode.setAttribute('viewBox', `${this.minX} ${minY} ${this.width} ${height}`);
+
+    // restore vertical scaling
+    this.domNode.setAttribute('height', (verticalScaling * height).toString());
+  }
+
+  /**
    * The maximum Y coordinate in the coordinate system of the drawing.
    *
    * Is the same as the maximum Y coordinate of the view box of the SVG document that is the drawing.
