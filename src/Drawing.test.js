@@ -110,6 +110,20 @@ describe('Drawing class', () => {
     expect(drawing.width).toBe(1902.340826);
   });
 
+  test('width setter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { x: -12.5, y: 2.28, width: 991.2, height: 1206 } };
+    drawing.domNode.width = { baseVal: { value: 1419 } };
+
+    drawing.width = 1392;
+
+    expect(drawing.domNode.getAttribute('viewBox')).toBe('-12.5 2.28 1392 1206');
+
+    // maintained horizontal scaling
+    expect(drawing.domNode.getAttribute('width')).toBe('1992.7845036319611');
+  });
+
   test('height getter', () => {
     let drawing = new Drawing();
 

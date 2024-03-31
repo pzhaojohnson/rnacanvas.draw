@@ -126,6 +126,18 @@ export class Drawing {
   }
 
   /**
+   * Sets the width of the view box of the SVG document that is the drawing.
+   *
+   * Maintains view box minimum X coordinate while changing view box maximum X coordinate.
+   *
+   * Also maintains the horizontal scaling of the drawing
+   * by adjusting the width attribute of the SVG document that is the drawing.
+   */
+  set width(width) {
+    this.maxX = this.minX + width;
+  }
+
+  /**
    * The height of the drawing in the coordinate system of the drawing
    * (i.e., the height of the view box of the SVG document that is the drawing).
    *
