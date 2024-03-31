@@ -65,6 +65,14 @@ describe('Drawing class', () => {
     expect(drawing.minY).toBe(-23.09613);
   });
 
+  test('maxY getter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { y: 23.293138, height: 199.4824 } };
+
+    expect(drawing.maxY).toBeCloseTo(23.293138 + 199.4824);
+  });
+
   test('width getter', () => {
     let drawing = new Drawing();
 

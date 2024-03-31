@@ -63,6 +63,15 @@ export class Drawing {
   }
 
   /**
+   * The maximum Y coordinate in the coordinate system of the drawing.
+   *
+   * Is the same as the maximum Y coordinate of the view box of the SVG document that is the drawing.
+   */
+  get maxY(): number {
+    return this.minY + this.height;
+  }
+
+  /**
    * The width of the drawing in the coordinate system of the drawing
    * (i.e., the width of the view box of the SVG document that is the drawing).
    *
