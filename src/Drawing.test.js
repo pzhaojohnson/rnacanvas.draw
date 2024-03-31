@@ -160,6 +160,20 @@ describe('Drawing class', () => {
     expect(drawing.height).toBe(3214.889701);
   });
 
+  test('height setter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { x: -12.83, y: 2.85, width: 2100.3, height: 1892.1 } };
+    drawing.domNode.height = { baseVal: { value: 603.7 } };
+
+    drawing.height = 2209.8;
+
+    expect(drawing.domNode.getAttribute('viewBox')).toBe('-12.83 2.85 2100.3 2209.8');
+
+    // maintained vertical scaling
+    expect(drawing.domNode.getAttribute('height')).toBe('705.0664658316159');
+  });
+
   test('horizontalScaling getter', () => {
     let drawing = new Drawing();
 
