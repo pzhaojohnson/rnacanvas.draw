@@ -98,6 +98,16 @@ describe('Drawing class', () => {
     expect(drawing.horizontalScaling).toBeCloseTo(1288.4278 / 1603.472);
   });
 
+  test('horizontalScaling setter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { width: 2133.02 } };
+
+    drawing.horizontalScaling = 2.3;
+
+    expect(drawing.domNode.getAttribute('width')).toBe((2.3 * 2133.02).toString());
+  });
+
   test('setScaling method', () => {
     let drawing = new Drawing();
 
