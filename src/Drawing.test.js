@@ -49,6 +49,21 @@ describe('Drawing class', () => {
     expect(drawing.minX).toBe(180.2753);
   });
 
+  test('minX setter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { x: 0.59, y: 1.22, width: 8842, height: 6503 } };
+    drawing.domNode.width = { baseVal: { value: 10228 } };
+
+    drawing.minX = -6.21;
+
+    // must change width as well to maintain maximum X coordinate
+    expect(drawing.domNode.getAttribute('viewBox')).toBe('-6.21 1.22 8848.8 6503');
+
+    // maintained horizontal scaling
+    expect(drawing.domNode.getAttribute('width')).toBe('10235.865912689436');
+  });
+
   test('maxX getter', () => {
     let drawing = new Drawing();
 
