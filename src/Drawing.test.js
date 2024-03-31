@@ -117,6 +117,16 @@ describe('Drawing class', () => {
     expect(drawing.verticalScaling).toBeCloseTo(2560.88 / 2101.9983);
   });
 
+  test('verticalScaling setter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.viewBox = { baseVal: { height: 2482.087 } };
+
+    drawing.verticalScaling = 0.782;
+
+    expect(drawing.domNode.getAttribute('height')).toBe((0.782 * 2482.087).toString());
+  });
+
   test('setScaling method', () => {
     let drawing = new Drawing();
 

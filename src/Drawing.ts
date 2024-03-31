@@ -130,6 +130,18 @@ export class Drawing {
   }
 
   /**
+   * Sets the vertical scaling of the drawing
+   * by adjusting the height attribute of the SVG document that is the drawing.
+   *
+   * Does not modify the view box of the drawing.
+   */
+  set verticalScaling(verticalScaling) {
+    let viewBoxHeight = this.height;
+
+    this.domNode.setAttribute('height', (verticalScaling * viewBoxHeight).toString());
+  }
+
+  /**
    * Sets the horizontal and vertical scaling of the drawing
    * (as determined by the view box and width and height attributes of the SVG document that is the drawing)
    * to the specified scaling factor.
