@@ -147,7 +147,8 @@ export class Drawing {
    * to the specified scaling factor.
    */
   setScaling(scaling: number) {
-    (new Scaling(this.domNode)).set(scaling);
+    this.horizontalScaling = scaling;
+    this.verticalScaling = scaling;
   }
 
   /**

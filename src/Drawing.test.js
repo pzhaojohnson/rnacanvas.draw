@@ -134,8 +134,8 @@ describe('Drawing class', () => {
 
     drawing.setScaling(2.18);
 
-    expect(drawing.domNode.getAttribute('width')).toBe('1589.22px');
-    expect(drawing.domNode.getAttribute('height')).toBe('2402.36px');
+    expect(drawing.domNode.getAttribute('width')).toBe((2.18 * 729).toString());
+    expect(drawing.domNode.getAttribute('height')).toBe((2.18 * 1102).toString());
   });
 
   test('horizontalClientScaling getter', () => {
