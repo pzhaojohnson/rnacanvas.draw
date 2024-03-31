@@ -94,6 +94,8 @@ export class Drawing {
   /**
    * The horizontal scaling factor of the drawing
    * (as determined by the width and view box width attributes of the SVG document that is the drawing).
+   *
+   * Might possibly return a nonfinite value (e.g., if view box width is zero).
    */
   get horizontalScaling(): number {
     let viewBoxWidth = this.width;
