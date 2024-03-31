@@ -117,6 +117,19 @@ export class Drawing {
   }
 
   /**
+   * The vertical scaling factor of the drawing
+   * (as determined by the height and view box height attributes of the SVG document that is the drawing).
+   *
+   * Might possibly return a nonfinite value (e.g., if view box height is zero).
+   */
+  get verticalScaling(): number {
+    let viewBoxHeight = this.height;
+    let heightAttribute = this.domNode.height.baseVal.value;
+
+    return heightAttribute / viewBoxHeight;
+  }
+
+  /**
    * Sets the horizontal and vertical scaling of the drawing
    * (as determined by the view box and width and height attributes of the SVG document that is the drawing)
    * to the specified scaling factor.
