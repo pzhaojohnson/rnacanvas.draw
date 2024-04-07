@@ -8,6 +8,19 @@ import { Nucleobase } from '@rnacanvas/draw.bases';
 
 import { StraightBond } from '@rnacanvas/draw.bonds';
 
+/**
+ * Returns true if the value is a string of a finite number and false otherwise.
+ */
+function isFiniteNumberString(value) {
+  if (typeof value != 'string') {
+    return false;
+  }
+
+  let n = Number.parseFloat(value);
+
+  return Number.isFinite(n) && n.toString() === value;
+}
+
 if (!SVGElement.prototype.getBBox) {
   SVGElement.prototype.getBBox = () => ({ x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0 });
 }
@@ -20,40 +33,89 @@ if (!SVGElement.prototype.getPointAtLength) {
   SVGElement.prototype.getPointAtLength = () => ({ x: 0, y: 0 });
 }
 
-describe('Drawing class', () => {
-  test('appendTo method', () => {
-    let drawing = new Drawing();
-    let container = document.createElement('div');
+function parseViewBox(viewBoxString) {
+  expect(typeof viewBoxString).toBe('string');
 
+  let values = viewBoxString.split(' ');
+  expect(values.length).toBe(4);
+
+  values.forEach(v => {
+    expect(isFiniteNumberString(v)).toBeTruthy();
+  });
+
+  return {
+    x: Number.parseFloat(values[0]),
+    y: Number.parseFloat(values[1]),
+    width: Number.parseFloat(values[2]),
+    height: Number.parseFloat(values[3]),
+  };
+}
+
+describe('Drawing class', () => {
+  let drawing = null;
+
+  beforeEach(() => {
+    drawing = new Drawing();
+
+    if (!drawing.domNode.viewBox) {
+      Object.defineProperty(drawing.domNode, 'viewBox', {
+        get: () => ({ baseVal: parseViewBox(drawing.domNode.getAttribute('viewBox')) }),
+      });
+    }
+
+    if (!drawing.domNode.width) {
+      Object.defineProperty(drawing.domNode, 'width', {
+        get: () => {
+          let width = drawing.domNode.getAttribute('width');
+          expect(isFiniteNumberString(width)).toBeTruthy();
+          return { baseVal: { value: Number.parseFloat(width) } };
+        },
+      });
+    }
+
+    if (!drawing.domNode.height) {
+      Object.defineProperty(drawing.domNode, 'height', {
+        get: () => {
+          let height = drawing.domNode.getAttribute('height');
+          expect(isFiniteNumberString(height)).toBeTruthy();
+          return { baseVal: { value: Number.parseFloat(height) } };
+        },
+      });
+    }
+  });
+
+  afterEach(() => {
+    drawing.remove();
+    drawing = null;
+  });
+
+  test('appendTo method', () => {
+    let container = document.createElement('div');
     expect(container.contains(drawing.domNode)).toBeFalsy();
+
     drawing.appendTo(container);
     expect(container.contains(drawing.domNode)).toBeTruthy();
   });
 
   test('remove method', () => {
-    let drawing = new Drawing();
-
     let container = document.createElement('div');
-    drawing.appendTo(container);
 
+    drawing.appendTo(container);
     expect(container.contains(drawing.domNode)).toBeTruthy();
+
     drawing.remove();
     expect(container.contains(drawing.domNode)).toBeFalsy();
   });
 
   test('minX getter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: 180.2753 } };
+    drawing.domNode.setAttribute('viewBox', '180.2753 5 10 200');
 
     expect(drawing.minX).toBe(180.2753);
   });
 
   test('minX setter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: 0.59, y: 1.22, width: 8842, height: 6503 } };
-    drawing.domNode.width = { baseVal: { value: 10228 } };
+    drawing.domNode.setAttribute('viewBox', '0.59 1.22 8842 6503');
+    drawing.domNode.setAttribute('width', '10228');
 
     drawing.minX = -6.21;
 
@@ -65,18 +127,14 @@ describe('Drawing class', () => {
   });
 
   test('maxX getter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: -18.39104, width: 555.38194 } };
+    drawing.domNode.setAttribute('viewBox', '-18.39104 20 555.38194 42');
 
     expect(drawing.maxX).toBeCloseTo((-18.39104) + 555.38194);
   });
 
   test('maxX setter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: 12.08, y: -18.4, width: 8819, height: 2369 } };
-    drawing.domNode.width = { baseVal: { value: 6607 } };
+    drawing.domNode.setAttribute('viewBox', '12.08 -18.4 8819 2369');
+    drawing.domNode.setAttribute('width', '6607');
 
     drawing.maxX = 12005;
 
@@ -87,18 +145,14 @@ describe('Drawing class', () => {
   });
 
   test('minY getter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { y: -23.09613 } };
+    drawing.domNode.setAttribute('viewBox', '15 -23.09613 27 84');
 
     expect(drawing.minY).toBe(-23.09613);
   });
 
   test('minY setter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: -8.05, y: -2.33, width: 902, height: 1282.3 } };
-    drawing.domNode.height = { baseVal: { value: 1108.4 } };
+    drawing.domNode.setAttribute('viewBox', '-8.05 -2.33 902 1282.3');
+    drawing.domNode.setAttribute('height', '1108.4');
 
     drawing.minY = 8.12;
 
@@ -109,18 +163,14 @@ describe('Drawing class', () => {
   });
 
   test('maxY getter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { y: 23.293138, height: 199.4824 } };
+    drawing.domNode.setAttribute('viewBox', '12 23.293138 25 199.4824');
 
     expect(drawing.maxY).toBeCloseTo(23.293138 + 199.4824);
   });
 
   test('maxY setter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: 12.08, y: -2.57, width: 1522.1, height: 1980.02 } };
-    drawing.domNode.height = { baseVal: { value: 1776.23 } };
+    drawing.domNode.setAttribute('viewBox', '12.08 -2.57 1522.1 1980.02');
+    drawing.domNode.setAttribute('height', '1776.23');
 
     drawing.maxY = 2504.8;
 
@@ -131,18 +181,14 @@ describe('Drawing class', () => {
   });
 
   test('width getter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { width: 1902.340826 } };
+    drawing.domNode.setAttribute('viewBox', '20 -12 1902.340826 57');
 
     expect(drawing.width).toBe(1902.340826);
   });
 
   test('width setter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: -12.5, y: 2.28, width: 991.2, height: 1206 } };
-    drawing.domNode.width = { baseVal: { value: 1419 } };
+    drawing.domNode.setAttribute('viewBox', '-12.5 2.28 991.2 1206');
+    drawing.domNode.setAttribute('width', '1419');
 
     drawing.width = 1392;
 
@@ -153,18 +199,14 @@ describe('Drawing class', () => {
   });
 
   test('height getter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { height: 3214.889701 } };
+    drawing.domNode.setAttribute('viewBox', '3 -9 24 3214.889701');
 
     expect(drawing.height).toBe(3214.889701);
   });
 
   test('height setter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: -12.83, y: 2.85, width: 2100.3, height: 1892.1 } };
-    drawing.domNode.height = { baseVal: { value: 603.7 } };
+    drawing.domNode.setAttribute('viewBox', '-12.83 2.85 2100.3 1892.1');
+    drawing.domNode.setAttribute('height', '603.7');
 
     drawing.height = 2209.8;
 
@@ -175,18 +217,14 @@ describe('Drawing class', () => {
   });
 
   test('horizontalScaling getter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { width: 1603.472 } };
-    drawing.domNode.width = { baseVal: { value: 1288.4278 } };
+    drawing.domNode.setAttribute('viewBox', '55 -24 1603.472 88');
+    drawing.domNode.setAttribute('width', '1288.4278');
 
     expect(drawing.horizontalScaling).toBeCloseTo(1288.4278 / 1603.472);
   });
 
   test('horizontalScaling setter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { width: 2133.02 } };
+    drawing.domNode.setAttribute('viewBox', '554 -228.1 2133.02 881');
 
     drawing.horizontalScaling = 2.3;
 
@@ -194,18 +232,14 @@ describe('Drawing class', () => {
   });
 
   test('verticalScaling getter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { height: 2101.9983 } };
-    drawing.domNode.height = { baseVal: { value: 2560.88 } };
+    drawing.domNode.setAttribute('viewBox', '-21.4 552.3 1012.6 2101.9983');
+    drawing.domNode.setAttribute('height', '2560.88');
 
     expect(drawing.verticalScaling).toBeCloseTo(2560.88 / 2101.9983);
   });
 
   test('verticalScaling setter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { height: 2482.087 } };
+    drawing.domNode.setAttribute('viewBox', '22 -10 884.257 2482.087');
 
     drawing.verticalScaling = 0.782;
 
@@ -213,9 +247,7 @@ describe('Drawing class', () => {
   });
 
   test('setScaling method', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: 0, y: 0, width: 729, height: 1102 } };
+    drawing.domNode.setAttribute('viewBox', '0 0 729 1102');
 
     drawing.setScaling(2.18);
 
@@ -224,9 +256,7 @@ describe('Drawing class', () => {
   });
 
   test('horizontalClientScaling getter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: 0, y: 0, width: 1812, height: 900 } };
+    drawing.domNode.setAttribute('viewBox', '0 0 1812 900');
 
     drawing.domNode.getBoundingClientRect = () => ({ width: 1693 });
 
@@ -234,9 +264,7 @@ describe('Drawing class', () => {
   });
 
   test('verticalClientScaling getter', () => {
-    let drawing = new Drawing();
-
-    drawing.domNode.viewBox = { baseVal: { x: 0, y: 0, width: 600, height: 907 } };
+    drawing.domNode.setAttribute('viewBox', '0 0 600 907');
 
     drawing.domNode.getBoundingClientRect = () => ({ height: 1184 });
 
@@ -244,8 +272,6 @@ describe('Drawing class', () => {
   });
 
   test('appendBase method', () => {
-    let drawing = new Drawing();
-
     // add some bases to append after
     drawing.appendBase(Nucleobase.create('A'));
     drawing.appendBase(Nucleobase.create('C'));
@@ -263,8 +289,6 @@ describe('Drawing class', () => {
   });
 
   test('appendPrimaryBond method', () => {
-    let drawing = new Drawing();
-
     let bs = [1, 2, 3, 4, 5, 6, 7, 8].map(() => Nucleobase.create('C'));
     expect(bs.length).toBe(8);
 
@@ -288,8 +312,6 @@ describe('Drawing class', () => {
   });
 
   test('appendSecondaryBond method', () => {
-    let drawing = new Drawing();
-
     let bs = [1, 2, 3, 4, 5, 6, 7, 8].map(() => Nucleobase.create('g'));
     expect(bs.length).toBe(8);
 
