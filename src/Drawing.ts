@@ -9,6 +9,16 @@ import type { Nucleobase } from '@rnacanvas/draw.bases';
 import type { StraightBond } from '@rnacanvas/draw.bonds';
 
 /**
+ * The minimum and maximum X and Y coordinates of a drawing.
+ */
+type Boundaries = {
+  readonly minX: number;
+  readonly maxX: number;
+  readonly minY: number;
+  readonly maxY: number;
+};
+
+/**
  * A two-dimensional nucleic acid structure drawing.
  */
 export class Drawing {
@@ -158,6 +168,19 @@ export class Drawing {
 
     // restore vertical scaling
     this.domNode.setAttribute('height', (verticalScaling * height).toString());
+  }
+
+  /**
+   * Set the minimum and maximum X and Y coordinates of the drawing.
+   *
+   * Maintains the horizontal and vertical scalings of the drawing
+   * by adjusting the width and height attributes of the SVG document that is the drawing.
+   */
+  setBoundaries({ minX, maxX, minY, maxY }: Boundaries) {
+    this.minX = minX;
+    this.maxX = maxX;
+    this.minY = minY;
+    this.maxY = maxY;
   }
 
   /**

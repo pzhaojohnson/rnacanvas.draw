@@ -180,6 +180,29 @@ describe('Drawing class', () => {
     expect(drawing.domNode.getAttribute('height')).toBe('2249.3034490055657');
   });
 
+  describe('setBoundaries method', () => {
+    beforeEach(() => {
+      drawing.domNode.setAttribute('viewBox', '-52.7 88.4 101.89 902.4');
+
+      drawing.domNode.setAttribute('width', '82.11');
+      drawing.domNode.setAttribute('height', '1257');
+
+      drawing.setBoundaries({ minX: -13.4, maxX: 128.3, minY: 412, maxY: 1072.8 });
+    });
+
+    it('sets the minimum and maximum X and Y coordinates', () => {
+      expect(drawing.minX).toBeCloseTo(-13.4);
+      expect(drawing.maxX).toBeCloseTo(128.3);
+      expect(drawing.minY).toBeCloseTo(412);
+      expect(drawing.maxY).toBeCloseTo(1072.8);
+    });
+
+    it('maintains horizontal and vertical scalings', () => {
+      expect(drawing.horizontalScaling).toBeCloseTo(82.11 / 101.89);
+      expect(drawing.verticalScaling).toBeCloseTo(1257 / 902.4);
+    });
+  });
+
   test('width getter', () => {
     drawing.domNode.setAttribute('viewBox', '20 -12 1902.340826 57');
 
