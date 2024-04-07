@@ -1,7 +1,5 @@
 import * as SVG from '@svgdotjs/svg.js';
 
-import { Scaling } from '@rnacanvas/draw.svg';
-
 import { HorizontalClientScaling, VerticalClientScaling } from '@rnacanvas/draw.svg';
 
 import type { Nucleobase } from '@rnacanvas/draw.bases';
