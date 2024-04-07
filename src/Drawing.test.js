@@ -33,6 +33,15 @@ if (!SVGElement.prototype.getPointAtLength) {
   SVGElement.prototype.getPointAtLength = () => ({ x: 0, y: 0 });
 }
 
+['x1', 'y1', 'x2', 'y2'].forEach(coordinateName => {
+  if (!SVGElement.prototype[coordinateName]) {
+    Object.defineProperty(SVGElement.prototype, coordinateName, {
+      value: { baseVal: { value: 0 } },
+      writable: true,
+    });
+  }
+});
+
 function parseViewBox(viewBoxString) {
   expect(typeof viewBoxString).toBe('string');
 
