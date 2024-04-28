@@ -393,6 +393,18 @@ export class Drawing {
   }
 
   /**
+   * Default values for newly created secondary bonds created through this drawing
+   * (e.g., by calling the `addSecondaryBond` method).
+   */
+  get secondaryBondDefaults() {
+    return this.secondaryBondsDrawing.secondaryBondDefaults;
+  }
+
+  set secondaryBondDefaults(secondaryBondDefaults) {
+    this.secondaryBondsDrawing.secondaryBondDefaults = secondaryBondDefaults;
+  }
+
+  /**
    * All secondary bonds in the drawing.
    *
    * Secondary bonds are meant to convey base-pairs in the secondary structure of a drawing
