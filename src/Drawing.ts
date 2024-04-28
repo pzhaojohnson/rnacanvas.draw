@@ -331,6 +331,15 @@ export class Drawing {
   }
 
   /**
+   * Creates a new nucleobase with the specified text content and appends it to the drawing.
+   *
+   * Returns the newly added nucleobase.
+   */
+  addBase(textContent: string): Nucleobase {
+    return this.basesDrawing.add(textContent);
+  }
+
+  /**
    * All primary bonds in the drawing.
    *
    * Primary bonds are intended to connect consecutive bases
