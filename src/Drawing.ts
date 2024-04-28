@@ -415,4 +415,13 @@ export class Drawing {
   appendSecondaryBond(sb: StraightBond<Nucleobase>): void {
     this.secondaryBondsDrawing.append(sb);
   }
+
+  /**
+   * Creates a new secondary bond between the two bases and appends it to the drawing.
+   *
+   * Returns the newly added secondary bond.
+   */
+  addSecondaryBond(base1: Nucleobase, base2: Nucleobase): SecondaryBond {
+    return this.secondaryBondsDrawing.add(base1, base2);
+  }
 }
