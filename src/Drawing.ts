@@ -375,6 +375,10 @@ export class Drawing {
     return this.primaryBondsDrawing.primaryBonds;
   }
 
+  set allPrimaryBonds(allPrimaryBonds) {
+    this.primaryBondsDrawing.primaryBonds = allPrimaryBonds;
+  }
+
   /**
    * Appends the primary bond both to the SVG document that is the drawing
    * and to the drawing's array of all primary bonds.
