@@ -19,7 +19,7 @@ export class BondsDrawing<T extends Bond> {
    */
   private elementsDrawing: ElementsDrawing<T>;
 
-  constructor(private svgDoc: SVGSVGElement, public bonds: T[]) {
+  constructor(private svgDoc: SVGSVGElement, bonds: T[]) {
     this.elementsDrawing = new ElementsDrawing(svgDoc, bonds);
 
     let removalObserver = new MutationObserver(() => {
@@ -31,5 +31,20 @@ export class BondsDrawing<T extends Bond> {
     });
 
     removalObserver.observe(svgDoc, { childList: true, subtree: true });
+  }
+
+  /**
+   * The bonds in the drawing.
+   *
+   * The ordering of bonds in the returned array is the ordering of bonds in the drawing.
+   *
+   * The returned array can be directly edited to change the order of bonds and/or register/unregister bonds.
+   */
+  get bonds(): T[] {
+    return this.elementsDrawing.elements;
+  }
+
+  set bonds(bonds) {
+    this.elementsDrawing.elements = bonds;
   }
 }
