@@ -366,6 +366,15 @@ export class Drawing {
   }
 
   /**
+   * Creates a new primary bond between the two bases and appends it to the drawing.
+   *
+   * Returns the newly added primary bond.
+   */
+  addPrimaryBond(base1: Nucleobase, base2: Nucleobase): PrimaryBond {
+    return this.primaryBondsDrawing.add(base1, base2);
+  }
+
+  /**
    * All secondary bonds in the drawing.
    *
    * Secondary bonds are meant to convey base-pairs in the secondary structure of a drawing
