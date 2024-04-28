@@ -8,6 +8,8 @@ import { BasesDrawing } from './BasesDrawing';
 
 import type { StraightBond } from '@rnacanvas/draw.bonds';
 
+import { PrimaryBondsDrawing, PrimaryBond } from './PrimaryBondsDrawing';
+
 /**
  * The minimum and maximum X and Y coordinates of a drawing.
  */
@@ -31,10 +33,14 @@ export class Drawing {
 
   private basesDrawing: BasesDrawing;
 
+  private primaryBondsDrawing: PrimaryBondsDrawing;
+
   constructor() {
     this.domNode = (new SVG.Svg()).node;
 
     this.basesDrawing = new BasesDrawing(this.domNode, []);
+
+    this.primaryBondsDrawing = new PrimaryBondsDrawing(this.domNode, []);
   }
 
   /**
@@ -347,15 +353,16 @@ export class Drawing {
    *
    * This array also effectively orders the primary bonds in the drawing.
    */
-  allPrimaryBonds: StraightBond<Nucleobase>[] = [];
+  get allPrimaryBonds(): PrimaryBond[] {
+    return this.primaryBondsDrawing.primaryBonds;
+  }
 
   /**
    * Appends the primary bond both to the SVG document that is the drawing
    * and to the drawing's array of all primary bonds.
    */
-  appendPrimaryBond(pb: StraightBond<Nucleobase>): void {
-    pb.appendTo(this.domNode);
-    this.allPrimaryBonds.push(pb);
+  appendPrimaryBond(pb: PrimaryBond): void {
+    this.primaryBondsDrawing.append(pb);
   }
 
   /**
