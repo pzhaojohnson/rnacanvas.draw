@@ -4,6 +4,8 @@ import { HorizontalClientScaling, VerticalClientScaling } from '@rnacanvas/draw.
 
 import type { Nucleobase } from '@rnacanvas/draw.bases';
 
+import { BasesDrawing } from './BasesDrawing';
+
 import type { StraightBond } from '@rnacanvas/draw.bonds';
 
 /**
@@ -25,7 +27,15 @@ export class Drawing {
    *
    * Nucleic acid structures are to be drawn on this.
    */
-  readonly domNode = (new SVG.Svg()).node;
+  readonly domNode: SVGSVGElement;
+
+  private basesDrawing: BasesDrawing;
+
+  constructor() {
+    this.domNode = (new SVG.Svg()).node;
+
+    this.basesDrawing = new BasesDrawing(this.domNode, []);
+  }
 
   /**
    * Appends the SVG document that is the drawing to the container node.
@@ -304,19 +314,20 @@ export class Drawing {
   }
 
   /**
-   * All bases in the drawing.
+   * All the bases in the drawing.
    *
    * The ordering of bases in this array is the ordering of bases in the drawing itself.
    */
-  allBasesSorted: Nucleobase[] = [];
+  get allBasesSorted(): Nucleobase[] {
+    return this.basesDrawing.bases;
+  }
 
   /**
    * Appends the base both to the SVG document that is the drawing
    * and to the drawing's (ordered) array of nucleobases.
    */
   appendBase(b: Nucleobase): void {
-    b.appendTo(this.domNode);
-    this.allBasesSorted.push(b);
+    this.basesDrawing.append(b);
   }
 
   /**
