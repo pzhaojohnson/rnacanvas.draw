@@ -10,6 +10,8 @@ import type { StraightBond } from '@rnacanvas/draw.bonds';
 
 import { PrimaryBondsDrawing, PrimaryBond } from './PrimaryBondsDrawing';
 
+import { SecondaryBondsDrawing, SecondaryBond } from './SecondaryBondsDrawing';
+
 /**
  * The minimum and maximum X and Y coordinates of a drawing.
  */
@@ -35,12 +37,16 @@ export class Drawing {
 
   private primaryBondsDrawing: PrimaryBondsDrawing;
 
+  private secondaryBondsDrawing: SecondaryBondsDrawing;
+
   constructor() {
     this.domNode = (new SVG.Svg()).node;
 
     this.basesDrawing = new BasesDrawing(this.domNode, []);
 
     this.primaryBondsDrawing = new PrimaryBondsDrawing(this.domNode, []);
+
+    this.secondaryBondsDrawing = new SecondaryBondsDrawing(this.domNode, []);
   }
 
   /**
@@ -394,14 +400,19 @@ export class Drawing {
    *
    * This array also effectively orders the secondary bonds in the drawing.
    */
-  allSecondaryBonds: StraightBond<Nucleobase>[] = [];
+  get allSecondaryBonds(): SecondaryBond[] {
+    return this.secondaryBondsDrawing.secondaryBonds;
+  }
+
+  set allSecondaryBonds(allSecondaryBonds) {
+    this.secondaryBondsDrawing.secondaryBonds = allSecondaryBonds;
+  }
 
   /**
    * Appends the secondary bond to both the SVG document that is the drawing
    * and to the drawing's array of all secondary bonds.
    */
   appendSecondaryBond(sb: StraightBond<Nucleobase>): void {
-    sb.appendTo(this.domNode);
-    this.allSecondaryBonds.push(sb);
+    this.secondaryBondsDrawing.append(sb);
   }
 }
