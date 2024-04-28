@@ -346,6 +346,18 @@ export class Drawing {
   }
 
   /**
+   * Default values for primary bonds created using this drawing
+   * (e.g., by using the `addPrimaryBond` method).
+   */
+  get primaryBondDefaults() {
+    return this.primaryBondsDrawing.primaryBondDefaults;
+  }
+
+  set primaryBondDefaults(primaryBondDefaults) {
+    this.primaryBondsDrawing.primaryBondDefaults = primaryBondDefaults;
+  }
+
+  /**
    * All primary bonds in the drawing.
    *
    * Primary bonds are intended to connect consecutive bases
