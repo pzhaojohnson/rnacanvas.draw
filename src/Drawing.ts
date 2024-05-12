@@ -42,6 +42,9 @@ export class Drawing {
   constructor() {
     this.domNode = (new SVG.Svg()).node;
 
+    // needs to be initialized for certain underlying web browser functionality to work
+    this.domNode.setAttribute('viewBox', '0 0 0 0');
+
     this.basesDrawing = new BasesDrawing(this.domNode, []);
 
     this.primaryBondsDrawing = new PrimaryBondsDrawing(this.domNode, []);

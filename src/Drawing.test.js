@@ -98,6 +98,13 @@ describe('Drawing class', () => {
     drawing = null;
   });
 
+  describe('constructor', () => {
+    it('initializes the view box of the SVG document that is the drawing', () => {
+      let drawing = new Drawing();
+      expect(drawing.domNode.getAttribute('viewBox')).toBe('0 0 0 0');
+    });
+  });
+
   test('appendTo method', () => {
     let container = document.createElement('div');
     expect(container.contains(drawing.domNode)).toBeFalsy();
