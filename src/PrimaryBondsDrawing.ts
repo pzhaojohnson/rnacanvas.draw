@@ -17,7 +17,7 @@ export class PrimaryBondsDrawing {
    * Default values for new primary bonds created by instances of this class
    * (e.g., when adding a primary bond between a pair of bases).
    */
-  public primaryBondDefaults = {
+  public primaryBondDefaultValues = {
     attributes: {
       'stroke': '#808080',
       'stroke-width': '1',
@@ -71,7 +71,7 @@ export class PrimaryBondsDrawing {
    */
   add(base1: Nucleobase, base2: Nucleobase): PrimaryBond {
     let pb = StraightBond.between(base1, base2);
-    pb.set(this.primaryBondDefaults);
+    pb.set(this.primaryBondDefaultValues);
 
     this.append(pb);
 

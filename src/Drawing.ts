@@ -355,12 +355,12 @@ export class Drawing {
    * Default values for primary bonds created using this drawing
    * (e.g., by using the `addPrimaryBond` method).
    */
-  get primaryBondDefaults() {
-    return this.primaryBondsDrawing.primaryBondDefaults;
+  get primaryBondDefaultValues() {
+    return this.primaryBondsDrawing.primaryBondDefaultValues;
   }
 
-  set primaryBondDefaults(primaryBondDefaults) {
-    this.primaryBondsDrawing.primaryBondDefaults = primaryBondDefaults;
+  set primaryBondDefaultValues(primaryBondDefaultValues) {
+    this.primaryBondsDrawing.primaryBondDefaultValues = primaryBondDefaultValues;
   }
 
   /**
@@ -400,12 +400,12 @@ export class Drawing {
    * Default values for newly created secondary bonds created through this drawing
    * (e.g., by calling the `addSecondaryBond` method).
    */
-  get secondaryBondDefaults() {
-    return this.secondaryBondsDrawing.secondaryBondDefaults;
+  get secondaryBondDefaultValues() {
+    return this.secondaryBondsDrawing.secondaryBondDefaultValues;
   }
 
-  set secondaryBondDefaults(secondaryBondDefaults) {
-    this.secondaryBondsDrawing.secondaryBondDefaults = secondaryBondDefaults;
+  set secondaryBondDefaultValues(secondaryBondDefaultValues) {
+    this.secondaryBondsDrawing.secondaryBondDefaultValues = secondaryBondDefaultValues;
   }
 
   /**
