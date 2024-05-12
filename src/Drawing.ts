@@ -43,7 +43,7 @@ export class Drawing {
     this.domNode = (new SVG.Svg()).node;
 
     // needs to be initialized for certain underlying web browser functionality to work
-    this.domNode.setAttribute('viewBox', '0 0 0 0');
+    this.domNode.setAttribute('viewBox', '0 0 100 100');
 
     this.basesDrawing = new BasesDrawing(this.domNode, []);
 

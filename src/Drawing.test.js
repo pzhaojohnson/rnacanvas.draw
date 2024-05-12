@@ -101,7 +101,7 @@ describe('Drawing class', () => {
   describe('constructor', () => {
     it('initializes the view box of the SVG document that is the drawing', () => {
       let drawing = new Drawing();
-      expect(drawing.domNode.getAttribute('viewBox')).toBe('0 0 0 0');
+      expect(drawing.domNode.getAttribute('viewBox')).toBe('0 0 100 100');
     });
   });
 
