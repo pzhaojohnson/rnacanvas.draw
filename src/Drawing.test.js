@@ -311,12 +311,12 @@ describe('Drawing class', () => {
 
     let b = Nucleobase.create('b');
 
-    expect(drawing.allBasesSorted.includes(b)).toBeFalsy();
+    expect([...drawing.bases].includes(b)).toBeFalsy();
     expect(drawing.domNode.contains(b.domNode)).toBeFalsy();
 
     drawing.appendBase(b);
 
-    expect(drawing.allBasesSorted[3]).toBe(b);
+    expect([...drawing.bases][3]).toBe(b);
     expect(drawing.domNode.childNodes[3]).toBe(b.domNode);
   });
 
@@ -334,12 +334,12 @@ describe('Drawing class', () => {
 
     let pb = StraightBond.between(bs[2], bs[6]);
 
-    expect(drawing.allPrimaryBonds.includes(pb)).toBeFalsy();
+    expect([...drawing.primaryBonds].includes(pb)).toBeFalsy();
     expect(drawing.domNode.contains(pb.domNode)).toBeFalsy();
 
     drawing.appendPrimaryBond(pb);
 
-    expect(drawing.allPrimaryBonds[3]).toBe(pb);
+    expect([...drawing.primaryBonds][3]).toBe(pb);
     expect(drawing.domNode.childNodes[6]).toBe(pb.domNode);
   });
 
@@ -356,12 +356,12 @@ describe('Drawing class', () => {
 
     let sb = StraightBond.between(bs[6], bs[3]);
 
-    expect(drawing.allSecondaryBonds.includes(sb)).toBeFalsy();
+    expect([...drawing.secondaryBonds].includes(sb)).toBeFalsy();
     expect(drawing.domNode.contains(sb.domNode)).toBeFalsy();
 
     drawing.appendSecondaryBond(sb);
 
-    expect(drawing.allSecondaryBonds[2]).toBe(sb);
+    expect([...drawing.secondaryBonds][2]).toBe(sb);
     expect(drawing.domNode.childNodes[5]).toBe(sb.domNode);
   });
 });

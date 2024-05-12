@@ -328,9 +328,9 @@ export class Drawing {
   /**
    * All the bases in the drawing.
    *
-   * The ordering of bases in this array is the ordering of bases in the drawing itself.
+   * The ordering of bases in the returned iterable is the ordering of bases in the drawing.
    */
-  get allBasesSorted(): Nucleobase[] {
+  get bases(): Iterable<Nucleobase> {
     return this.basesDrawing.bases;
   }
 
@@ -369,14 +369,14 @@ export class Drawing {
    * Primary bonds are intended to connect consecutive bases
    * and to convey the sequence of bases in the drawing.
    *
-   * This array also effectively orders the primary bonds in the drawing.
+   * The returned iterable also specifies the order of primary bonds in the drawing.
    */
-  get allPrimaryBonds(): PrimaryBond[] {
+  get primaryBonds(): Iterable<PrimaryBond> {
     return this.primaryBondsDrawing.primaryBonds;
   }
 
-  set allPrimaryBonds(allPrimaryBonds) {
-    this.primaryBondsDrawing.primaryBonds = allPrimaryBonds;
+  set primaryBonds(primaryBonds) {
+    this.primaryBondsDrawing.primaryBonds = [...primaryBonds];
   }
 
   /**
@@ -414,14 +414,14 @@ export class Drawing {
    * Secondary bonds are meant to convey base-pairs in the secondary structure of a drawing
    * and are expected to affect the layout of bases in the drawing.
    *
-   * This array also effectively orders the secondary bonds in the drawing.
+   * The returned iterable also specifies the order of secondary bonds in the drawing.
    */
-  get allSecondaryBonds(): SecondaryBond[] {
+  get secondaryBonds(): Iterable<SecondaryBond> {
     return this.secondaryBondsDrawing.secondaryBonds;
   }
 
-  set allSecondaryBonds(allSecondaryBonds) {
-    this.secondaryBondsDrawing.secondaryBonds = allSecondaryBonds;
+  set secondaryBonds(secondaryBonds) {
+    this.secondaryBondsDrawing.secondaryBonds = [...secondaryBonds];
   }
 
   /**
