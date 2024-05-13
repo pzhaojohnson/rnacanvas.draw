@@ -103,6 +103,13 @@ describe('Drawing class', () => {
       let drawing = new Drawing();
       expect(drawing.domNode.getAttribute('viewBox')).toBe('0 0 100 100');
     });
+
+    it('explicitly initializes horizontal and vertical scaling to 1', () => {
+      let drawing = new Drawing();
+
+      expect(drawing.domNode.getAttribute('width')).toBe('100');
+      expect(drawing.domNode.getAttribute('height')).toBe('100');
+    });
   });
 
   test('appendTo method', () => {

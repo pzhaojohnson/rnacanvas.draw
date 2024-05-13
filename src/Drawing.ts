@@ -45,6 +45,10 @@ export class Drawing {
     // needs to be initialized for certain underlying web browser functionality to work
     this.domNode.setAttribute('viewBox', '0 0 100 100');
 
+    // explicitly initialize horizontal and vertical scaling to 1
+    this.domNode.setAttribute('width', '100');
+    this.domNode.setAttribute('height', '100');
+
     this.basesDrawing = new BasesDrawing(this.domNode, []);
 
     this.primaryBondsDrawing = new PrimaryBondsDrawing(this.domNode, []);
