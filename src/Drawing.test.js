@@ -112,6 +112,22 @@ describe('Drawing class', () => {
     });
   });
 
+  test('outerHTML getter', () => {
+    let drawing = new Drawing();
+
+    Object.defineProperty(drawing.domNode, 'outerHTML', { value: 'Outer HTML string - 174182764826' });
+
+    expect(drawing.outerHTML).toBe('Outer HTML string - 174182764826');
+  });
+
+  test('innerHTML getter', () => {
+    let drawing = new Drawing();
+
+    Object.defineProperty(drawing.domNode, 'innerHTML', { value: 'Inner HTML string - 987598173953' });
+
+    expect(drawing.innerHTML).toBe('Inner HTML string - 987598173953');
+  });
+
   test('appendTo method', () => {
     let container = document.createElement('div');
     expect(container.contains(drawing.domNode)).toBeFalsy();

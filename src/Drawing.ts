@@ -57,6 +57,20 @@ export class Drawing {
   }
 
   /**
+   * Forwards the `outerHTML` property of the SVG document that is the drawing.
+   */
+  get outerHTML() {
+    return this.domNode.outerHTML;
+  }
+
+  /**
+   * Forwards the `innerHTML` property of the SVG document that is the drawing.
+   */
+  get innerHTML() {
+    return this.domNode.innerHTML;
+  }
+
+  /**
    * Appends the SVG document that is the drawing to the container node.
    */
   appendTo(container: Node): void {
