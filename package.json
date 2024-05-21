@@ -1,6 +1,6 @@
 {
   "name": "@rnacanvas/draw",
-  "version": "5.1.1",
+  "version": "5.2.0",
   "description": "Make 2D nucleic acid structure drawings",
   "repository": {
     "type": "git",

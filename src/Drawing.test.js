@@ -394,4 +394,12 @@ describe('Drawing class', () => {
     expect([...drawing.secondaryBonds][2]).toBe(sb);
     expect(drawing.domNode.childNodes[5]).toBe(sb.domNode);
   });
+
+  test('contentBBox getter', () => {
+    let drawing = new Drawing();
+
+    drawing.domNode.getBBox = () => ({ x: 57, y: -112, width: 842, height: 2054 });
+
+    expect(drawing.contentBBox).toStrictEqual({ x: 57, y: -112, width: 842, height: 2054 });
+  });
 });

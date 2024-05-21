@@ -461,4 +461,20 @@ export class Drawing {
   addSecondaryBond(base1: Nucleobase, base2: Nucleobase): SecondaryBond {
     return this.secondaryBondsDrawing.add(base1, base2);
   }
+
+  /**
+   * The bounding box of the content of the drawing
+   * (e.g., including all bases and bonds).
+   *
+   * Note that this is distinct from the boundaries of the drawing itself.
+   *
+   * The returned bounding box is expressed in drawing coordinates
+   * (i.e., as defined by the view box of the SVG document that is the drawing).
+   *
+   * Essentially, this method just forwards the values returned by the `getBBox` method
+   * of the SVG document that is the drawing.
+   */
+  get contentBBox(): { x: number, y: number, width: number, height: number } {
+    return this.domNode.getBBox();
+  }
 }
