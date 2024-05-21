@@ -402,4 +402,29 @@ describe('Drawing class', () => {
 
     expect(drawing.contentBBox).toStrictEqual({ x: 57, y: -112, width: 842, height: 2054 });
   });
+
+  describe('setPadding method', () => {
+    beforeEach(() => {
+      drawing.domNode.setAttribute('viewBox', '12.8 62 3012.4 2086');
+
+      drawing.domNode.setAttribute('width', '4225');
+      drawing.domNode.setAttribute('height', '2210');
+
+      drawing.domNode.getBBox = () => ({ x: 30, y: 50, width: 2000, height: 4000 });
+
+      drawing.setPadding(250.1);
+    });
+
+    it('adjusts the boundaries of the drawing', () => {
+      expect(drawing.minX).toBeCloseTo(30 - 250.1);
+      expect(drawing.maxX).toBeCloseTo(30 + 2000 + 250.1);
+      expect(drawing.minY).toBeCloseTo(50 - 250.1);
+      expect(drawing.maxY).toBeCloseTo(50 + 4000 + 250.1);
+    });
+
+    it('maintains the horizontal and vertical scalings of the drawing', () => {
+      expect(drawing.horizontalScaling).toBeCloseTo(4225 / 3012.4);
+      expect(drawing.verticalScaling).toBeCloseTo(2210 / 2086);
+    });
+  });
 });

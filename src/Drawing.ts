@@ -477,4 +477,21 @@ export class Drawing {
   get contentBBox(): { x: number, y: number, width: number, height: number } {
     return this.domNode.getBBox();
   }
+
+  /**
+   * Adjusts the boundaries of the drawing to set the padding on all four sides of the drawing.
+   *
+   * Padding is defined in reference to the bounding box of the content of the drawing
+   * (see `contentBBox` getter).
+   */
+  setPadding(padding: number): void {
+    let contentBBox = this.contentBBox;
+
+    this.setBoundaries({
+      minX: contentBBox.x - padding,
+      maxX: contentBBox.x + contentBBox.width + padding,
+      minY: contentBBox.y - padding,
+      maxY: contentBBox.y + contentBBox.height + padding,
+    });
+  }
 }
