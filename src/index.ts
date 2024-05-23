@@ -6,3 +6,6 @@ export { Nucleobase };
 
 import { StraightBond } from '@rnacanvas/draw.bonds';
 export { StraightBond };
+
+import { DotBracketDrawer } from './DotBracketDrawer';
+export { DotBracketDrawer };
