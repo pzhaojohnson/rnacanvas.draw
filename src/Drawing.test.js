@@ -101,14 +101,14 @@ describe('Drawing class', () => {
   describe('constructor', () => {
     it('initializes the view box of the SVG document that is the drawing', () => {
       let drawing = new Drawing();
-      expect(drawing.domNode.getAttribute('viewBox')).toBe('0 0 100 100');
+      expect(drawing.domNode.getAttribute('viewBox')).toBe('0 0 250 250');
     });
 
     it('explicitly initializes horizontal and vertical scaling to 1', () => {
       let drawing = new Drawing();
 
-      expect(drawing.domNode.getAttribute('width')).toBe('100');
-      expect(drawing.domNode.getAttribute('height')).toBe('100');
+      expect(drawing.domNode.getAttribute('width')).toBe('250');
+      expect(drawing.domNode.getAttribute('height')).toBe('250');
     });
   });
 

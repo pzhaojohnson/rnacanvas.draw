@@ -43,11 +43,11 @@ export class Drawing {
     this.domNode = (new SVG.Svg()).node;
 
     // needs to be initialized for certain underlying web browser functionality to work
-    this.domNode.setAttribute('viewBox', '0 0 100 100');
+    this.domNode.setAttribute('viewBox', '0 0 250 250');
 
     // explicitly initialize horizontal and vertical scaling to 1
-    this.domNode.setAttribute('width', '100');
-    this.domNode.setAttribute('height', '100');
+    this.domNode.setAttribute('width', '250');
+    this.domNode.setAttribute('height', '250');
 
     this.basesDrawing = new BasesDrawing(this.domNode, []);
 
