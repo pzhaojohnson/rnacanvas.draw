@@ -112,20 +112,20 @@ describe('Drawing class', () => {
     });
   });
 
-  test('outerHTML getter', () => {
+  test('outerXML getter', () => {
     let drawing = new Drawing();
 
-    Object.defineProperty(drawing.domNode, 'outerHTML', { value: 'Outer HTML string - 174182764826' });
+    Object.defineProperty(drawing.domNode, 'outerHTML', { value: 'Outer XML string - 174182764826' });
 
-    expect(drawing.outerHTML).toBe('Outer HTML string - 174182764826');
+    expect(drawing.outerXML).toBe('Outer XML string - 174182764826');
   });
 
-  test('innerHTML getter', () => {
+  test('innerXML getter', () => {
     let drawing = new Drawing();
 
-    Object.defineProperty(drawing.domNode, 'innerHTML', { value: 'Inner HTML string - 987598173953' });
+    Object.defineProperty(drawing.domNode, 'innerHTML', { value: 'Inner XML string - 987598173953' });
 
-    expect(drawing.innerHTML).toBe('Inner HTML string - 987598173953');
+    expect(drawing.innerXML).toBe('Inner XML string - 987598173953');
   });
 
   test('appendTo method', () => {

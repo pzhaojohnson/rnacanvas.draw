@@ -59,14 +59,14 @@ export class Drawing {
   /**
    * Forwards the `outerHTML` property of the SVG document that is the drawing.
    */
-  get outerHTML() {
+  get outerXML() {
     return this.domNode.outerHTML;
   }
 
   /**
    * Forwards the `innerHTML` property of the SVG document that is the drawing.
    */
-  get innerHTML() {
+  get innerXML() {
     return this.domNode.innerHTML;
   }
 
