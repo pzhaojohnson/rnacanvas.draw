@@ -2,6 +2,8 @@ import type { Drawing } from './Drawing';
 
 import { mean } from '@rnacanvas/math';
 
+import { consecutivePairs } from '@rnacanvas/base-pairs';
+
 type Nucleobase = ReturnType<Drawing['addBase']>;
 
 /**
@@ -83,6 +85,8 @@ export class SchemaDrawer {
         this.#targetDrawing.primaryBondDefaultValues.attributes['stroke-width'] = `${0.125 * meanBaseHeight}`;
         this.#targetDrawing.primaryBondDefaultValues.basePadding1 = 0.6 * meanBaseHeight;
         this.#targetDrawing.primaryBondDefaultValues.basePadding2 = 0.6 * meanBaseHeight;
+
+        consecutivePairs(bs).forEach(bp => this.#targetDrawing.addPrimaryBond(...bp));
 
         this.#targetDrawing.secondaryBondDefaultValues.attributes['stroke-width'] = `${0.15 * meanBaseHeight}`;
         this.#targetDrawing.secondaryBondDefaultValues.basePadding1 = 0.5 * meanBaseHeight;
