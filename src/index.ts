@@ -9,3 +9,6 @@ export { StraightBond };
 
 import { DotBracketDrawer } from './DotBracketDrawer';
 export { DotBracketDrawer };
+
+import { SchemaDrawer } from './SchemaDrawer';
+export { SchemaDrawer };
