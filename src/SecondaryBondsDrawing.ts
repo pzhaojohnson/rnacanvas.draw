@@ -1,4 +1,4 @@
-import { StraightBond } from '@rnacanvas/draw.bonds';
+import { StraightBond } from '@rnacanvas/draw.bases.bonds';
 
 import { Nucleobase } from '@rnacanvas/draw.bases';
 

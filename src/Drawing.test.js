@@ -6,7 +6,7 @@ import { Drawing } from './Drawing';
 
 import { Nucleobase } from '@rnacanvas/draw.bases';
 
-import { StraightBond } from '@rnacanvas/draw.bonds';
+import { StraightBond } from '@rnacanvas/draw.bases.bonds';
 
 /**
  * Returns true if the value is a string of a finite number and false otherwise.

@@ -110,7 +110,8 @@ export class SchemaDrawer {
         .forEach(c => b.setAttributes({ ...c, name: undefined }));
     });
 
-    b.centerPoint = { x: residue.x, y: residue.y };
+    b.centerPoint.x = residue.x;
+    b.centerPoint.y = residue.y;
 
     return b;
   }

@@ -6,7 +6,7 @@ import type { Nucleobase } from '@rnacanvas/draw.bases';
 
 import { BasesDrawing } from './BasesDrawing';
 
-import type { StraightBond } from '@rnacanvas/draw.bonds';
+import type { StraightBond } from '@rnacanvas/draw.bases.bonds';
 
 import { PrimaryBondsDrawing, PrimaryBond } from './PrimaryBondsDrawing';
 
