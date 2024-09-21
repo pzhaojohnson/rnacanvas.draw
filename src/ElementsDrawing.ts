@@ -1,12 +1,8 @@
-/**
- * An element in a drawing that is an SVG document.
- */
 export interface DrawingElement {
   /**
-   * Returns true if the element is currently present in the SVG document
-   * (i.e., is a child of the SVG document) and returns false otherwise.
+   * The actual DOM node corresponding to the drawing element.
    */
-  isIn(svgDoc: SVGSVGElement): boolean;
+  domNode: Node;
 }
 
 /**
@@ -28,7 +24,7 @@ export class ElementsDrawing<T extends DrawingElement> {
   constructor(private svgDoc: SVGSVGElement, public elements: T[]) {
     let removalObserver = new MutationObserver(mutations => {
       if (mutations.some(mut => mut.removedNodes.length > 0)) {
-        this.elements = this.elements.filter(ele => ele.isIn(this.svgDoc));
+        this.elements = this.elements.filter(ele => this.svgDoc.contains(ele.domNode));
       }
     });
 

@@ -24,7 +24,7 @@ export class BondsDrawing<T extends Bond> {
 
     let removalObserver = new MutationObserver(() => {
       this.bonds.forEach(bond => {
-        if (!bond.base1.isIn(this.svgDoc) || !bond.base2.isIn(this.svgDoc)) {
+        if (!this.svgDoc.contains(bond.base1.domNode) || !this.svgDoc.contains(bond.base2.domNode)) {
           bond.remove();
         }
       });
