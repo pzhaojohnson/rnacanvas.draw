@@ -1,9 +1,4 @@
-export interface DrawingElement {
-  /**
-   * The actual DOM node corresponding to the drawing element.
-   */
-  domNode: Node;
-}
+import type { DrawingElement } from './DrawingElement';
 
 /**
  * A drawing of elements.

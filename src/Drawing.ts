@@ -6,6 +6,10 @@ import type { Nucleobase } from '@rnacanvas/draw.bases';
 
 import { BasesDrawing } from './BasesDrawing';
 
+import type { BaseOutline } from './BaseOutline';
+
+import { BaseOutlinesDrawing } from './BaseOutlinesDrawing';
+
 import type { StraightBond } from '@rnacanvas/draw.bases.bonds';
 
 import { PrimaryBondsDrawing, PrimaryBond } from './PrimaryBondsDrawing';
@@ -35,6 +39,8 @@ export class Drawing {
 
   private basesDrawing: BasesDrawing;
 
+  #baseOutlinesDrawing: BaseOutlinesDrawing;
+
   private primaryBondsDrawing: PrimaryBondsDrawing;
 
   private secondaryBondsDrawing: SecondaryBondsDrawing;
@@ -50,6 +56,8 @@ export class Drawing {
     this.domNode.setAttribute('height', '250');
 
     this.basesDrawing = new BasesDrawing(this.domNode, []);
+
+    this.#baseOutlinesDrawing = new BaseOutlinesDrawing(this.domNode);
 
     this.primaryBondsDrawing = new PrimaryBondsDrawing(this.domNode, []);
 
@@ -370,6 +378,25 @@ export class Drawing {
    */
   addBase(textContent: string): Nucleobase {
     return this.basesDrawing.add(textContent);
+  }
+
+  /**
+   * The base outlines in the drawing.
+   */
+  get baseOutlines(): Iterable<BaseOutline> {
+    return this.#baseOutlinesDrawing.baseOutlines;
+  }
+
+  /**
+   * Adds an outline for the base to the drawing
+   * and returns the newly created base outline.
+   */
+  outlineBase(b: Nucleobase): BaseOutline {
+    return this.#baseOutlinesDrawing.outline(b);
+  }
+
+  appendBaseOutline(bo: BaseOutline) {
+    this.#baseOutlinesDrawing.append(bo);
   }
 
   /**

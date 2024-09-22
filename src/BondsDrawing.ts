@@ -1,4 +1,6 @@
-import { ElementsDrawing, DrawingElement } from './ElementsDrawing';
+import type { DrawingElement } from './DrawingElement';
+
+import { ElementsDrawing } from './ElementsDrawing';
 
 /**
  * A bond between two bases.
