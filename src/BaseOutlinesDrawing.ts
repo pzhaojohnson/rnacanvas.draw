@@ -30,11 +30,11 @@ export class BaseOutlinesDrawing {
   }
 
   /**
-   * The base to be outlined is assumed to be present in the drawing.
+   * The base to be outlined is assumed to be present in the SVG document
+   * corresponding to the drawing.
    */
   outline(b: Nucleobase): BaseOutline {
-    let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    let bo = new GenericBaseOutline(circle, b);
+    let bo = GenericBaseOutline.outlining(b);
 
     b.domNode.insertAdjacentElement('beforebegin', bo.domNode);
 
