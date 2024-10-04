@@ -14,10 +14,10 @@ export type SecondaryBond = StraightBond<Nucleobase>;
  */
 export class SecondaryBondsDrawing {
   /**
-   * Default values for new secondary bonds created by a secondary bonds drawing
-   * (e.g., when calling the `add` method of a secondary bonds drawing).
+   * Default values for new secondary bonds created using the methods of this class
+   * (e.g., the `add()` method).
    */
-  public secondaryBondDefaultValues = {
+  public defaultValues = {
     attributes: {
       'stroke': '#000000',
       'stroke-width': '2',
@@ -71,7 +71,7 @@ export class SecondaryBondsDrawing {
    */
   add(base1: Nucleobase, base2: Nucleobase): SecondaryBond {
     let sb = StraightBond.between(base1, base2);
-    sb.set(this.secondaryBondDefaultValues);
+    sb.set(this.defaultValues);
 
     this.append(sb);
 

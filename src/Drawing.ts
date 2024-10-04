@@ -400,18 +400,6 @@ export class Drawing {
   }
 
   /**
-   * Default values for primary bonds created using this drawing
-   * (e.g., by using the `addPrimaryBond` method).
-   */
-  get primaryBondDefaultValues() {
-    return this.primaryBondsDrawing.primaryBondDefaultValues;
-  }
-
-  set primaryBondDefaultValues(primaryBondDefaultValues) {
-    this.primaryBondsDrawing.primaryBondDefaultValues = primaryBondDefaultValues;
-  }
-
-  /**
    * All primary bonds in the drawing.
    *
    * Primary bonds are intended to connect consecutive bases
@@ -445,18 +433,6 @@ export class Drawing {
   }
 
   /**
-   * Default values for newly created secondary bonds created through this drawing
-   * (e.g., by calling the `addSecondaryBond` method).
-   */
-  get secondaryBondDefaultValues() {
-    return this.secondaryBondsDrawing.secondaryBondDefaultValues;
-  }
-
-  set secondaryBondDefaultValues(secondaryBondDefaultValues) {
-    this.secondaryBondsDrawing.secondaryBondDefaultValues = secondaryBondDefaultValues;
-  }
-
-  /**
    * All secondary bonds in the drawing.
    *
    * Secondary bonds are meant to convey base-pairs in the secondary structure of a drawing
@@ -487,6 +463,22 @@ export class Drawing {
    */
   addSecondaryBond(base1: Nucleobase, base2: Nucleobase): SecondaryBond {
     return this.secondaryBondsDrawing.add(base1, base2);
+  }
+
+  /**
+   * Default values for different drawing element types.
+   */
+  get defaultValues() {
+    let primaryBondsDrawing = this.primaryBondsDrawing;
+    let secondaryBondsDrawing = this.secondaryBondsDrawing;
+
+    return {
+      get primaryBonds() { return primaryBondsDrawing.defaultValues; },
+      set primaryBonds(defaultValues) { primaryBondsDrawing.defaultValues = defaultValues; },
+
+      get secondaryBonds() { return secondaryBondsDrawing.defaultValues; },
+      set secondaryBonds(defaultValues) { secondaryBondsDrawing.defaultValues = defaultValues; }
+    };
   }
 
   /**
