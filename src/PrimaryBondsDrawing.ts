@@ -71,9 +71,11 @@ export class PrimaryBondsDrawing {
    */
   add(base1: Nucleobase, base2: Nucleobase): PrimaryBond {
     let pb = StraightBond.between(base1, base2);
-    pb.set(this.defaultValues);
 
     this.append(pb);
+
+    // safer to edit elements after adding them to the document body
+    pb.set(this.defaultValues);
 
     return pb;
   }

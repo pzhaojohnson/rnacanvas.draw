@@ -71,9 +71,11 @@ export class SecondaryBondsDrawing {
    */
   add(base1: Nucleobase, base2: Nucleobase): SecondaryBond {
     let sb = StraightBond.between(base1, base2);
-    sb.set(this.defaultValues);
 
     this.append(sb);
+
+    // safer to edit elements after adding them to the document body
+    sb.set(this.defaultValues);
 
     return sb;
   }
