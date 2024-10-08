@@ -1,6 +1,6 @@
 {
   "name": "@rnacanvas/draw",
-  "version": "9.0.1",
+  "version": "10.0.0",
   "description": "Make 2D nucleic acid structure drawings",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
   "dependencies": {
     "@rnacanvas/base-pairs": "^2.2.0",
     "@rnacanvas/bases-layout": "^3.0.0",
-    "@rnacanvas/draw.bases": "^7.0.0",
+    "@rnacanvas/draw.bases": "^8.0.0",
     "@rnacanvas/draw.bases.bonds": "^11.0.0",
     "@rnacanvas/draw.bases.outlines": "^1.1.0",
     "@rnacanvas/draw.svg": "^3.3.0",
