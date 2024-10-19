@@ -4,19 +4,27 @@ import { OuterXML, InnerXML } from '@rnacanvas/draw.svg';
 
 import { HorizontalClientScaling, VerticalClientScaling } from '@rnacanvas/draw.svg';
 
-import type { Nucleobase } from '@rnacanvas/draw.bases';
+import { Nucleobase } from '@rnacanvas/draw.bases';
 
 import { BasesDrawing } from './BasesDrawing';
 
 import type { BaseOutline } from './BaseOutline';
 
+import { BaseOutline as GenericBaseOutline } from '@rnacanvas/draw.bases.outlines';
+
 import { BaseOutlinesDrawing } from './BaseOutlinesDrawing';
 
-import type { StraightBond } from '@rnacanvas/draw.bases.bonds';
+import { StraightBond } from '@rnacanvas/draw.bases.bonds';
 
 import { PrimaryBondsDrawing, PrimaryBond } from './PrimaryBondsDrawing';
 
 import { SecondaryBondsDrawing, SecondaryBond } from './SecondaryBondsDrawing';
+
+import { isNonNullObject } from '@rnacanvas/value-check';
+
+import { isString } from '@rnacanvas/value-check';
+
+import { isArray } from '@rnacanvas/value-check';
 
 /**
  * The minimum and maximum X and Y coordinates of a drawing.
@@ -572,6 +580,44 @@ export class Drawing {
       primaryBonds: [...this.primaryBonds].map(pb => pb.serialized()),
       secondaryBonds: [...this.secondaryBonds].map(sb => sb.serialized()),
     };
+  }
+
+  /**
+   * Recreates a saved drawing from its serialized form.
+   *
+   * Throws if unable to do so.
+   *
+   * @param savedDrawing The serialized form of a saved drawing.
+   */
+  static deserialized(savedDrawing: unknown): Drawing | never {
+    let newDrawing = new Drawing();
+
+    if (!isNonNullObject(savedDrawing)) { throw new Error('Saved drawing must be an object.'); }
+
+    // used to be saved under `svg`
+    let outerXML = savedDrawing.outerXML ?? savedDrawing.svg;
+    if (!outerXML) { throw new Error('Saved drawing outer XML is missing.'); }
+    if (!isString(outerXML)) { throw new Error('Saved drawing outer XML must be a string.'); }
+
+    newDrawing.outerXML = outerXML;
+
+    if (isArray(savedDrawing.bases)) {
+      newDrawing.bases = savedDrawing.bases.map(b => Nucleobase.deserialized(b, newDrawing));
+    }
+
+    if (isArray(savedDrawing.baseOutlines)) {
+      newDrawing.baseOutlines = savedDrawing.baseOutlines.map(bo => GenericBaseOutline.deserialized(bo, newDrawing));
+    }
+
+    if (isArray(savedDrawing.primaryBonds)) {
+      newDrawing.primaryBonds = savedDrawing.primaryBonds.map(pb => StraightBond.deserialized(pb, newDrawing));
+    }
+
+    if (isArray(savedDrawing.secondaryBonds)) {
+      newDrawing.secondaryBonds = savedDrawing.secondaryBonds.map(sb => StraightBond.deserialized(sb, newDrawing));
+    }
+
+    return newDrawing;
   }
 }
 

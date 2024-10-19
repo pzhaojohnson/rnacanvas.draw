@@ -525,4 +525,36 @@ describe('Drawing class', () => {
     // is JSON-serializable
     expect(() => JSON.stringify(serializedDrawing)).not.toThrow();
   });
+
+  test('`static deserialized()`', () => {
+    let drawing1 = new Drawing();
+
+    for (let i = 0; i < 9; i++) { drawing1.addBase(`${i}`); }
+    let bases = [...drawing1.bases];
+
+    [2, 5, 3, 6, 1].forEach(i => drawing1.outlineBase(bases[i]));
+
+    [[2, 3], [5, 4], [7, 6]].forEach(([i, j]) => drawing1.addPrimaryBond(bases[i], bases[j]));
+
+    [[1, 8], [2, 8], [5, 3], [1, 7]].forEach(([i, j]) => drawing1.addSecondaryBond(bases[i], bases[j]));
+
+    // JSDOM does not define these
+    globalThis.SVGTextElement = SVGElement;
+    globalThis.SVGCircleElement = SVGElement;
+    globalThis.SVGLineElement = SVGElement;
+
+    let drawing2 = Drawing.deserialized(drawing1.serialized());
+
+    expect(drawing2.outerXML).toBe(drawing1.outerXML);
+    expect(drawing1.outerXML).toBeTruthy();
+
+    expect([...drawing2.bases].length).toBe(9);
+    expect([...drawing2.baseOutlines].length).toBe(5);
+    expect([...drawing2.primaryBonds].length).toBe(3);
+    expect([...drawing2.secondaryBonds].length).toBe(4);
+
+    // the outer XML used to be saved under `svg`
+    drawing2 = Drawing.deserialized({ ...drawing1.serialized(), outerXML: undefined, svg: drawing1.outerXML });
+    expect(drawing2.outerXML).toBe(drawing1.outerXML);
+  });
 });
