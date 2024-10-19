@@ -120,12 +120,29 @@ describe('Drawing class', () => {
     expect(drawing.outerXML).toBe('Outer XML string - 174182764826');
   });
 
+  test('`set outerXML`', () => {
+    let domNode = drawing.domNode;
+
+    drawing.outerXML = '<svg><text>A</text><path d="M2 3 L50 60"></path></svg>';
+
+    expect(drawing.domNode.outerHTML).toBe('<svg><text>A</text><path d="M2 3 L50 60"></path></svg>');
+
+    // was edited in place
+    expect(drawing.domNode).toBe(domNode);
+  });
+
   test('innerXML getter', () => {
     let drawing = new Drawing();
 
     Object.defineProperty(drawing.domNode, 'innerHTML', { value: 'Inner XML string - 987598173953' });
 
     expect(drawing.innerXML).toBe('Inner XML string - 987598173953');
+  });
+
+  test('`set innerXML`', () => {
+    drawing.innerXML = '<text>C</text><circle r="25.5"></circle><text>84</text>';
+
+    expect(drawing.domNode.innerHTML).toBe('<text>C</text><circle r="25.5"></circle><text>84</text>');
   });
 
   test('appendTo method', () => {

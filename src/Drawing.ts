@@ -1,5 +1,7 @@
 import * as SVG from '@svgdotjs/svg.js';
 
+import { OuterXML, InnerXML } from '@rnacanvas/draw.svg';
+
 import { HorizontalClientScaling, VerticalClientScaling } from '@rnacanvas/draw.svg';
 
 import type { Nucleobase } from '@rnacanvas/draw.bases';
@@ -72,10 +74,23 @@ export class Drawing {
   }
 
   /**
+   * Note that this setter does not replace the DOM node for the drawing
+   * but rather edits it in place
+   * (unlike the built-in `outerHTML` property of DOM nodes).
+   */
+  set outerXML(outerXML) {
+    (new OuterXML(this.domNode)).set(outerXML);
+  }
+
+  /**
    * Forwards the `innerHTML` property of the SVG document that is the drawing.
    */
   get innerXML() {
     return this.domNode.innerHTML;
+  }
+
+  set innerXML(innerXML) {
+    (new InnerXML(this.domNode)).set(innerXML);
   }
 
   /**
