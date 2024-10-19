@@ -363,6 +363,10 @@ export class Drawing {
     return this.basesDrawing.bases;
   }
 
+  set bases(bases) {
+    this.basesDrawing.bases = [...bases];
+  }
+
   /**
    * Appends the base both to the SVG document that is the drawing
    * and to the drawing's (ordered) array of nucleobases.
@@ -385,6 +389,10 @@ export class Drawing {
    */
   get baseOutlines(): Iterable<BaseOutline> {
     return this.#baseOutlinesDrawing.baseOutlines;
+  }
+
+  set baseOutlines(baseOutlines) {
+    this.#baseOutlinesDrawing.baseOutlines = [...baseOutlines];
   }
 
   /**

@@ -333,6 +333,19 @@ describe('Drawing class', () => {
     expect(drawing.verticalClientScaling).toBeCloseTo(1184 / 907);
   });
 
+  test('`set bases`', () => {
+    for (let i = 0; i < 10; i++) { drawing.addBase(`${i}`); }
+    let bases = [...drawing.bases];
+
+    drawing.bases = [];
+    expect([...drawing.bases].length).toBe(0);
+
+    drawing.bases = bases;
+    expect([...drawing.bases].length).toBe(10);
+
+    [...drawing.bases].forEach((b, i) => expect(b).toBe(bases[i]));
+  });
+
   test('appendBase method', () => {
     // add some bases to append after
     drawing.appendBase(Nucleobase.create('A'));
@@ -348,6 +361,22 @@ describe('Drawing class', () => {
 
     expect([...drawing.bases][3]).toBe(b);
     expect(drawing.domNode.childNodes[3]).toBe(b.domNode);
+  });
+
+  test('`set baseOutlines`', () => {
+    for (let i = 0; i < 10; i++) { drawing.addBase(`${i}`); }
+    let bases = [...drawing.bases];
+
+    [2, 8, 4, 1].forEach(i => drawing.outlineBase(bases[i]));
+    let baseOutlines = [...drawing.baseOutlines];
+
+    drawing.baseOutlines = [];
+    expect([...drawing.baseOutlines].length).toBe(0);
+
+    drawing.baseOutlines = baseOutlines;
+    expect([...drawing.baseOutlines].length).toBe(4);
+
+    [...drawing.baseOutlines].forEach((bo, i) => expect(bo).toBe(baseOutlines[i]));
   });
 
   test('appendPrimaryBond method', () => {
