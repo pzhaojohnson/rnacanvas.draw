@@ -49,11 +49,11 @@ export class Drawing {
     this.domNode = (new SVG.Svg()).node;
 
     // needs to be initialized for certain underlying web browser functionality to work
-    this.domNode.setAttribute('viewBox', '0 0 250 250');
+    this.domNode.setAttribute('viewBox', `0 0 ${defaultWidth} ${defaultHeight}`);
 
     // explicitly initialize horizontal and vertical scaling to 1
-    this.domNode.setAttribute('width', '250');
-    this.domNode.setAttribute('height', '250');
+    this.domNode.setAttribute('width', `${defaultWidth}`);
+    this.domNode.setAttribute('height', `${defaultHeight}`);
 
     this.basesDrawing = new BasesDrawing(this.domNode, []);
 
@@ -513,4 +513,28 @@ export class Drawing {
       maxY: contentBBox.y + contentBBox.height + padding,
     });
   }
+
+  /**
+   * Resets the drawing to its original state when initially constructed.
+   */
+  reset(): void {
+    this.domNode.innerHTML = '';
+
+    this.basesDrawing.bases = [];
+    this.#baseOutlinesDrawing.baseOutlines = [];
+    this.primaryBondsDrawing.primaryBonds = [];
+    this.secondaryBondsDrawing.secondaryBonds = [];
+
+    [...this.domNode.attributes].forEach(a => this.domNode.removeAttribute(a.name));
+
+    // must be specified for SVG-related web browser functionality to work
+    this.domNode.setAttribute('viewBox', `0 0 ${defaultWidth} ${defaultHeight}`);
+
+    // explicitly set horizontal and vertical scalings to 1
+    this.domNode.setAttribute('width', `${defaultWidth}`);
+    this.domNode.setAttribute('height', `${defaultHeight}`);
+  }
 }
+
+const defaultWidth = 250;
+const defaultHeight = 250;

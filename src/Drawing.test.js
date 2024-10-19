@@ -427,4 +427,25 @@ describe('Drawing class', () => {
       expect(drawing.verticalScaling).toBeCloseTo(2210 / 2086);
     });
   });
+
+  test('`reset()`', () => {
+    for (let i = 0; i < 15; i++) { drawing.addBase(`${i}`); }
+    let bases = [...drawing.bases];
+
+    [3, 5, 8].forEach(i => drawing.outlineBase(bases[i]));
+
+    [[4, 1], [2, 3], [5, 6]].forEach(([i, j]) => drawing.addPrimaryBond(bases[i], bases[j]));
+
+    [[12, 11], [3, 10], [6, 2]].forEach(([i, j]) => drawing.addSecondaryBond(bases[i], bases[j]));
+
+    drawing.reset();
+
+    // hard-coded to match default width and height values
+    expect(drawing.outerXML).toBe('<svg viewBox="0 0 250 250" width="250" height="250"></svg>');
+
+    expect([...drawing.bases]).toStrictEqual([]);
+    expect([...drawing.baseOutlines]).toStrictEqual([]);
+    expect([...drawing.primaryBonds]).toStrictEqual([]);
+    expect([...drawing.secondaryBonds]).toStrictEqual([]);
+  });
 });

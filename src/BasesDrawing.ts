@@ -28,6 +28,10 @@ export class BasesDrawing {
     return this.elementsDrawing.elements;
   }
 
+  set bases(bases) {
+    this.elementsDrawing.elements = bases;
+  }
+
   /**
    * Appends the given nucleobase to the drawing
    * (i.e., appends it to the SVG document that is the drawing

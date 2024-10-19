@@ -23,6 +23,10 @@ export class BaseOutlinesDrawing {
     return this.#ownedElementsDrawing.elements;
   }
 
+  set baseOutlines(baseOutlines) {
+    this.#ownedElementsDrawing.elements = baseOutlines;
+  }
+
   append(bo: BaseOutline) {
     this.domNode.append(bo.domNode);
 

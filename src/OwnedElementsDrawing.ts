@@ -24,4 +24,8 @@ export class OwnedElementsDrawing<T extends OwnedElement> {
   get elements() {
     return this.#elementsDrawing.elements;
   }
+
+  set elements(elements) {
+    this.#elementsDrawing.elements = elements;
+  }
 }
