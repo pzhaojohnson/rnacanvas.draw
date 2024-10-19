@@ -534,6 +534,22 @@ export class Drawing {
     this.domNode.setAttribute('width', `${defaultWidth}`);
     this.domNode.setAttribute('height', `${defaultHeight}`);
   }
+
+  /**
+   * Returns the serialized form of the drawing,
+   * which can be converted to a JSON string and saved in a file.
+   *
+   * Throws if unable to properly serialize the drawing.
+   */
+  serialized() {
+    return {
+      outerXML: this.outerXML,
+      bases: [...this.bases].map(b => b.serialized()),
+      baseOutlines: [...this.baseOutlines].map(bo => bo.serialized()),
+      primaryBonds: [...this.primaryBonds].map(pb => pb.serialized()),
+      secondaryBonds: [...this.secondaryBonds].map(sb => sb.serialized()),
+    };
+  }
 }
 
 const defaultWidth = 250;

@@ -448,4 +448,35 @@ describe('Drawing class', () => {
     expect([...drawing.primaryBonds]).toStrictEqual([]);
     expect([...drawing.secondaryBonds]).toStrictEqual([]);
   });
+
+  test('`serialized()`', () => {
+    for (let i = 0; i < 15; i++) { drawing.addBase(`${i}`); }
+    let bases = [...drawing.bases];
+
+    [7, 2, 1, 5].forEach(i => drawing.outlineBase(bases[i]));
+
+    [[6, 2], [3, 4], [10, 11]].forEach(([i, j]) => drawing.addPrimaryBond(bases[i], bases[j]));
+
+    [[12, 1], [2, 9], [7, 4], [1, 5]].forEach(([i, j]) => drawing.addSecondaryBond(bases[i], bases[j]));
+
+    let serializedDrawing = drawing.serialized();
+
+    expect(serializedDrawing.outerXML).toBe(drawing.outerXML);
+    expect(drawing.outerXML).toBeTruthy();
+
+    let elements = [...bases, ...drawing.baseOutlines, ...drawing.primaryBonds, ...drawing.secondaryBonds];
+
+    let serializedElements = [
+      ...serializedDrawing.bases, ...serializedDrawing.baseOutlines,
+      ...serializedDrawing.primaryBonds, ...serializedDrawing.secondaryBonds,
+    ];
+
+    expect(serializedElements.length).toBe(elements.length);
+
+    elements.forEach((ele, i) => expect(serializedElements[i].id).toBe(ele.id));
+    elements.forEach(ele => expect(ele.id).toBeTruthy());
+
+    // is JSON-serializable
+    expect(() => JSON.stringify(serializedDrawing)).not.toThrow();
+  });
 });
