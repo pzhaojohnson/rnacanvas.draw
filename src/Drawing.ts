@@ -627,6 +627,43 @@ export class Drawing {
 
     return newDrawing;
   }
+
+  /**
+   * Restores a previous state of the drawing.
+   *
+   * Throws if unable to do so.
+   *
+   * This method is intended to be atomic
+   * (i.e., if it is unable to restore the drawing to a previous state,
+   * then it should leave the drawing unmodified).
+   */
+  restore(previousState: unknown): void | never {
+    // this is the only line of code in this method that is supposed to be capable of throwing
+    // (which should make this method atomic)
+    let deserializedDrawing = Drawing.deserialized(previousState);
+
+    // cache before removing nodes from the deserialized drawing
+    // (since removing nodes will also remove these elements from the drawing)
+    let bases = [...deserializedDrawing.bases];
+    let baseOutlines = [...deserializedDrawing.baseOutlines];
+    let primaryBonds = [...deserializedDrawing.primaryBonds];
+    let secondaryBonds = [...deserializedDrawing.secondaryBonds];
+
+    this.reset();
+
+    // copy over SVG document attributes
+    [...this.domNode.attributes].forEach(a => this.domNode.removeAttribute(a.name));
+    [...deserializedDrawing.domNode.attributes].forEach(a => this.domNode.setAttribute(a.name, a.value));
+
+    // transfer over DOM nodes
+    [...deserializedDrawing.domNode.childNodes].forEach(node => this.domNode.appendChild(node));
+
+    // register drawing elements after transferring over their corresponding DOM nodes
+    this.bases = bases;
+    this.baseOutlines = baseOutlines;
+    this.primaryBonds = primaryBonds;
+    this.secondaryBonds = secondaryBonds;
+  }
 }
 
 const defaultWidth = 250;

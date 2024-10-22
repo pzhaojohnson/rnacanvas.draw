@@ -557,4 +557,48 @@ describe('Drawing class', () => {
     drawing2 = Drawing.deserialized({ ...drawing1.serialized(), outerXML: undefined, svg: drawing1.outerXML });
     expect(drawing2.outerXML).toBe(drawing1.outerXML);
   });
+
+  test('`restore()`', () => {
+    let drawing1 = new Drawing();
+
+    // attributes that will need to be preserved
+    drawing1.domNode.setAttribute('width', '18492');
+    drawing1.domNode.style.backgroundColor = '#712acd';
+
+    for (let i = 0; i < 20; i++) { drawing1.addBase(`${i}`); }
+    let bases = [...drawing1.bases];
+
+    [4, 10, 2, 3, 8, 9].forEach(i => drawing1.outlineBase(bases[i]));
+
+    [[3, 1], [12, 11], [8, 9], [7, 6]].forEach(([i, j]) => drawing1.addPrimaryBond(bases[i], bases[j]));
+
+    [[2, 18], [3, 11], [12, 5]].forEach(([i, j]) => drawing1.addSecondaryBond(bases[i], bases[j]));
+
+    let previousState = drawing1.serialized();
+    expect(previousState).toBeTruthy();
+
+    let drawing2 = new Drawing();
+
+    // attributes that will need to be removed
+    drawing2.domNode.setAttribute('fill', '#bb1287');
+    drawing2.domNode.setAttribute('stroke', '#781fac');
+
+    // elements that will need to be removed
+    for (let i = 0; i < 10; i++) { drawing2.addBase(`${i}`); }
+    [6, 2, 9, 2].forEach(i => drawing2.outlineBase([...drawing2.bases][i]));
+    [[5, 2], [1, 2], [6, 8]].forEach(([i, j]) => drawing2.addPrimaryBond([...drawing2.bases][i], [...drawing2.bases][j]));
+
+    drawing2.restore(previousState);
+    expect(drawing2.serialized()).toStrictEqual(previousState);
+
+    // make invalid
+    previousState.bases[0].id = '';
+
+    expect(() => drawing2.restore(previousState)).toThrow();
+
+    // drawing 2 was not changed
+    // (the `restore()` method should be atomic)
+    expect(drawing2.serialized()).toStrictEqual(drawing1.serialized());
+    expect(drawing1.serialized()).toBeTruthy();
+  });
 });
