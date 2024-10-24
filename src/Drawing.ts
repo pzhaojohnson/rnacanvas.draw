@@ -65,14 +65,6 @@ export class Drawing {
     this.domNode.setAttribute('width', `${defaultWidth}`);
     this.domNode.setAttribute('height', `${defaultHeight}`);
 
-    this.domNode.style.backgroundColor = 'white';
-
-    // prevent highlighting of text when dragging drawing elements
-    this.domNode.style.userSelect = 'none';
-    this.domNode.style.webkitUserSelect = 'none';
-
-    this.domNode.style.cursor = 'default';
-
     this.basesDrawing = new BasesDrawing(this.domNode, []);
 
     this.#baseOutlinesDrawing = new BaseOutlinesDrawing(this.domNode);
