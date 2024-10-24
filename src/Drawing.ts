@@ -592,6 +592,15 @@ export class Drawing {
   static deserialized(savedDrawing: unknown): Drawing | never {
     let newDrawing = new Drawing();
 
+    let container = document.createElement('div');
+    container.append(newDrawing.domNode);
+
+    // make impossible to see
+    container.style.width = '0px'; container.style.height = '0px';
+
+    // many calculations (e.g., bounding box) require that an SVG document be part of the document body
+    document.body.append(container);
+
     if (!isNonNullObject(savedDrawing)) { throw new Error('Saved drawing must be an object.'); }
 
     // used to be saved under `svg`
@@ -601,21 +610,20 @@ export class Drawing {
 
     newDrawing.outerXML = outerXML;
 
-    if (isArray(savedDrawing.bases)) {
-      newDrawing.bases = savedDrawing.bases.map(b => Nucleobase.deserialized(b, newDrawing));
-    }
+    if (isArray(savedDrawing.bases))
+      { newDrawing.bases = savedDrawing.bases.map(b => Nucleobase.deserialized(b, newDrawing)); }
 
-    if (isArray(savedDrawing.baseOutlines)) {
-      newDrawing.baseOutlines = savedDrawing.baseOutlines.map(bo => GenericBaseOutline.deserialized(bo, newDrawing));
-    }
+    if (isArray(savedDrawing.baseOutlines))
+      { newDrawing.baseOutlines = savedDrawing.baseOutlines.map(bo => GenericBaseOutline.deserialized(bo, newDrawing)); }
 
-    if (isArray(savedDrawing.primaryBonds)) {
-      newDrawing.primaryBonds = savedDrawing.primaryBonds.map(pb => StraightBond.deserialized(pb, newDrawing));
-    }
+    if (isArray(savedDrawing.primaryBonds))
+      { newDrawing.primaryBonds = savedDrawing.primaryBonds.map(pb => StraightBond.deserialized(pb, newDrawing)); }
 
-    if (isArray(savedDrawing.secondaryBonds)) {
-      newDrawing.secondaryBonds = savedDrawing.secondaryBonds.map(sb => StraightBond.deserialized(sb, newDrawing));
-    }
+    if (isArray(savedDrawing.secondaryBonds))
+      { newDrawing.secondaryBonds = savedDrawing.secondaryBonds.map(sb => StraightBond.deserialized(sb, newDrawing)); }
+
+    newDrawing.domNode.remove();
+    container.remove();
 
     return newDrawing;
   }

@@ -556,6 +556,14 @@ describe('Drawing class', () => {
     // the outer XML used to be saved under `svg`
     drawing2 = Drawing.deserialized({ ...drawing1.serialized(), outerXML: undefined, svg: drawing1.outerXML });
     expect(drawing2.outerXML).toBe(drawing1.outerXML);
+
+    // removes any container node used from the document body
+    let n = document.body.childNodes.length;
+    let drawing3 = Drawing.deserialized(drawing1.serialized());
+    expect(document.body.childNodes.length).toBe(n);
+
+    // removes the deserialized drawing from any container node used
+    expect(drawing3.domNode.parentNode).toBeFalsy();
   });
 
   test('`restore()`', () => {
