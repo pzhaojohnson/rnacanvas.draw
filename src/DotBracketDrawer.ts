@@ -4,7 +4,7 @@ import { parseDotBracket } from '@rnacanvas/base-pairs';
 
 import { consecutivePairs } from '@rnacanvas/base-pairs';
 
-import { radialize } from '@rnacanvas/bases-layout';
+import { untangle } from '@rnacanvas/bases-layout';
 
 import { mean } from '@rnacanvas/math';
 
@@ -25,7 +25,7 @@ export class DotBracketDrawer {
    * Currently, this method is only able to handle simple dot-bracket notation
    * (i.e., that only contains the characters ".", "(", and ")").
    *
-   * This method will also radialize the layout of the drawn bases
+   * This method will also apply the RNAcanvas untangling algorithm to the drawn bases
    * and add a primary bond between each consecutive pair of bases.
    *
    * @param seq The sequence of the structure to draw.
@@ -46,6 +46,6 @@ export class DotBracketDrawer {
     // adjust multiplying factor as desired
     let spacing = 1.87 * mean(bases.map(b => b.bbox.height));
 
-    radialize(bases, basePairs, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
+    untangle(bases, basePairs, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
   }
 }
