@@ -8,6 +8,14 @@ import { Nucleobase } from '@rnacanvas/draw.bases';
 
 import { BasesDrawing } from './BasesDrawing';
 
+import { BaseNumbering, BaseNumberingLine } from './BaseNumbering';
+
+import { BaseNumbering as GenericBaseNumbering, BaseNumberingLine as GenericBaseNumberingLine } from '@rnacanvas/draw.bases.numberings';
+
+import { BaseNumberingsDrawing, BaseNumberingLinesDrawing } from './BaseNumberingsDrawing';
+
+import { outwardNormal } from '@rnacanvas/bases-layout';
+
 import type { BaseOutline } from './BaseOutline';
 
 import { BaseOutline as GenericBaseOutline } from '@rnacanvas/draw.bases.outlines';
@@ -49,6 +57,10 @@ export class Drawing {
 
   private basesDrawing: BasesDrawing;
 
+  #baseNumberingsDrawing;
+
+  #baseNumberingLinesDrawing;
+
   #baseOutlinesDrawing: BaseOutlinesDrawing;
 
   private primaryBondsDrawing: PrimaryBondsDrawing;
@@ -66,6 +78,9 @@ export class Drawing {
     this.domNode.setAttribute('height', `${defaultHeight}`);
 
     this.basesDrawing = new BasesDrawing(this.domNode, []);
+
+    this.#baseNumberingsDrawing = new BaseNumberingsDrawing(this.domNode);
+    this.#baseNumberingLinesDrawing = new BaseNumberingLinesDrawing(this.domNode);
 
     this.#baseOutlinesDrawing = new BaseOutlinesDrawing(this.domNode);
 
@@ -407,6 +422,50 @@ export class Drawing {
     return this.basesDrawing.add(textContent);
   }
 
+  get #secondaryStructure(): [Nucleobase[], [Nucleobase, Nucleobase][]] {
+    let seq = [...this.bases];
+
+    let basePairs = this.secondaryBondsDrawing.secondaryBonds.map(sb => sb.basePair);
+
+    return [seq, basePairs];
+  }
+
+  /**
+   * Adds a base numbering for the specified base with the specified number.
+   *
+   * @param b
+   * @param n
+   * @returns The added base numbering and base numbering line.
+   */
+  number(b: Nucleobase, n: number): [BaseNumbering, BaseNumberingLine] {
+    let text = this.#baseNumberingsDrawing.number(b, n);
+
+    let line = this.#baseNumberingLinesDrawing.connect(text);
+
+    line.length = 2 * text.domNode.getBBox().height;
+
+    // set direction after making line length nonzero
+    line.direction = outwardNormal(b, ...this.#secondaryStructure);
+
+    return [text, line];
+  }
+
+  get baseNumberings(): Iterable<BaseNumbering> {
+    return this.#baseNumberingsDrawing.baseNumberings;
+  }
+
+  set baseNumberings(baseNumberings) {
+    this.#baseNumberingsDrawing.baseNumberings = [...baseNumberings];
+  }
+
+  get baseNumberingLines(): Iterable<BaseNumberingLine> {
+    return this.#baseNumberingLinesDrawing.baseNumberingLines;
+  }
+
+  set baseNumberingLines(baseNumberingLines) {
+    this.#baseNumberingLinesDrawing.baseNumberingLines = [...baseNumberingLines];
+  }
+
   /**
    * The base outlines in the drawing.
    */
@@ -576,6 +635,8 @@ export class Drawing {
     return {
       outerXML: this.outerXML,
       bases: [...this.bases].map(b => b.serialized()),
+      baseNumberings: [...this.baseNumberings].map(bn => bn.serialized()),
+      baseNumberingLines: [...this.baseNumberingLines].map(line => line.serialized()),
       baseOutlines: [...this.baseOutlines].map(bo => bo.serialized()),
       primaryBonds: [...this.primaryBonds].map(pb => pb.serialized()),
       secondaryBonds: [...this.secondaryBonds].map(sb => sb.serialized()),
@@ -610,8 +671,20 @@ export class Drawing {
 
     newDrawing.outerXML = outerXML;
 
+    let domNode = newDrawing.domNode;
+
     if (isArray(savedDrawing.bases))
       { newDrawing.bases = savedDrawing.bases.map(b => Nucleobase.deserialized(b, newDrawing)); }
+
+    let bases = [...newDrawing.bases];
+
+    if (isArray(savedDrawing.baseNumberings))
+      { newDrawing.baseNumberings = savedDrawing.baseNumberings.map(bn => GenericBaseNumbering.deserialized(bn, { domNode, bases })); }
+
+    let baseNumberings = [...newDrawing.baseNumberings];
+
+    if (isArray(savedDrawing.baseNumberingLines))
+      { newDrawing.baseNumberingLines = savedDrawing.baseNumberingLines.map(line => GenericBaseNumberingLine.deserialized(line, { domNode, baseNumberings })); }
 
     if (isArray(savedDrawing.baseOutlines))
       { newDrawing.baseOutlines = savedDrawing.baseOutlines.map(bo => GenericBaseOutline.deserialized(bo, newDrawing)); }
@@ -645,6 +718,8 @@ export class Drawing {
     // cache before removing nodes from the deserialized drawing
     // (since removing nodes will also remove these elements from the drawing)
     let bases = [...deserializedDrawing.bases];
+    let baseNumberings = [...deserializedDrawing.baseNumberings];
+    let baseNumberingLines = [...deserializedDrawing.baseNumberingLines];
     let baseOutlines = [...deserializedDrawing.baseOutlines];
     let primaryBonds = [...deserializedDrawing.primaryBonds];
     let secondaryBonds = [...deserializedDrawing.secondaryBonds];
@@ -660,6 +735,8 @@ export class Drawing {
 
     // register drawing elements after transferring over their corresponding DOM nodes
     this.bases = bases;
+    this.baseNumberings = baseNumberings;
+    this.baseNumberingLines = baseNumberingLines;
     this.baseOutlines = baseOutlines;
     this.primaryBonds = primaryBonds;
     this.secondaryBonds = secondaryBonds;
