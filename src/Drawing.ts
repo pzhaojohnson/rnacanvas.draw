@@ -442,7 +442,7 @@ export class Drawing {
 
     let line = this.#baseNumberingLinesDrawing.connect(text);
 
-    line.length = 2 * text.domNode.getBBox().height;
+    line.length = 1.15 * text.domNode.getBBox().height;
 
     // set direction after making line length nonzero
     line.direction = outwardNormal(b, ...this.#secondaryStructure);
