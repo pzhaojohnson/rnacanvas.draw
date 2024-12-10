@@ -574,7 +574,11 @@ export class Drawing {
         let line = GenericBaseNumberingLine.unpadded(bn);
         this.domNode.append(line.domNode);
 
+        let length = line.length; // cache
+
         line.direction += angle;
+
+        line.length = length; // restore
 
         // don't forget to remove
         line.domNode.remove();
