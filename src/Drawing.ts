@@ -8,6 +8,8 @@ import { Nucleobase } from '@rnacanvas/draw.bases';
 
 import { BasesDrawing } from './BasesDrawing';
 
+import { rotate as rotateBases } from '@rnacanvas/bases-layout';
+
 import { BaseNumbering, BaseNumberingLine } from './BaseNumbering';
 
 import { BaseNumbering as GenericBaseNumbering, BaseNumberingLine as GenericBaseNumberingLine } from '@rnacanvas/draw.bases.numberings';
@@ -555,6 +557,29 @@ export class Drawing {
    */
   addSecondaryBond(base1: Nucleobase, base2: Nucleobase): SecondaryBond {
     return this.secondaryBondsDrawing.add(base1, base2);
+  }
+
+  /**
+   * Rotates the bases by the given angle.
+   *
+   * Also rotates any base numberings attached to the bases.
+   */
+  rotate(bases: Nucleobase[], angle: number): void {
+    rotateBases(bases, angle);
+
+    let basesSet = new Set(bases);
+
+    for (let bn of this.baseNumberings) {
+      if (basesSet.has(bn.owner)) {
+        let line = GenericBaseNumberingLine.unpadded(bn);
+        this.domNode.append(line.domNode);
+
+        line.direction += angle;
+
+        // don't forget to remove
+        line.domNode.remove();
+      }
+    }
   }
 
   /**
