@@ -565,8 +565,6 @@ export class Drawing {
    * Also rotates any base numberings attached to the bases.
    */
   rotate(bases: Nucleobase[], angle: number): void {
-    rotateBases(bases, angle);
-
     let basesSet = new Set(bases);
 
     for (let bn of this.baseNumberings) {
@@ -580,6 +578,10 @@ export class Drawing {
         line.domNode.remove();
       }
     }
+
+    // must rotate bases after rotating base numberings
+    // (otherwise base numbering direction calculations won't be correct)
+    rotateBases(bases, angle);
   }
 
   /**
