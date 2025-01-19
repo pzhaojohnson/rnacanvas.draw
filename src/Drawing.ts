@@ -8,7 +8,7 @@ import { Nucleobase } from '@rnacanvas/draw.bases';
 
 import { BasesDrawing } from './BasesDrawing';
 
-import { rotate as rotateBases } from '@rnacanvas/bases-layout';
+import { rotate as rotateBases } from '@rnacanvas/layout';
 
 import { BaseNumbering, BaseNumberingLine } from './BaseNumbering';
 
@@ -16,7 +16,7 @@ import { BaseNumbering as GenericBaseNumbering, BaseNumberingLine as GenericBase
 
 import { BaseNumberingsDrawing, BaseNumberingLinesDrawing } from './BaseNumberingsDrawing';
 
-import { outwardNormal } from '@rnacanvas/bases-layout';
+import { outwardNormal } from '@rnacanvas/layout';
 
 import type { BaseOutline } from './BaseOutline';
 

@@ -4,7 +4,7 @@ import { parseDotBracket } from '@rnacanvas/base-pairs';
 
 import { consecutivePairs } from '@rnacanvas/base-pairs';
 
-import { untangle } from '@rnacanvas/bases-layout';
+import { untangle } from '@rnacanvas/layout';
 
 import { mean } from '@rnacanvas/math';
 
