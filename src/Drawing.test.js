@@ -553,10 +553,6 @@ describe('Drawing class', () => {
     expect([...drawing2.primaryBonds].length).toBe(3);
     expect([...drawing2.secondaryBonds].length).toBe(4);
 
-    // the outer XML used to be saved under `svg`
-    drawing2 = Drawing.deserialized({ ...drawing1.serialized(), outerXML: undefined, svg: drawing1.outerXML });
-    expect(drawing2.outerXML).toBe(drawing1.outerXML);
-
     // removes any container node used from the document body
     let n = document.body.childNodes.length;
     let drawing3 = Drawing.deserialized(drawing1.serialized());

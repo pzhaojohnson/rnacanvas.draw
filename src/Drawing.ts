@@ -30,11 +30,7 @@ import { PrimaryBondsDrawing, PrimaryBond } from './PrimaryBondsDrawing';
 
 import { SecondaryBondsDrawing, SecondaryBond } from './SecondaryBondsDrawing';
 
-import { isNonNullObject } from '@rnacanvas/value-check';
-
-import { isString } from '@rnacanvas/value-check';
-
-import { isArray } from '@rnacanvas/value-check';
+import { VersionlessDrawing } from './VersionlessDrawing';
 
 /**
  * The minimum and maximum X and Y coordinates of a drawing.
@@ -680,6 +676,7 @@ export class Drawing {
    * @param savedDrawing The serialized form of a saved drawing.
    */
   static deserialized(savedDrawing: unknown): Drawing | never {
+    let oldDrawing = new VersionlessDrawing(savedDrawing);
     let newDrawing = new Drawing();
 
     let container = document.createElement('div');
@@ -691,38 +688,25 @@ export class Drawing {
     // many calculations (e.g., bounding box) require that an SVG document be part of the document body
     document.body.append(container);
 
-    if (!isNonNullObject(savedDrawing)) { throw new Error('Saved drawing must be an object.'); }
-
-    // used to be saved under `svg`
-    let outerXML = savedDrawing.outerXML ?? savedDrawing.svg;
-    if (!outerXML) { throw new Error('Saved drawing outer XML is missing.'); }
-    if (!isString(outerXML)) { throw new Error('Saved drawing outer XML must be a string.'); }
-
-    newDrawing.outerXML = outerXML;
+    newDrawing.outerXML = oldDrawing.outerXML;
 
     let domNode = newDrawing.domNode;
 
-    if (isArray(savedDrawing.bases))
-      { newDrawing.bases = savedDrawing.bases.map(b => Nucleobase.deserialized(b, newDrawing)); }
+    newDrawing.bases = oldDrawing.bases.map(b => Nucleobase.deserialized(b, newDrawing));
 
     let bases = [...newDrawing.bases];
 
-    if (isArray(savedDrawing.baseNumberings))
-      { newDrawing.baseNumberings = savedDrawing.baseNumberings.map(bn => GenericBaseNumbering.deserialized(bn, { domNode, bases })); }
+    newDrawing.baseNumberings = oldDrawing.numberings.map(n => GenericBaseNumbering.deserialized(n, { domNode, bases }));
 
     let baseNumberings = [...newDrawing.baseNumberings];
 
-    if (isArray(savedDrawing.baseNumberingLines))
-      { newDrawing.baseNumberingLines = savedDrawing.baseNumberingLines.map(line => GenericBaseNumberingLine.deserialized(line, { domNode, baseNumberings })); }
+    newDrawing.baseNumberingLines = oldDrawing.numberingLines.map(line => GenericBaseNumberingLine.deserialized(line, { domNode, baseNumberings }));
 
-    if (isArray(savedDrawing.baseOutlines))
-      { newDrawing.baseOutlines = savedDrawing.baseOutlines.map(bo => GenericBaseOutline.deserialized(bo, newDrawing)); }
+    newDrawing.baseOutlines = oldDrawing.outlines.map(o => GenericBaseOutline.deserialized(o, newDrawing));
 
-    if (isArray(savedDrawing.primaryBonds))
-      { newDrawing.primaryBonds = savedDrawing.primaryBonds.map(pb => StraightBond.deserialized(pb, newDrawing)); }
+    newDrawing.primaryBonds = oldDrawing.primaryBonds.map(pb => StraightBond.deserialized(pb, newDrawing));
 
-    if (isArray(savedDrawing.secondaryBonds))
-      { newDrawing.secondaryBonds = savedDrawing.secondaryBonds.map(sb => StraightBond.deserialized(sb, newDrawing)); }
+    newDrawing.secondaryBonds = oldDrawing.secondaryBonds.map(sb => StraightBond.deserialized(sb, newDrawing));
 
     newDrawing.domNode.remove();
     container.remove();
