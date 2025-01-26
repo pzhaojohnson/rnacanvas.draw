@@ -118,7 +118,7 @@ export class VersionlessDrawing {
             throw new Error('Saved numberings must be non-null objects.');
           }
 
-          return { ...b.numbering, ownerID: b.id };
+          return { ...b.numbering, ownerID: b.textId };
         });
       }
     } catch {}
