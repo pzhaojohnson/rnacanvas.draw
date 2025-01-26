@@ -48,7 +48,7 @@ describe('`class VersionlessDrawing`', () => {
     let ownerIDs = outlines.map(() => `${Math.random()}`);
 
     var drawing = new VersionlessDrawing({
-      bases: outlines.map((o, i) => ({ outline: o, id: ownerIDs[i] })),
+      bases: outlines.map((o, i) => ({ outline: o, textId: ownerIDs[i] })),
     });
 
     expect(drawing.outlines).toStrictEqual(outlines.map((o, i) => ({ ...o, ownerID: ownerIDs[i] })));

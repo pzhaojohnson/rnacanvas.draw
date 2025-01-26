@@ -87,7 +87,7 @@ export class VersionlessDrawing {
             throw new Error('Saved outlines must be non-null objects.');
           }
 
-          return { ...b.outline, ownerID: b.id };
+          return { ...b.outline, ownerID: b.textId };
         });
       }
     } catch {}
