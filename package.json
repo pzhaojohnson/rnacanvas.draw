@@ -1,6 +1,6 @@
 {
   "name": "@rnacanvas/draw",
-  "version": "12.5.2",
+  "version": "12.6.0",
   "description": "Draw nucleic acid structures",
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@rnacanvas/base-pairs": "^2.2.0",
+    "@rnacanvas/ct": "^1.1.0",
     "@rnacanvas/draw.bases": "^9.0.2",
     "@rnacanvas/draw.bases.bonds": "^12.0.0",
     "@rnacanvas/draw.bases.numberings": "^2.2.1",
@@ -34,6 +35,7 @@
     "@rnacanvas/draw.svg": "^3.3.0",
     "@rnacanvas/layout": "^1.0.0",
     "@rnacanvas/math": "^1.16.0",
+    "@rnacanvas/position-pairs": "^2.5.0",
     "@svgdotjs/svg.js": "^3.2.0"
   }
 }
