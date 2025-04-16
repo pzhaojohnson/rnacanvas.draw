@@ -478,11 +478,25 @@ export class Drawing {
   }
 
   /**
+   * Shorthand for `get baseOutlines()`.
+   */
+  get outlines() {
+    return this.baseOutlines;
+  }
+
+  /**
    * Adds an outline for the base to the drawing
    * and returns the newly created base outline.
    */
   outlineBase(b: Nucleobase): BaseOutline {
     return this.#baseOutlinesDrawing.outline(b);
+  }
+
+  /**
+   * Shorthand for `outlineBase()`.
+   */
+  outline(b: Nucleobase) {
+    return this.outlineBase(b);
   }
 
   appendBaseOutline(bo: BaseOutline) {

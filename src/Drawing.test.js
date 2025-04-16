@@ -396,6 +396,29 @@ describe('Drawing class', () => {
     [...drawing.baseOutlines].forEach((bo, i) => expect(bo).toBe(baseOutlines[i]));
   });
 
+  test('`get outlines()`', () => {
+    for (let i = 0; i < 10; i++) { drawing.addBase(`${i}`); }
+    let bases = [...drawing.bases];
+
+    [2, 8, 4, 1].forEach(i => drawing.outline(bases[i]));
+
+    expect([...drawing.outlines].length).toBe(4);
+
+    expect([...drawing.outlines][0].owner.textContent).toBe('2');
+    expect([...drawing.outlines][1].owner.textContent).toBe('8');
+    expect([...drawing.outlines][2].owner.textContent).toBe('4');
+    expect([...drawing.outlines][3].owner.textContent).toBe('1');
+  });
+
+  test('`outline()`', () => {
+    for (let i = 0; i < 10; i++) { drawing.addBase(`${i}`); }
+    let bases = [...drawing.bases];
+
+    let outlines = [2, 8, 4, 1].map(i => drawing.outline(bases[i]));
+
+    expect(outlines.map(o => o.owner.textContent).join('')).toBe('2841');
+  });
+
   test('appendPrimaryBond method', () => {
     let bs = [1, 2, 3, 4, 5, 6, 7, 8].map(() => Nucleobase.create('C'));
     expect(bs.length).toBe(8);
