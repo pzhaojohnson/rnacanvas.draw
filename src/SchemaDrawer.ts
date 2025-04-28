@@ -10,7 +10,7 @@ type Nucleobase = ReturnType<Drawing['addBase']>;
  * How a schema should be formatted.
  */
 type Schema = {
-  classes: SchemaClass[],
+  classes?: SchemaClass[],
 
   rnaComplexes: RNAComplex[],
 };
@@ -37,7 +37,7 @@ type RNAMolecule = {
 };
 
 type Residue = {
-  classes: string[];
+  classes?: string[];
 
   residueName: string;
 
@@ -53,7 +53,7 @@ type Residue = {
 };
 
 type BasePair = {
-  classes: string[];
+  classes?: string[];
 
   residueIndex1: number;
   residueIndex2: number;
@@ -104,8 +104,8 @@ export class SchemaDrawer {
   #drawResidue(residue: Residue, parentSchema: Schema) {
     let b = this.#targetDrawing.addBase(residue.residueName);
 
-    residue.classes.forEach(className => {
-      parentSchema.classes
+    residue.classes?.forEach(className => {
+      (parentSchema.classes ?? [])
         .filter(c => c.name == className)
         .forEach(c => b.setAttributes({ ...c, name: undefined }));
     });
@@ -122,8 +122,8 @@ export class SchemaDrawer {
 
     let sb = this.#targetDrawing.addSecondaryBond(base1, base2);
 
-    basePair.classes.forEach(className => {
-      parentSchema.classes
+    basePair.classes?.forEach(className => {
+      (parentSchema.classes ?? [])
         .filter(c => c.name == className)
         .forEach(c => sb.setAttributes({ ...c, name: undefined }));
     });
