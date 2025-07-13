@@ -1,6 +1,6 @@
 {
   "name": "@rnacanvas/draw",
-  "version": "12.7.2",
+  "version": "12.8.0",
   "description": "Draw nucleic acid structures",
   "repository": {
     "type": "git",
@@ -17,9 +17,9 @@
     "@babel/core": "^7.23.7",
     "@babel/preset-env": "^7.23.7",
     "@babel/preset-typescript": "^7.23.3",
-    "babel-jest": "^29.7.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
+    "babel-jest": "^30.0.4",
+    "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.4",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
     "webpack": "^5.89.0",
