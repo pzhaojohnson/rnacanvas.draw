@@ -115,6 +115,23 @@ export class Drawing {
   }
 
   /**
+   * Is stored as the data attribute `data-name`.
+   */
+  get name(): string | undefined {
+    return this.domNode.dataset.name;
+  }
+
+  set name(name: string | undefined) {
+    // cannot simply set a dataset property to undefined
+    // (will result in the data attribute being assigned the string "undefined")
+    if (name === undefined) {
+      this.domNode.removeAttribute('data-name');
+    } else {
+      this.domNode.setAttribute('data-name', name);
+    }
+  }
+
+  /**
    * Appends the SVG document that is the drawing to the container node.
    */
   appendTo(container: Node): void {

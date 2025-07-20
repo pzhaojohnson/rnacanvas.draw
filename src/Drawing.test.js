@@ -145,6 +145,22 @@ describe('Drawing class', () => {
     expect(drawing.domNode.innerHTML).toBe('<text>C</text><circle r="25.5"></circle><text>84</text>');
   });
 
+  test('`get name()`', () => {
+    drawing.domNode.setAttribute('data-name', 'Drawing-182749');
+    expect(drawing.name).toBe('Drawing-182749');
+
+    drawing.domNode.removeAttribute('data-name');
+    expect(drawing.name).toBeUndefined();
+  });
+
+  test('`set name()`', () => {
+    drawing.name = 'Drawing-87918264912';
+    expect(drawing.domNode.getAttribute('data-name')).toBe('Drawing-87918264912');
+
+    drawing.name = undefined;
+    expect(drawing.domNode.hasAttribute('data-name')).toBeFalsy();
+  });
+
   test('appendTo method', () => {
     let container = document.createElement('div');
     expect(container.contains(drawing.domNode)).toBeFalsy();
