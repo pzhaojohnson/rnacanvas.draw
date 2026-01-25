@@ -10,11 +10,11 @@ import { BasesDrawing } from './BasesDrawing';
 
 import { rotate as rotateBases } from '@rnacanvas/layout';
 
-import { BaseNumbering, BaseNumberingLine } from './BaseNumbering';
+import { Numbering, NumberingLine } from './Numbering';
 
-import { BaseNumbering as GenericBaseNumbering, BaseNumberingLine as GenericBaseNumberingLine } from '@rnacanvas/draw.bases.numberings';
+import { Numbering as GenericNumbering, NumberingLine as GenericNumberingLine } from '@rnacanvas/draw.bases.numberings';
 
-import { BaseNumberingsDrawing, BaseNumberingLinesDrawing } from './BaseNumberingsDrawing';
+import { NumberingsDrawing, NumberingLinesDrawing } from './NumberingsDrawing';
 
 import { outwardNormal } from '@rnacanvas/layout';
 
@@ -55,9 +55,9 @@ export class Drawing {
 
   private basesDrawing: BasesDrawing;
 
-  #baseNumberingsDrawing;
+  #numberingsDrawing;
 
-  #baseNumberingLinesDrawing;
+  #numberingLinesDrawing;
 
   #baseOutlinesDrawing: BaseOutlinesDrawing;
 
@@ -77,8 +77,8 @@ export class Drawing {
 
     this.basesDrawing = new BasesDrawing(this.domNode, []);
 
-    this.#baseNumberingsDrawing = new BaseNumberingsDrawing(this.domNode);
-    this.#baseNumberingLinesDrawing = new BaseNumberingLinesDrawing(this.domNode);
+    this.#numberingsDrawing = new NumberingsDrawing(this.domNode);
+    this.#numberingLinesDrawing = new NumberingLinesDrawing(this.domNode);
 
     this.#baseOutlinesDrawing = new BaseOutlinesDrawing(this.domNode);
 
@@ -446,16 +446,13 @@ export class Drawing {
   }
 
   /**
-   * Adds a base numbering for the specified base with the specified number.
-   *
-   * @param b
-   * @param n
-   * @returns The added base numbering and base numbering line.
+   * Adds a numbering (and numbering line) to the drawing
+   * for the specified base with the specified number.
    */
-  number(b: Nucleobase, n: number): [BaseNumbering, BaseNumberingLine] {
-    let text = this.#baseNumberingsDrawing.number(b, n);
+  number(b: Nucleobase, n: number): [Numbering, NumberingLine] {
+    let text = this.#numberingsDrawing.number(b, n);
 
-    let line = this.#baseNumberingLinesDrawing.connect(text);
+    let line = this.#numberingLinesDrawing.connect(text);
 
     // make nonzero before setting direction angles
     text.displacement.magnitude = 10;
@@ -467,20 +464,20 @@ export class Drawing {
     return [text, line];
   }
 
-  get baseNumberings(): Iterable<BaseNumbering> {
-    return this.#baseNumberingsDrawing.baseNumberings;
+  get numberings(): Iterable<Numbering> {
+    return this.#numberingsDrawing.numberings;
   }
 
-  set baseNumberings(baseNumberings) {
-    this.#baseNumberingsDrawing.baseNumberings = [...baseNumberings];
+  set numberings(numberings) {
+    this.#numberingsDrawing.numberings = [...numberings];
   }
 
-  get baseNumberingLines(): Iterable<BaseNumberingLine> {
-    return this.#baseNumberingLinesDrawing.baseNumberingLines;
+  get numberingLines(): Iterable<NumberingLine> {
+    return this.#numberingLinesDrawing.numberingLines;
   }
 
-  set baseNumberingLines(baseNumberingLines) {
-    this.#baseNumberingLinesDrawing.baseNumberingLines = [...baseNumberingLines];
+  set numberingLines(numberingLines) {
+    this.#numberingLinesDrawing.numberingLines = [...numberingLines];
   }
 
   /**
@@ -594,9 +591,9 @@ export class Drawing {
   rotate(bases: Nucleobase[], angle: number): void {
     let basesSet = new Set(bases);
 
-    for (let bn of this.baseNumberings) {
-      if (basesSet.has(bn.owner)) {
-        let line = GenericBaseNumberingLine.unpadded(bn);
+    for (let n of this.numberings) {
+      if (basesSet.has(n.owner)) {
+        let line = GenericNumberingLine.unpadded(n);
         this.domNode.append(line.domNode);
 
         line.direction += angle;
@@ -691,8 +688,8 @@ export class Drawing {
     return {
       outerXML: this.outerXML,
       bases: [...this.bases].map(b => b.serialized()),
-      baseNumberings: [...this.baseNumberings].map(bn => bn.serialized()),
-      baseNumberingLines: [...this.baseNumberingLines].map(line => line.serialized()),
+      numberings: [...this.numberings].map(bn => bn.serialized()),
+      numberingLines: [...this.numberingLines].map(line => line.serialized()),
       baseOutlines: [...this.baseOutlines].map(bo => bo.serialized()),
       primaryBonds: [...this.primaryBonds].map(pb => pb.serialized()),
       secondaryBonds: [...this.secondaryBonds].map(sb => sb.serialized()),
@@ -727,11 +724,11 @@ export class Drawing {
 
     let bases = [...newDrawing.bases];
 
-    newDrawing.baseNumberings = oldDrawing.numberings.map(n => GenericBaseNumbering.deserialized(n, { domNode, bases }));
+    newDrawing.numberings = oldDrawing.numberings.map(n => GenericNumbering.deserialized(n, { domNode, bases }));
 
-    let baseNumberings = [...newDrawing.baseNumberings];
+    let numberings = [...newDrawing.numberings];
 
-    newDrawing.baseNumberingLines = oldDrawing.numberingLines.map(line => GenericBaseNumberingLine.deserialized(line, { domNode, baseNumberings }));
+    newDrawing.numberingLines = oldDrawing.numberingLines.map(line => GenericNumberingLine.deserialized(line, { domNode, numberings }));
 
     newDrawing.baseOutlines = oldDrawing.outlines.map(o => GenericBaseOutline.deserialized(o, newDrawing));
 
@@ -762,8 +759,8 @@ export class Drawing {
     // cache before removing nodes from the deserialized drawing
     // (since removing nodes will also remove these elements from the drawing)
     let bases = [...deserializedDrawing.bases];
-    let baseNumberings = [...deserializedDrawing.baseNumberings];
-    let baseNumberingLines = [...deserializedDrawing.baseNumberingLines];
+    let numberings = [...deserializedDrawing.numberings];
+    let numberingLines = [...deserializedDrawing.numberingLines];
     let baseOutlines = [...deserializedDrawing.baseOutlines];
     let primaryBonds = [...deserializedDrawing.primaryBonds];
     let secondaryBonds = [...deserializedDrawing.secondaryBonds];
@@ -779,8 +776,8 @@ export class Drawing {
 
     // register drawing elements after transferring over their corresponding DOM nodes
     this.bases = bases;
-    this.baseNumberings = baseNumberings;
-    this.baseNumberingLines = baseNumberingLines;
+    this.numberings = numberings;
+    this.numberingLines = numberingLines;
     this.baseOutlines = baseOutlines;
     this.primaryBonds = primaryBonds;
     this.secondaryBonds = secondaryBonds;
