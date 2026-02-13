@@ -481,6 +481,13 @@ export class Drawing {
   }
 
   /**
+   * Add a numbering line to the drawing connecting the specified numbering to its owner base.
+   */
+  connect(numbering: Numbering): NumberingLine {
+    return this.#numberingLinesDrawing.connect(numbering);
+  }
+
+  /**
    * The base outlines in the drawing.
    */
   get baseOutlines(): Iterable<BaseOutline> {

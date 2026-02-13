@@ -21,6 +21,14 @@ function isFiniteNumberString(value) {
   return Number.isFinite(n) && n.toString() === value;
 }
 
+if (!SVGElement.prototype.x) {
+  SVGElement.prototype.x = { baseVal: [{ value: 0 }] };
+}
+
+if (!SVGElement.prototype.y) {
+  SVGElement.prototype.y = { baseVal: [{ value: 0 }] };
+}
+
 if (!SVGElement.prototype.getBBox) {
   SVGElement.prototype.getBBox = () => ({ x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0 });
 }
@@ -394,6 +402,18 @@ describe('Drawing class', () => {
 
     expect([...drawing.bases][3]).toBe(b);
     expect(drawing.domNode.childNodes[3]).toBe(b.domNode);
+  });
+
+  test('`connect()`', () => {
+    [...'AGCUAGCCU'].forEach(letter => drawing.addBase(letter));
+
+    var [numbering, _] = drawing.number([...drawing.bases][2], 3);
+
+    var line = drawing.connect(numbering);
+
+    expect(line.owner).toBe(numbering);
+
+    expect(drawing.domNode.contains(line.domNode)).toBeTruthy();
   });
 
   test('`set baseOutlines`', () => {
