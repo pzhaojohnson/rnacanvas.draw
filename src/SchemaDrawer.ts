@@ -83,14 +83,14 @@ export class SchemaDrawer {
         let meanBaseHeight = mean(bs.map(b => b.bbox.height));
 
         this.#targetDrawing.defaultValues.primaryBonds.attributes['stroke-width'] = `${0.125 * meanBaseHeight}`;
-        this.#targetDrawing.defaultValues.primaryBonds.basePadding1 = 0.6 * meanBaseHeight;
-        this.#targetDrawing.defaultValues.primaryBonds.basePadding2 = 0.6 * meanBaseHeight;
+        this.#targetDrawing.defaultValues.primaryBonds.basePadding1 = 0.75 * meanBaseHeight;
+        this.#targetDrawing.defaultValues.primaryBonds.basePadding2 = 0.75 * meanBaseHeight;
 
         consecutivePairs(bs).forEach(bp => this.#targetDrawing.addPrimaryBond(...bp));
 
         this.#targetDrawing.defaultValues.secondaryBonds.attributes['stroke-width'] = `${0.15 * meanBaseHeight}`;
-        this.#targetDrawing.defaultValues.secondaryBonds.basePadding1 = 0.5 * meanBaseHeight;
-        this.#targetDrawing.defaultValues.secondaryBonds.basePadding2 = 0.5 * meanBaseHeight;
+        this.#targetDrawing.defaultValues.secondaryBonds.basePadding1 = 0.6 * meanBaseHeight;
+        this.#targetDrawing.defaultValues.secondaryBonds.basePadding2 = 0.6 * meanBaseHeight;
 
         // omit duplicate base-pairs
         // (R2DT has a bug that duplicates all base-pairs in generated schemas)
