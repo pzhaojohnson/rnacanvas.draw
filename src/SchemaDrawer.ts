@@ -104,6 +104,11 @@ export class SchemaDrawer {
   #drawResidue(residue: Residue, parentSchema: Schema) {
     let b = this.#targetDrawing.addBase(residue.residueName);
 
+    let fontClass = parentSchema.classes?.find(c => c.name == 'font');
+
+    // apply font class by default (even if not listed in residue class list)
+    fontClass ? b.setAttributes({ ...fontClass, name: undefined }) : {};
+
     residue.classes?.forEach(className => {
       (parentSchema.classes ?? [])
         .filter(c => c.name == className)
