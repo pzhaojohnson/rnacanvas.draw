@@ -76,6 +76,12 @@ export class SchemaDrawer {
    * (e.g., with only part of the schema having been drawn).
    */
   draw(schema: Schema): void | never {
+    // include hard-coded classes
+    schema = {
+      ...schema,
+      classes: [...hardCodedClasses, ...schema.classes ?? []],
+    };
+
     schema.rnaComplexes.forEach(complex => {
       complex.rnaMolecules.forEach(molecule => {
         let bs = molecule.sequence.map(r => this.#drawResidue(r, schema));
@@ -136,3 +142,22 @@ export class SchemaDrawer {
     return sb;
   }
 }
+
+const hardCodedClasses = [
+  {
+    name: 'text-black',
+    fill: '#000000',
+  },
+  {
+    name: 'text-green',
+    fill: '#00ff00',
+  },
+  {
+    name: 'text-red',
+    fill: '#ff00ff',
+  },
+  {
+    name: 'text-blue',
+    fill: '#0000ff',
+  },
+];
