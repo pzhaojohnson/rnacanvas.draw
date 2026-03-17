@@ -1,8 +1,16 @@
 import type { Drawing } from './Drawing';
 
+import { Numbering, NumberingLine } from '@rnacanvas/draw.bases.numberings';
+
 import { mean } from '@rnacanvas/math';
 
 import { consecutivePairs } from '@rnacanvas/base-pairs';
+
+import { isNonNullObject } from '@rnacanvas/value-check';
+
+import { isArray } from '@rnacanvas/value-check';
+
+import { isNullish } from '@rnacanvas/value-check';
 
 type Nucleobase = ReturnType<Drawing['addBase']>;
 
@@ -34,6 +42,8 @@ type RNAMolecule = {
   sequence: Residue[];
 
   basePairs: BasePair[];
+
+  labels?: Label[] | unknown;
 };
 
 type Residue = {
@@ -57,6 +67,14 @@ type BasePair = {
 
   residueIndex1: number;
   residueIndex2: number;
+};
+
+type Label = {
+  residueIndex: number;
+
+  'label-content'?: {
+    label?: string;
+  }
 };
 
 export class SchemaDrawer {
@@ -103,6 +121,20 @@ export class SchemaDrawer {
         let basePairJSONStrings = new Set(molecule.basePairs.map(bp => JSON.stringify(bp)));
 
         basePairJSONStrings.forEach(jsonString => this.#drawBasePair(JSON.parse(jsonString), bs, schema));
+
+        Numbering.defaultValues.attributes['font-family'] = 'Helvetica';
+        Numbering.defaultValues.attributes['font-size'] = `${0.97 * meanBaseHeight}`;
+        Numbering.defaultValues.attributes['font-weight'] = '700';
+        Numbering.defaultValues.attributes['fill'] = '#cccccc';
+
+        NumberingLine.defaultValues.attributes['stroke'] = '#cccccc';
+        NumberingLine.defaultValues.attributes['stroke-width'] = `${0.125 * meanBaseHeight}`;
+        NumberingLine.defaultValues.basePadding = 0.75 * meanBaseHeight;
+        NumberingLine.defaultValues.textPadding = 0.25 * meanBaseHeight;
+
+        if (isArray(molecule.labels)) {
+          molecule.labels.forEach(label => this.#drawLabel(label, bs));
+        }
       });
     });
   }
@@ -141,6 +173,65 @@ export class SchemaDrawer {
 
     return sb;
   }
+
+  /**
+   * Draws a label for a base in a sequence.
+   */
+  #drawLabel(label: Label | unknown, sequence: Nucleobase[]): void {
+    if (!isNonNullObject(label)) {
+      console.error(`Label schema is not an object: ${label}.`);
+      return;
+    }
+
+    if (typeof label.residueIndex != 'number') {
+      console.error(`Label residue index is not a number: ${label.residueIndex}.`);
+      return;
+    } else if (label.residueIndex < 0) {
+      console.error(`Label residue index is negative: ${label.residueIndex}.`);
+      return;
+    } else if (label.residueIndex >= sequence.length) {
+      console.error(`Label residue index is out-of-bounds: ${label.residueIndex}.`);
+      return;
+    } else if (!Number.isInteger(label.residueIndex)) {
+      console.error(`Label residue index is not an integer: ${label.residueIndex}.`);
+      return;
+    }
+
+    let b = sequence[label.residueIndex];
+
+    let sequencePosition = label.residueIndex + 1;
+
+    let labelContent = label['label-content'];
+
+    if (!isNonNullObject(labelContent)) {
+      console.error(`Label content schema is not an object: ${labelContent}.`);
+    }
+
+    // default to sequence position
+    let textContent: string = (
+      isNonNullObject(labelContent)
+      && !isNullish(labelContent.label)
+      && !isEmptyString(labelContent.label)
+    ) ? (
+      `${labelContent.label}`
+    ) : (
+      `${sequencePosition}`
+    );
+
+    // initialize with sequence position (just initially)
+    let [numbering, line] = this.#targetDrawing.number(b, sequencePosition);
+
+    // cache line direction
+    let lineDirection = line.direction;
+
+    numbering.textContent = textContent;
+
+    // set line length after setting text content (to help make line length non-zero)
+    line.length = 1.03 * b.domNode.getBBox().height;
+
+    // restore line direction
+    line.direction = lineDirection;
+  }
 }
 
 const hardCodedClasses = [
@@ -161,3 +252,7 @@ const hardCodedClasses = [
     fill: '#0000ff',
   },
 ];
+
+function isEmptyString(value: unknown): value is string {
+  return value === '';
+}
