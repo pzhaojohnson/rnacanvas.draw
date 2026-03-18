@@ -116,8 +116,7 @@ export class SchemaDrawer {
         this.#targetDrawing.defaultValues.secondaryBonds.basePadding1 = 0.6 * meanBaseHeight;
         this.#targetDrawing.defaultValues.secondaryBonds.basePadding2 = 0.6 * meanBaseHeight;
 
-        // omit duplicate base-pairs
-        // (R2DT has a bug that duplicates all base-pairs in generated schemas)
+        // remove duplicate base-pairs (if present)
         let basePairJSONStrings = new Set(molecule.basePairs.map(bp => JSON.stringify(bp)));
 
         basePairJSONStrings.forEach(jsonString => this.#drawBasePair(JSON.parse(jsonString), bs, schema));
@@ -133,7 +132,10 @@ export class SchemaDrawer {
         NumberingLine.defaultValues.textPadding = 0.25 * meanBaseHeight;
 
         if (isArray(molecule.labels)) {
-          molecule.labels.forEach(label => this.#drawLabel(label, bs));
+          // remove duplicates (if present)
+          let labelJSONStrings = new Set(molecule.labels.map(label => JSON.stringify(label)));
+
+          labelJSONStrings.forEach(labelJSONString => this.#drawLabel(JSON.parse(labelJSONString), bs));
         }
       });
     });
