@@ -201,7 +201,7 @@ export class SchemaDrawer {
 
     let sequencePosition = label.residueIndex + 1;
 
-    let labelContent = label['label-content'];
+    let labelContent: unknown = label.labelContent;
 
     if (!isNonNullObject(labelContent)) {
       console.error(`Label content schema is not an object: ${labelContent}.`);
