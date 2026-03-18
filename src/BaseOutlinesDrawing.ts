@@ -40,6 +40,9 @@ export class BaseOutlinesDrawing {
   outline(b: Nucleobase): BaseOutline {
     let bo = GenericBaseOutline.outlining(b);
 
+    // scale outline size with base size
+    bo.setAttribute('r', `${0.54 * b.domNode.getBBox().height}`);
+
     b.domNode.insertAdjacentElement('beforebegin', bo.domNode);
 
     this.baseOutlines.push(bo);
