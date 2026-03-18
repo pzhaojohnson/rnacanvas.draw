@@ -221,16 +221,16 @@ export class SchemaDrawer {
     // initialize with sequence position (just initially)
     let [numbering, line] = this.#targetDrawing.number(b, sequencePosition);
 
-    // cache line direction
-    let lineDirection = line.direction;
+    // cache
+    // (note that line direction won't be correct if accessed immediately after numbering a base)
+    let direction = numbering.displacement.direction;
 
     numbering.textContent = textContent;
 
-    // set line length after setting text content (to help make line length non-zero)
     line.length = 1.03 * b.domNode.getBBox().height;
 
-    // restore line direction
-    line.direction = lineDirection;
+    // restore
+    line.direction = direction;
   }
 }
 
