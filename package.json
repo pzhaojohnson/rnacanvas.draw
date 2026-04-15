@@ -1,6 +1,6 @@
 {
   "name": "@rnacanvas/draw",
-  "version": "13.3.4",
+  "version": "14.0.0",
   "description": "Draw nucleic acid structures",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
     "build": "webpack"
   },
   "author": "pzhaojohnson",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "devDependencies": {
     "@babel/core": "^7.23.7",
     "@babel/preset-env": "^7.23.7",
@@ -21,7 +21,7 @@
     "jest": "^30.0.4",
     "jest-environment-jsdom": "^30.0.4",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.3.3",
+    "typescript": "^6.0.2",
     "webpack": "^5.89.0",
     "webpack-cli": "^7.0.1"
   },
@@ -29,7 +29,7 @@
     "@rnacanvas/base-pairs": "^2.2.0",
     "@rnacanvas/ct": "^1.1.0",
     "@rnacanvas/draw.bases": "^9.0.2",
-    "@rnacanvas/draw.bases.bonds": "^12.0.0",
+    "@rnacanvas/draw.bases.bonds": "^13.3.1",
     "@rnacanvas/draw.bases.numberings": "^4.0.2",
     "@rnacanvas/draw.bases.outlines": "^2.0.0",
     "@rnacanvas/draw.svg": "^3.3.0",
