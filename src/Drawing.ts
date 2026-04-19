@@ -32,6 +32,8 @@ import { SecondaryBondsDrawing, SecondaryBond } from './SecondaryBondsDrawing';
 
 import { VersionlessDrawing } from './VersionlessDrawing';
 
+import { Box } from '@rnacanvas/boxes';
+
 /**
  * The minimum and maximum X and Y coordinates of a drawing.
  */
@@ -643,8 +645,8 @@ export class Drawing {
    * Essentially, this method just forwards the values returned by the `getBBox` method
    * of the SVG document that is the drawing.
    */
-  get contentBBox(): { x: number, y: number, width: number, height: number } {
-    return this.domNode.getBBox();
+  get contentBBox(): Box {
+    return Box.matching(this.domNode.getBBox());
   }
 
   /**

@@ -8,6 +8,8 @@ import { Nucleobase } from '@rnacanvas/draw.bases';
 
 import { StraightBond } from '@rnacanvas/draw.bases.bonds';
 
+import { Box } from '@rnacanvas/boxes';
+
 /**
  * Returns true if the value is a string of a finite number and false otherwise.
  */
@@ -500,12 +502,17 @@ describe('Drawing class', () => {
     expect(drawing.domNode.childNodes[5]).toBe(sb.domNode);
   });
 
-  test('contentBBox getter', () => {
-    let drawing = new Drawing();
+  test('`get contentBBox()`', () => {
+    var drawing = new Drawing();
 
     drawing.domNode.getBBox = () => ({ x: 57, y: -112, width: 842, height: 2054 });
 
-    expect(drawing.contentBBox).toStrictEqual({ x: 57, y: -112, width: 842, height: 2054 });
+    expect(drawing.contentBBox.x).toBe(57);
+    expect(drawing.contentBBox.y).toBe(-112);
+    expect(drawing.contentBBox.width).toBe(842);
+    expect(drawing.contentBBox.height).toBe(2054);
+
+    expect(drawing.contentBBox).toBeInstanceOf(Box);
   });
 
   describe('setPadding method', () => {
