@@ -22,7 +22,7 @@ export class CTDrawer {
    *
    * Throws if unable to parse the CT string.
    */
-  draw(ctString: string): void | never {
+  draw(ctString: string): Drawn | never {
     let ct = parseCT(ctString);
 
     let seq = [...ct.sequence].map(c => this.#targetDrawing.addBase(c));
@@ -55,5 +55,16 @@ export class CTDrawer {
 
     // place bases on top of everything else
     seq.forEach(b => b.bringToFront());
+
+    return {
+      bases: seq,
+    };
   }
 }
+
+type Drawn = {
+  /**
+   * The drawn bases.
+   */
+  readonly bases: Iterable<ReturnType<InstanceType<typeof Drawing>['addBase']>>;
+};

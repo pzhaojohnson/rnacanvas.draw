@@ -31,7 +31,7 @@ export class DotBracketDrawer {
    * @param seq The sequence of the structure to draw.
    * @param dotBracket Dot-bracket notation of the base-pairs in the structure to draw.
    */
-  draw(seq: string, dotBracket: string): void {
+  draw(seq: string, dotBracket: string): Drawn | never {
     let bases = [...seq].map(character => this.targetDrawing.addBase(character));
 
     consecutivePairs(bases).forEach(bp => this.targetDrawing.addPrimaryBond(...bp));
@@ -47,5 +47,16 @@ export class DotBracketDrawer {
     let spacing = 1.87 * mean(bases.map(b => b.bbox.height));
 
     untangle(bases, basePairs, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
+
+    return {
+      bases,
+    };
   }
 }
+
+type Drawn = {
+  /**
+   * The drawn bases.
+   */
+  readonly bases: Iterable<ReturnType<InstanceType<typeof Drawing>['addBase']>>;
+};
