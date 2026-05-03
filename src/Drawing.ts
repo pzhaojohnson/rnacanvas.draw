@@ -409,6 +409,10 @@ export class Drawing {
     return (new VerticalClientScaling(this.domNode)).get();
   }
 
+  isEmpty(): boolean {
+    return this.domNode.childNodes.length == 0;
+  }
+
   /**
    * All the bases in the drawing.
    *

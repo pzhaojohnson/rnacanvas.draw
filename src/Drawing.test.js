@@ -376,6 +376,27 @@ describe('Drawing class', () => {
     expect(drawing.verticalClientScaling).toBeCloseTo(1184 / 907);
   });
 
+  test('`isEmpty()`', () => {
+    var drawing = new Drawing();
+
+    expect(drawing.isEmpty()).toBe(true);
+
+    // add some elements
+    [1, 2, 3, 4, 5].map(() => drawing.addBase('A'));
+
+    expect(drawing.isEmpty()).toBe(false);
+
+    // remove all added elements
+    [...drawing.bases].forEach(b => b.remove());
+
+    expect(drawing.isEmpty()).toBe(true);
+
+    // add something that's not an SVG element (but still rendered)
+    drawing.domNode.append('text');
+
+    expect(drawing.isEmpty()).toBe(false);
+  });
+
   test('`set bases`', () => {
     for (let i = 0; i < 10; i++) { drawing.addBase(`${i}`); }
     let bases = [...drawing.bases];
