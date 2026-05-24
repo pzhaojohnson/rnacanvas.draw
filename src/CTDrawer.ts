@@ -10,6 +10,8 @@ import { untangle } from '@rnacanvas/layout';
 
 import { linearize } from '@rnacanvas/layout';
 
+import { Direction } from '@rnacanvas/layout';
+
 import { mean } from '@rnacanvas/math';
 
 import { first, last } from '@rnacanvas/utilities';
@@ -45,6 +47,9 @@ export class CTDrawer {
       untangle(seq, bps, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
     } else {
       linearize(seq, { spacing: spacing / 2 });
+
+      // set explicitly (otherwise might be non-zero by default sometimes)
+      (new Direction(seq)).set(0);
     }
 
     // only number bases when there's more than 10 being drawn
