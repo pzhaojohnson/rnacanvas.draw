@@ -10,6 +10,8 @@ import { linearize } from '@rnacanvas/layout';
 
 import { mean } from '@rnacanvas/math';
 
+import { first, last } from '@rnacanvas/utilities';
+
 /**
  * Draws structures expressed in dot-bracket notation on a target drawing.
  */
@@ -48,11 +50,31 @@ export class DotBracketDrawer {
     // adjust multiplying factor as desired
     let spacing = 1.87 * mean(bases.map(b => b.bbox.height));
 
+    // arrange bases before numbering them (to orient numberings correctly)
     if (basePairs.length > 0) {
       untangle(bases, basePairs, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
     } else {
       linearize(bases, { spacing: spacing / 2 });
     }
+
+    // only number bases when there's more than 10 being drawn
+    if (bases.length > 10) {
+      this.targetDrawing.number(first(bases), 1);
+      this.targetDrawing.number(last(bases), bases.length);
+    }
+
+    let numberingIncrement = 20;
+
+    // number intervening bases
+    bases.slice(0, -numberingIncrement).forEach((b, i) => {
+      // the position of the base
+      let p = i + 1;
+
+      p % numberingIncrement == 0 ? this.targetDrawing.number(b, p) : {};
+    });
+
+    // place bases on top of everything else
+    bases.forEach(b => b.bringToFront());
 
     return {
       bases,
