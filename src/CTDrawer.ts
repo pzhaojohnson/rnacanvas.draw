@@ -61,7 +61,7 @@ export class CTDrawer {
     let numberingIncrement = 20;
 
     // number intervening bases
-    seq.slice(0, -numberingIncrement).forEach((b, i) => {
+    seq.slice(0, -3).forEach((b, i) => {
       // the position of the base
       let p = i + 1;
 
