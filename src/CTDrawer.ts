@@ -56,17 +56,17 @@ export class CTDrawer {
     if (seq.length > 10) {
       this.#targetDrawing.number(first(seq), 1 + ct.numberingOffset);
       this.#targetDrawing.number(last(seq), seq.length + ct.numberingOffset);
+
+      let numberingIncrement = 20;
+
+      // number intervening bases
+      seq.slice(0, -3).forEach((b, i) => {
+        // the position of the base
+        let p = i + 1;
+
+        p % numberingIncrement == 0 ? this.#targetDrawing.number(b, p + ct.numberingOffset) : {};
+      });
     }
-
-    let numberingIncrement = 20;
-
-    // number intervening bases
-    seq.slice(0, -3).forEach((b, i) => {
-      // the position of the base
-      let p = i + 1;
-
-      p % numberingIncrement == 0 ? this.#targetDrawing.number(b, p + ct.numberingOffset) : {};
-    });
 
     // place bases on top of everything else
     seq.forEach(b => b.bringToFront());

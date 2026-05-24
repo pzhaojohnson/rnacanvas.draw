@@ -66,17 +66,17 @@ export class DotBracketDrawer {
     if (bases.length > 10) {
       this.targetDrawing.number(first(bases), 1);
       this.targetDrawing.number(last(bases), bases.length);
+
+      let numberingIncrement = 20;
+
+      // number intervening bases
+      bases.slice(0, -3).forEach((b, i) => {
+        // the position of the base
+        let p = i + 1;
+
+        p % numberingIncrement == 0 ? this.targetDrawing.number(b, p) : {};
+      });
     }
-
-    let numberingIncrement = 20;
-
-    // number intervening bases
-    bases.slice(0, -3).forEach((b, i) => {
-      // the position of the base
-      let p = i + 1;
-
-      p % numberingIncrement == 0 ? this.targetDrawing.number(b, p) : {};
-    });
 
     // place bases on top of everything else
     bases.forEach(b => b.bringToFront());
