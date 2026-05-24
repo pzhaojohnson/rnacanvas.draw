@@ -6,6 +6,8 @@ import { consecutivePairs } from '@rnacanvas/base-pairs';
 
 import { untangle } from '@rnacanvas/layout';
 
+import { linearize } from '@rnacanvas/layout';
+
 import { mean } from '@rnacanvas/math';
 
 /**
@@ -46,7 +48,11 @@ export class DotBracketDrawer {
     // adjust multiplying factor as desired
     let spacing = 1.87 * mean(bases.map(b => b.bbox.height));
 
-    untangle(bases, basePairs, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
+    if (basePairs.length > 0) {
+      untangle(bases, basePairs, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
+    } else {
+      linearize(bases, { spacing: spacing / 2 });
+    }
 
     return {
       bases,

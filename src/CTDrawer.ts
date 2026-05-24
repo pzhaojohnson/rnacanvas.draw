@@ -8,6 +8,8 @@ import { basePairs } from '@rnacanvas/position-pairs';
 
 import { untangle } from '@rnacanvas/layout';
 
+import { linearize } from '@rnacanvas/layout';
+
 import { mean } from '@rnacanvas/math';
 
 export class CTDrawer {
@@ -36,7 +38,11 @@ export class CTDrawer {
     // adjust multiplying factor as desired
     let spacing = 1.87 * mean(seq.map(b => b.bbox.height));
 
-    untangle(seq, bps, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
+    if (bps.length > 0) {
+      untangle(seq, bps, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
+    } else {
+      linearize(seq, { spacing: spacing / 2 });
+    }
 
     // number bases after arranging their layout
     // (so that numberings are oriented correctly)
