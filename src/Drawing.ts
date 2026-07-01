@@ -699,6 +699,7 @@ export class Drawing {
     this.#baseOutlinesDrawing.baseOutlines = [];
     this.primaryBondsDrawing.primaryBonds = [];
     this.secondaryBondsDrawing.secondaryBonds = [];
+    this.#tertiaryBondsDrawing.tertiaryBonds = [];
 
     [...this.domNode.attributes].forEach(a => this.domNode.removeAttribute(a.name));
 

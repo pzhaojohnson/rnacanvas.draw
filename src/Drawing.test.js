@@ -595,6 +595,8 @@ describe('Drawing class', () => {
 
     [[12, 11], [3, 10], [6, 2]].forEach(([i, j]) => drawing.addSecondaryBond(bases[i], bases[j]));
 
+    [[1, 2], [7, 1]].forEach(indices => drawing.addTertiaryBond(...indices.map(i => bases[i])));
+
     drawing.reset();
 
     // hard-coded to match default width and height values
@@ -604,6 +606,7 @@ describe('Drawing class', () => {
     expect([...drawing.baseOutlines]).toStrictEqual([]);
     expect([...drawing.primaryBonds]).toStrictEqual([]);
     expect([...drawing.secondaryBonds]).toStrictEqual([]);
+    expect([...drawing.tertiaryBonds]).toStrictEqual([]);
   });
 
   test('`serialized()`', () => {
