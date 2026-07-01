@@ -806,6 +806,7 @@ export class Drawing {
     let baseOutlines = [...deserializedDrawing.baseOutlines];
     let primaryBonds = [...deserializedDrawing.primaryBonds];
     let secondaryBonds = [...deserializedDrawing.secondaryBonds];
+    let tertiaryBonds = [...deserializedDrawing.tertiaryBonds];
 
     this.reset();
 
@@ -823,6 +824,7 @@ export class Drawing {
     this.baseOutlines = baseOutlines;
     this.primaryBonds = primaryBonds;
     this.secondaryBonds = secondaryBonds;
+    this.tertiaryBonds = tertiaryBonds;
   }
 }
 

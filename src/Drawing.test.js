@@ -710,6 +710,8 @@ describe('Drawing class', () => {
 
     [[2, 18], [3, 11], [12, 5]].forEach(([i, j]) => drawing1.addSecondaryBond(bases[i], bases[j]));
 
+    [[11, 8], [2, 9], [1, 10]].forEach(indices => drawing1.addTertiaryBond(...indices.map(i => bases[i])));
+
     let previousState = drawing1.serialized();
     expect(previousState).toBeTruthy();
 
