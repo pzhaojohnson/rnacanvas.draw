@@ -523,6 +523,20 @@ describe('Drawing class', () => {
     expect(drawing.domNode.childNodes[5]).toBe(sb.domNode);
   });
 
+  test('`addTertiaryBond()`', () => {
+    var drawing = new Drawing();
+
+    var base1 = drawing.addBase('A');
+    var base2 = drawing.addBase('C');
+
+    var tb = drawing.addTertiaryBond(base1, base2);
+
+    expect(tb.base1).toBe(base1);
+    expect(tb.base2).toBe(base2);
+
+    expect(drawing.domNode.contains(tb.domNode)).toBeTruthy();
+  });
+
   test('`get contentBBox()`', () => {
     var drawing = new Drawing();
 

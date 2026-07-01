@@ -30,6 +30,10 @@ import { PrimaryBondsDrawing, PrimaryBond } from './PrimaryBondsDrawing';
 
 import { SecondaryBondsDrawing, SecondaryBond } from './SecondaryBondsDrawing';
 
+import type { TertiaryBond } from './TertiaryBondsDrawing';
+
+import { TertiaryBondsDrawing } from './TertiaryBondsDrawing';
+
 import { VersionlessDrawing } from './VersionlessDrawing';
 
 import { Box } from '@rnacanvas/boxes';
@@ -67,6 +71,8 @@ export class Drawing {
 
   private secondaryBondsDrawing: SecondaryBondsDrawing;
 
+  readonly #tertiaryBondsDrawing;
+
   constructor() {
     this.domNode = (new SVG.Svg()).node;
 
@@ -87,6 +93,8 @@ export class Drawing {
     this.primaryBondsDrawing = new PrimaryBondsDrawing(this.domNode, []);
 
     this.secondaryBondsDrawing = new SecondaryBondsDrawing(this.domNode, []);
+
+    this.#tertiaryBondsDrawing = new TertiaryBondsDrawing(this.domNode);
   }
 
   /**
@@ -594,6 +602,13 @@ export class Drawing {
    */
   addSecondaryBond(base1: Nucleobase, base2: Nucleobase): SecondaryBond {
     return this.secondaryBondsDrawing.add(base1, base2);
+  }
+
+  /**
+   * Creates a new tertiary bond between the two bases, adds it to the drawing and returns it.
+   */
+  addTertiaryBond(base1: Nucleobase, base2: Nucleobase): TertiaryBond {
+    return this.#tertiaryBondsDrawing.addTertiaryBond(base1, base2);
   }
 
   /**
