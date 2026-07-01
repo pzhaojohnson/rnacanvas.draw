@@ -523,6 +523,16 @@ describe('Drawing class', () => {
     expect(drawing.domNode.childNodes[5]).toBe(sb.domNode);
   });
 
+  test('`get tertiaryBonds()`', () => {
+    var drawing = new Drawing();
+
+    var bases = [...'1234567890'].map(() => drawing.addBase('A'));
+
+    [[1, 2], [0, 9], [8, 2]].map(indices => drawing.addTertiaryBond(...indices.map(i => bases[i])));
+
+    expect([...drawing.tertiaryBonds].map(tb => [bases.indexOf(tb.base1), bases.indexOf(tb.base2)])).toStrictEqual([[1, 2], [0, 9], [8, 2]]);
+  });
+
   test('`addTertiaryBond()`', () => {
     var drawing = new Drawing();
 
@@ -606,16 +616,18 @@ describe('Drawing class', () => {
 
     [[12, 1], [2, 9], [7, 4], [1, 5]].forEach(([i, j]) => drawing.addSecondaryBond(bases[i], bases[j]));
 
+    [[1, 8], [5, 2], [0, 7]].forEach(indices => drawing.addTertiaryBond(...indices.map(i => bases[i])));
+
     let serializedDrawing = drawing.serialized();
 
     expect(serializedDrawing.outerXML).toBe(drawing.outerXML);
     expect(drawing.outerXML).toBeTruthy();
 
-    let elements = [...bases, ...drawing.baseOutlines, ...drawing.primaryBonds, ...drawing.secondaryBonds];
+    let elements = [...bases, ...drawing.baseOutlines, ...drawing.primaryBonds, ...drawing.secondaryBonds, ...drawing.tertiaryBonds];
 
     let serializedElements = [
       ...serializedDrawing.bases, ...serializedDrawing.baseOutlines,
-      ...serializedDrawing.primaryBonds, ...serializedDrawing.secondaryBonds,
+      ...serializedDrawing.primaryBonds, ...serializedDrawing.secondaryBonds, ...serializedDrawing.tertiaryBonds,
     ];
 
     expect(serializedElements.length).toBe(elements.length);

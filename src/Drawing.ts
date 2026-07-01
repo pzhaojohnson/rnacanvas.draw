@@ -604,6 +604,10 @@ export class Drawing {
     return this.secondaryBondsDrawing.add(base1, base2);
   }
 
+  get tertiaryBonds(): Iterable<TertiaryBond> {
+    return this.#tertiaryBondsDrawing.tertiaryBonds;
+  }
+
   /**
    * Creates a new tertiary bond between the two bases, adds it to the drawing and returns it.
    */
@@ -721,6 +725,7 @@ export class Drawing {
       baseOutlines: [...this.baseOutlines].map(bo => bo.serialized()),
       primaryBonds: [...this.primaryBonds].map(pb => pb.serialized()),
       secondaryBonds: [...this.secondaryBonds].map(sb => sb.serialized()),
+      tertiaryBonds: [...this.tertiaryBonds].map(tb => tb.save()),
     };
   }
 
