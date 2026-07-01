@@ -173,4 +173,12 @@ export class VersionlessDrawing {
 
     return [];
   }
+
+  get tertiaryBonds(): unknown[] | never {
+    if (isArray(this.#savedDrawing.tertiaryBonds)) {
+      return this.#savedDrawing.tertiaryBonds;
+    }
+
+    return [];
+  }
 }

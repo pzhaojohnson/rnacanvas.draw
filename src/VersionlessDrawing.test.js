@@ -121,6 +121,18 @@ describe('`class VersionlessDrawing`', () => {
 
     expect(drawing.secondaryBonds).toStrictEqual(secondaryBonds);
   });
+
+  test('`get tertiaryBonds()`', () => {
+    var drawing = new VersionlessDrawing({});
+
+    expect(drawing.tertiaryBonds).toStrictEqual([]);
+
+    let tertiaryBonds = [1, 2, 3, 4, 5].map(() => new ElementMock());
+
+    var drawing = new VersionlessDrawing({ tertiaryBonds });
+
+    expect(drawing.tertiaryBonds).toStrictEqual(tertiaryBonds);
+  });
 });
 
 class ElementMock {

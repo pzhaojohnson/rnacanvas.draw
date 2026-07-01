@@ -70,6 +70,24 @@ function parseViewBox(viewBoxString) {
   };
 }
 
+beforeAll(() => {
+  if (!globalThis.SVGTextElement) {
+    globalThis.SVGTextElement = SVGElement;
+  }
+
+  if (!globalThis.SVGCircleElement) {
+    globalThis.SVGCircleElement = SVGElement;
+  }
+
+  if (!globalThis.SVGLineElement) {
+    globalThis.SVGLineElement = SVGElement;
+  }
+
+  if (!globalThis.SVGPathElement) {
+    globalThis.SVGPathElement = SVGElement;
+  }
+});
+
 describe('Drawing class', () => {
   let drawing = null;
 
@@ -654,10 +672,7 @@ describe('Drawing class', () => {
 
     [[1, 8], [2, 8], [5, 3], [1, 7]].forEach(([i, j]) => drawing1.addSecondaryBond(bases[i], bases[j]));
 
-    // JSDOM does not define these
-    globalThis.SVGTextElement = SVGElement;
-    globalThis.SVGCircleElement = SVGElement;
-    globalThis.SVGLineElement = SVGElement;
+    [[8, 3], [5, 2], [1, 0]].forEach(indices => drawing1.addTertiaryBond(...indices.map(i => bases[i])));
 
     let drawing2 = Drawing.deserialized(drawing1.serialized());
 
@@ -668,6 +683,7 @@ describe('Drawing class', () => {
     expect([...drawing2.baseOutlines].length).toBe(5);
     expect([...drawing2.primaryBonds].length).toBe(3);
     expect([...drawing2.secondaryBonds].length).toBe(4);
+    expect([...drawing2.tertiaryBonds].length).toBe(3);
 
     // removes any container node used from the document body
     let n = document.body.childNodes.length;

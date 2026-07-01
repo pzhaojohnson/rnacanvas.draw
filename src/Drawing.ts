@@ -34,6 +34,8 @@ import type { TertiaryBond } from './TertiaryBondsDrawing';
 
 import { TertiaryBondsDrawing } from './TertiaryBondsDrawing';
 
+import { CurvedBond } from '@rnacanvas/draw.bases.bonds';
+
 import { VersionlessDrawing } from './VersionlessDrawing';
 
 import { Box } from '@rnacanvas/boxes';
@@ -608,6 +610,10 @@ export class Drawing {
     return this.#tertiaryBondsDrawing.tertiaryBonds;
   }
 
+  set tertiaryBonds(tertiaryBonds) {
+    this.#tertiaryBondsDrawing.tertiaryBonds = [...tertiaryBonds];
+  }
+
   /**
    * Creates a new tertiary bond between the two bases, adds it to the drawing and returns it.
    */
@@ -769,6 +775,8 @@ export class Drawing {
     newDrawing.primaryBonds = oldDrawing.primaryBonds.map(pb => StraightBond.deserialized(pb, newDrawing));
 
     newDrawing.secondaryBonds = oldDrawing.secondaryBonds.map(sb => StraightBond.deserialized(sb, newDrawing));
+
+    newDrawing.tertiaryBonds = oldDrawing.tertiaryBonds.map(tb => CurvedBond.recreate(tb, newDrawing));
 
     newDrawing.domNode.remove();
     container.remove();
