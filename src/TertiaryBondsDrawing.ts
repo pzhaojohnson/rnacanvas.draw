@@ -36,4 +36,4 @@ export class TertiaryBondsDrawing {
   }
 }
 
-export type TertiaryBond = CurvedBond;
+export type TertiaryBond = CurvedBond<Nucleobase>;
