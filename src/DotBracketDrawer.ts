@@ -54,8 +54,6 @@ export class DotBracketDrawer {
 
     let allBasePairs = basePairs(bases, positionPairs.toArray());
 
-    missing(secondaryBasePairs, allBasePairs).forEach(bp => this.targetDrawing.addTertiaryBond(...bp));
-
     // place all bases on top of all primary, secondary and tertiary bonds
     bases.forEach(b => b.bringToFront());
 
@@ -71,6 +69,9 @@ export class DotBracketDrawer {
       // set explicitly (otherwise might be non-zero by default sometimes)
       (new Direction(bases)).set(0);
     }
+
+    // add tertiary bonds after arranging bases (to make tertiary bonds curved by default)
+    missing(secondaryBasePairs, allBasePairs).forEach(bp => this.targetDrawing.addTertiaryBond(...bp));
 
     // only number bases when there's more than 10 being drawn
     if (bases.length > 10) {

@@ -45,8 +45,6 @@ export class CTDrawer {
 
     secondaryBasePairs.forEach(bp => this.#targetDrawing.addSecondaryBond(...bp));
 
-    tertiaryBasePairs.forEach(bp => this.#targetDrawing.addTertiaryBond(...bp));
-
     // adjust multiplying factor as desired
     let spacing = 1.87 * mean(seq.map(b => b.bbox.height));
 
@@ -59,6 +57,9 @@ export class CTDrawer {
       // set explicitly (otherwise might be non-zero by default sometimes)
       (new Direction(seq)).set(0);
     }
+
+    // add tertiary bonds after arranging bases (to make tertiary bonds curved by default)
+    tertiaryBasePairs.forEach(bp => this.#targetDrawing.addTertiaryBond(...bp));
 
     // only number bases when there's more than 10 being drawn
     if (seq.length > 10) {
