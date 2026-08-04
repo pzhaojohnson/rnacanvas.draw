@@ -1,6 +1,10 @@
 import type { Drawing } from './Drawing';
 
-import { parseDotBracket } from '@rnacanvas/base-pairs';
+import { parseDotBracket } from '@rnacanvas/position-pairs';
+
+import { basePairs } from '@rnacanvas/position-pairs';
+
+import { missing } from '@rnacanvas/base-pairs';
 
 import { consecutivePairs } from '@rnacanvas/base-pairs';
 
@@ -42,19 +46,25 @@ export class DotBracketDrawer {
 
     consecutivePairs(bases).forEach(bp => this.targetDrawing.addPrimaryBond(...bp));
 
-    let basePairs = [...parseDotBracket(bases, dotBracket)];
+    let positionPairs = parseDotBracket(dotBracket);
 
-    basePairs.forEach(bp => this.targetDrawing.addSecondaryBond(...bp));
+    let secondaryBasePairs = basePairs(bases, positionPairs['()']);
 
-    // place all bases on top of all primary and secondary bonds
+    secondaryBasePairs.forEach(bp => this.targetDrawing.addSecondaryBond(...bp));
+
+    let allBasePairs = basePairs(bases, positionPairs.toArray());
+
+    missing(secondaryBasePairs, allBasePairs).forEach(bp => this.targetDrawing.addTertiaryBond(...bp));
+
+    // place all bases on top of all primary, secondary and tertiary bonds
     bases.forEach(b => b.bringToFront());
 
     // adjust multiplying factor as desired
     let spacing = 1.87 * mean(bases.map(b => b.bbox.height));
 
     // arrange bases before numbering them (to orient numberings correctly)
-    if (basePairs.length > 0) {
-      untangle(bases, basePairs, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
+    if (secondaryBasePairs.length > 0) {
+      untangle(bases, secondaryBasePairs, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
     } else {
       linearize(bases, { spacing: spacing / 2 });
 

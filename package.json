@@ -1,6 +1,6 @@
 {
   "name": "@rnacanvas/draw",
-  "version": "14.9.1",
+  "version": "14.10.0",
   "description": "Draw nucleic acid structures",
   "repository": {
     "type": "git",
@@ -36,7 +36,7 @@
     "@rnacanvas/draw.svg": "^3.3.0",
     "@rnacanvas/layout": "^1.0.0",
     "@rnacanvas/math": "^3.0.0",
-    "@rnacanvas/position-pairs": "^2.5.0",
+    "@rnacanvas/position-pairs": "^5.0.0",
     "@rnacanvas/utilities": "^9.0.0",
     "@svgdotjs/svg.js": "^3.2.0"
   }

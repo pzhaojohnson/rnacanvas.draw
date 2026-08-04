@@ -6,6 +6,8 @@ import { consecutivePairs } from '@rnacanvas/base-pairs';
 
 import { basePairs } from '@rnacanvas/position-pairs';
 
+import { knotless, missing } from '@rnacanvas/base-pairs';
+
 import { untangle } from '@rnacanvas/layout';
 
 import { linearize } from '@rnacanvas/layout';
@@ -35,16 +37,22 @@ export class CTDrawer {
 
     consecutivePairs(seq).forEach(bp => this.#targetDrawing.addPrimaryBond(...bp));
 
-    let bps = basePairs(seq, ct.positionPairs);
+    let allBasePairs = basePairs(seq, ct.positionPairs);
 
-    bps.forEach(bp => this.#targetDrawing.addSecondaryBond(...bp));
+    let [_, secondaryBasePairs] = knotless(seq, allBasePairs);
+
+    let tertiaryBasePairs = missing(secondaryBasePairs, allBasePairs);
+
+    secondaryBasePairs.forEach(bp => this.#targetDrawing.addSecondaryBond(...bp));
+
+    tertiaryBasePairs.forEach(bp => this.#targetDrawing.addTertiaryBond(...bp));
 
     // adjust multiplying factor as desired
     let spacing = 1.87 * mean(seq.map(b => b.bbox.height));
 
     // arrange bases before numbering them (to orient numberings correctly)
-    if (bps.length > 0) {
-      untangle(seq, bps, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
+    if (secondaryBasePairs.length > 0) {
+      untangle(seq, secondaryBasePairs, { spacing, basePairSpacing: spacing / 2, hairpinLoopSpacing: spacing / 2 });
     } else {
       linearize(seq, { spacing: spacing / 2 });
 

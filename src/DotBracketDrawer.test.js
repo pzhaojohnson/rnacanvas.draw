@@ -42,11 +42,17 @@ describe('`class DotBracketDrawer`', () => {
     var drawer = new DotBracketDrawer(targetDrawing);
 
     var { bases } = drawer.draw(
-      'AAGGGGAAAAAGGGGAA',
-      '..((((.....))))..',
+      'AAGGGGAAAAACCCCAAGGGAAAAUUAACCCAA',
+      '..((((.[[..))))..{{{....]]..}}}..',
     );
 
     // returns drawn bases
-    expect([...bases].map(b => b.domNode.textContent).join('')).toBe('AAGGGGAAAAAGGGGAA');
+    expect([...bases].map(b => b.domNode.textContent).join('')).toBe('AAGGGGAAAAACCCCAAGGGAAAAUUAACCCAA');
+
+    // draws secondary bonds
+    expect([...targetDrawing.secondaryBonds].length).toBe(4);
+
+    // draws tertiary bonds
+    expect([...targetDrawing.tertiaryBonds].length).toBe(5);
   });
 });
