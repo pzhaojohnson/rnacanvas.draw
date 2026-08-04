@@ -54,7 +54,7 @@ export class DotBracketDrawer {
 
     let allBasePairs = basePairs(bases, positionPairs.toArray());
 
-    // place all bases on top of all primary, secondary and tertiary bonds
+    // place all bases on top of all primary and secondary bonds
     bases.forEach(b => b.bringToFront());
 
     // adjust multiplying factor as desired

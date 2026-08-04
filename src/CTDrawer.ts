@@ -45,6 +45,9 @@ export class CTDrawer {
 
     secondaryBasePairs.forEach(bp => this.#targetDrawing.addSecondaryBond(...bp));
 
+    // place all bases on top of all primary and secondary bonds
+    seq.forEach(b => b.bringToFront());
+
     // adjust multiplying factor as desired
     let spacing = 1.87 * mean(seq.map(b => b.bbox.height));
 
@@ -76,9 +79,6 @@ export class CTDrawer {
         p % numberingIncrement == 0 ? this.#targetDrawing.number(b, p + ct.numberingOffset) : {};
       });
     }
-
-    // place bases on top of everything else
-    seq.forEach(b => b.bringToFront());
 
     return {
       bases: seq,
