@@ -133,9 +133,25 @@ describe('`class VersionlessDrawing`', () => {
 
     expect(drawing.tertiaryBonds).toStrictEqual(tertiaryBonds);
   });
+
+  test('`get strungElements()`', () => {
+    // no saved strung elements
+    var drawing = new VersionlessDrawing({});
+
+    expect(drawing.strungElements).toStrictEqual([]);
+
+    let strungElements = [1, 2, 3].map(() => new ElementMock());
+
+    // some saved strung elements
+    var drawing = new VersionlessDrawing({ strungElements });
+
+    expect(drawing.strungElements).toStrictEqual(strungElements);
+  });
 });
 
 class ElementMock {
-  // make each element unique in some way
+  /**
+   * Make each element unique.
+   */
   id = Math.random();
 }

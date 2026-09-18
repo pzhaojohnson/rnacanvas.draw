@@ -24,6 +24,8 @@ import { BaseOutline as GenericBaseOutline } from '@rnacanvas/draw.bases.outline
 
 import { BaseOutlinesDrawing } from './BaseOutlinesDrawing';
 
+import type { Bond } from './Bond';
+
 import { StraightBond } from '@rnacanvas/draw.bases.bonds';
 
 import { PrimaryBondsDrawing, PrimaryBond } from './PrimaryBondsDrawing';
@@ -35,6 +37,12 @@ import type { TertiaryBond } from './TertiaryBondsDrawing';
 import { TertiaryBondsDrawing } from './TertiaryBondsDrawing';
 
 import { CurvedBond } from '@rnacanvas/draw.bases.bonds';
+
+import type { StrungElement } from './StrungElement';
+
+import { StrungElement as StrungElement_ } from '@rnacanvas/draw.floating';
+
+import { StrungElementsDrawing } from './StrungElementsDrawing';
 
 import { VersionlessDrawing } from './VersionlessDrawing';
 
@@ -75,6 +83,8 @@ export class Drawing {
 
   readonly #tertiaryBondsDrawing;
 
+  readonly #strungElementsDrawing;
+
   constructor() {
     this.domNode = (new SVG.Svg()).node;
 
@@ -97,6 +107,8 @@ export class Drawing {
     this.secondaryBondsDrawing = new SecondaryBondsDrawing(this.domNode, []);
 
     this.#tertiaryBondsDrawing = new TertiaryBondsDrawing(this.domNode);
+
+    this.#strungElementsDrawing = new StrungElementsDrawing(this.domNode);
   }
 
   /**
@@ -540,6 +552,18 @@ export class Drawing {
     this.#baseOutlinesDrawing.append(bo);
   }
 
+  get bonds() {
+    const find = (callback: (bond: Bond) => unknown) => (
+      this.primaryBondsDrawing.primaryBonds.find(callback)
+      ?? this.secondaryBondsDrawing.secondaryBonds.find(callback)
+      ?? this.#tertiaryBondsDrawing.tertiaryBonds.find(callback)
+    );
+
+    return {
+      find,
+    };
+  }
+
   /**
    * All primary bonds in the drawing.
    *
@@ -619,6 +643,29 @@ export class Drawing {
    */
   addTertiaryBond(base1: Nucleobase, base2: Nucleobase): TertiaryBond {
     return this.#tertiaryBondsDrawing.addTertiaryBond(base1, base2);
+  }
+
+  get strungElements(): Iterable<StrungElement> & { toArray: () => StrungElement[] } {
+    return {
+      [Symbol.iterator]: () => this.#strungElementsDrawing.strungElements[Symbol.iterator](),
+
+      /**
+       * Using the `toArray()` method is more performant than using the spread operator.
+       */
+      toArray: () => this.#strungElementsDrawing.strungElements,
+    };
+  }
+
+  set strungElements(strungElements: Iterable<StrungElement>) {
+    if (Array.isArray(strungElements)) {
+      this.#strungElementsDrawing.strungElements = strungElements;
+    } else {
+      this.#strungElementsDrawing.strungElements = [...strungElements];
+    }
+  }
+
+  addStrungElement(type: string, owner: Bond): StrungElement | never {
+    return this.#strungElementsDrawing.add(type, owner);
   }
 
   /**
@@ -733,6 +780,7 @@ export class Drawing {
       primaryBonds: [...this.primaryBonds].map(pb => pb.serialized()),
       secondaryBonds: [...this.secondaryBonds].map(sb => sb.serialized()),
       tertiaryBonds: [...this.tertiaryBonds].map(tb => tb.save()),
+      strungElements: this.strungElements.toArray().map(ele => ele.save()),
     };
   }
 
@@ -778,6 +826,8 @@ export class Drawing {
 
     newDrawing.tertiaryBonds = oldDrawing.tertiaryBonds.map(tb => CurvedBond.recreate(tb, newDrawing));
 
+    newDrawing.strungElements = oldDrawing.strungElements.map(ele => StrungElement_.recreate(ele, newDrawing));
+
     newDrawing.domNode.remove();
     container.remove();
 
@@ -807,6 +857,7 @@ export class Drawing {
     let primaryBonds = [...deserializedDrawing.primaryBonds];
     let secondaryBonds = [...deserializedDrawing.secondaryBonds];
     let tertiaryBonds = [...deserializedDrawing.tertiaryBonds];
+    let strungElements = deserializedDrawing.strungElements.toArray();
 
     this.reset();
 
@@ -825,6 +876,7 @@ export class Drawing {
     this.primaryBonds = primaryBonds;
     this.secondaryBonds = secondaryBonds;
     this.tertiaryBonds = tertiaryBonds;
+    this.strungElements = strungElements;
   }
 }
 

@@ -541,6 +541,69 @@ describe('Drawing class', () => {
     expect(drawing.domNode.childNodes[5]).toBe(sb.domNode);
   });
 
+  test('`bonds`', () => {
+    // there are no bonds in the drawing
+    {
+      const drawing = new Drawing();
+
+      expect(drawing.bonds.find(() => true)).toBeUndefined();
+    }
+
+    // no bonds match the callback
+    {
+      const drawing = new Drawing();
+
+      const bases = [...'AGUCGAUCGCUGCUGAC'].map(letter => drawing.addBase(letter));
+
+      [[1, 3], [8, 2], [3, 10]].forEach(([i, j]) => drawing.addPrimaryBond(bases[i], bases[j]));
+      [[5, 3], [0, 1], [8, 7]].forEach(([i, j]) => drawing.addSecondaryBond(bases[i], bases[j]));
+      [[2, 7], [10, 8], [1, 10]].forEach(([i, j]) => drawing.addTertiaryBond(bases[i], bases[j]));
+
+      expect(drawing.bonds.find(() => false)).toBeUndefined();
+    }
+
+    // a primary bond matches
+    {
+      const drawing = new Drawing();
+
+      const b1 = drawing.addBase('A');
+      const b2 = drawing.addBase('B');
+      const b3 = drawing.addBase('C');
+
+      const pb = drawing.addPrimaryBond(b1, b2);
+      drawing.addSecondaryBond(b2, b3);
+      drawing.addTertiaryBond(b1, b3);
+
+      expect(drawing.bonds.find(bond => bond === pb)).toBe(pb);
+    }
+
+    // a secondary bond matches
+    {
+      const drawing = new Drawing();
+
+      const b1 = drawing.addBase('A');
+      const b2 = drawing.addBase('B');
+      const b3 = drawing.addBase('C');
+
+      const sb = drawing.addSecondaryBond(b1, b2);
+      drawing.addTertiaryBond(b2, b3);
+
+      expect(drawing.bonds.find(bond => bond === sb)).toBe(sb);
+    }
+
+    // a tertiary bond matches
+    {
+      const drawing = new Drawing();
+
+      const b1 = drawing.addBase('A');
+      const b2 = drawing.addBase('B');
+
+      const tb = drawing.addTertiaryBond(b1, b2);
+
+      expect(drawing.bonds.find(bond => bond === tb)).toBe(tb);
+    }
+  });
+
   test('`get tertiaryBonds()`', () => {
     var drawing = new Drawing();
 
@@ -563,6 +626,57 @@ describe('Drawing class', () => {
     expect(tb.base2).toBe(base2);
 
     expect(drawing.domNode.contains(tb.domNode)).toBeTruthy();
+  });
+
+  test('`strungElements`', () => {
+    const drawing = new Drawing();
+
+    // initially empty
+    expect([...drawing.strungElements]).toStrictEqual([]);
+    expect(drawing.strungElements.toArray()).toStrictEqual([]);
+
+    const b1 = drawing.addBase('A');
+    const b2 = drawing.addBase('C');
+
+    const pb = drawing.addPrimaryBond(b1, b2);
+
+    const ele1 = drawing.addStrungElement('text', pb);
+    const ele2 = drawing.addStrungElement('rectangle', pb);
+
+    expect([...drawing.strungElements]).toStrictEqual([ele1, ele2]);
+    expect(drawing.strungElements.toArray()).toStrictEqual([ele1, ele2]);
+
+    // unregister
+    drawing.strungElements = [];
+
+    expect([...drawing.strungElements]).toStrictEqual([]);
+    expect(drawing.strungElements.toArray()).toStrictEqual([]);
+
+    // re-register
+    drawing.strungElements = [ele1, ele2];
+
+    expect([...drawing.strungElements]).toStrictEqual([ele1, ele2]);
+    expect(drawing.strungElements.toArray()).toStrictEqual([ele1, ele2]);
+  });
+
+  test('`addStrungElement()`', () => {
+    const drawing = new Drawing();
+
+    const b1 = drawing.addBase('A');
+    const b2 = drawing.addBase('C');
+
+    // make a bond to own the strung element
+    const pb = drawing.addPrimaryBond(b1, b2);
+
+    const ele = drawing.addStrungElement('text', pb);
+
+    expect(ele).toBeTruthy();
+
+    // check that the added strung element is in the drawing
+    expect(drawing.domNode.contains(ele.domNode)).toBeTruthy();
+
+    // should be owned by the bond passed
+    expect(ele.owner).toBe(pb);
   });
 
   test('`get contentBBox()`', () => {
@@ -639,22 +753,36 @@ describe('Drawing class', () => {
 
     [[1, 8], [5, 2], [0, 7]].forEach(indices => drawing.addTertiaryBond(...indices.map(i => bases[i])));
 
+    ['text', 'rectangle', 'triangle'].forEach(type => drawing.addStrungElement(type, [...drawing.primaryBonds][0]));
+
     let serializedDrawing = drawing.serialized();
 
     expect(serializedDrawing.outerXML).toBe(drawing.outerXML);
     expect(drawing.outerXML).toBeTruthy();
 
-    let elements = [...bases, ...drawing.baseOutlines, ...drawing.primaryBonds, ...drawing.secondaryBonds, ...drawing.tertiaryBonds];
+    let elements = [
+      ...bases, ...drawing.baseOutlines,
+      ...drawing.primaryBonds, ...drawing.secondaryBonds, ...drawing.tertiaryBonds,
+      ...drawing.strungElements,
+    ];
 
     let serializedElements = [
       ...serializedDrawing.bases, ...serializedDrawing.baseOutlines,
       ...serializedDrawing.primaryBonds, ...serializedDrawing.secondaryBonds, ...serializedDrawing.tertiaryBonds,
+      ...serializedDrawing.strungElements,
     ];
 
     expect(serializedElements.length).toBe(elements.length);
 
-    elements.forEach((ele, i) => expect(serializedElements[i].id).toBe(ele.id));
-    elements.forEach(ele => expect(ele.id).toBeTruthy());
+    elements.forEach((ele, i) => {
+      if (drawing.strungElements.toArray().includes(ele)) {
+        expect(serializedElements[i].ownerID).toBe(ele.owner.id);
+        expect(ele.owner.id).toBeTruthy();
+      } else {
+        expect(serializedElements[i].id).toBe(ele.id);
+        expect(ele.id).toBeTruthy();
+      }
+    });
 
     // is JSON-serializable
     expect(() => JSON.stringify(serializedDrawing)).not.toThrow();
@@ -674,6 +802,8 @@ describe('Drawing class', () => {
 
     [[8, 3], [5, 2], [1, 0]].forEach(indices => drawing1.addTertiaryBond(...indices.map(i => bases[i])));
 
+    ['text', 'rectangle', 'triangle'].forEach(type => drawing1.addStrungElement(type, [...drawing1.primaryBonds][0]));
+
     let drawing2 = Drawing.deserialized(drawing1.serialized());
 
     expect(drawing2.outerXML).toBe(drawing1.outerXML);
@@ -684,6 +814,7 @@ describe('Drawing class', () => {
     expect([...drawing2.primaryBonds].length).toBe(3);
     expect([...drawing2.secondaryBonds].length).toBe(4);
     expect([...drawing2.tertiaryBonds].length).toBe(3);
+    expect([...drawing2.strungElements].length).toBe(3);
 
     // removes any container node used from the document body
     let n = document.body.childNodes.length;
@@ -711,6 +842,8 @@ describe('Drawing class', () => {
     [[2, 18], [3, 11], [12, 5]].forEach(([i, j]) => drawing1.addSecondaryBond(bases[i], bases[j]));
 
     [[11, 8], [2, 9], [1, 10]].forEach(indices => drawing1.addTertiaryBond(...indices.map(i => bases[i])));
+
+    ['text', 'rectangle', 'triangle'].forEach(type => drawing1.addStrungElement(type, [...drawing1.primaryBonds][0]));
 
     let previousState = drawing1.serialized();
     expect(previousState).toBeTruthy();

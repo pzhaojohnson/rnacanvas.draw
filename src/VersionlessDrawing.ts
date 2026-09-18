@@ -181,4 +181,12 @@ export class VersionlessDrawing {
 
     return [];
   }
+
+  get strungElements(): unknown[] | never {
+    if (isArray(this.#savedDrawing.strungElements)) {
+      return this.#savedDrawing.strungElements;
+    }
+
+    return [];
+  }
 }
