@@ -55,6 +55,10 @@ export class StrungElementsDrawing {
     // don't forget to add to the drawing
     this.domNode.append(strungElement.domNode);
 
+    // position the strung element (after being added to the document body, which is necessary for text)
+    strungElement.lineX += 1;
+    strungElement.lineX -= 1;
+
     // register the created element so it's tracked by the drawing
     this.#ownedElementsDrawing.elements.push(strungElement);
 
