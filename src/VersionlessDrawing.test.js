@@ -146,6 +146,47 @@ describe('`class VersionlessDrawing`', () => {
     var drawing = new VersionlessDrawing({ strungElements });
 
     expect(drawing.strungElements).toStrictEqual(strungElements);
+
+    // legacy format (strung elements saved within bond objects)
+    var drawing = new VersionlessDrawing({
+      primaryBonds: [
+        { lineId: 'primary-1', strungElements: [{ textId: 'text-1', a: 1 }, { circleId: 'circle-1', b: 2 }] },
+        { lineId: 'primary-2' },
+        { lineId: 'primary-3', strungElements: [] },
+      ],
+      secondaryBonds: [
+        { lineId: 'secondary-1', strungElements: [{ pathId: 'path-1', c: 3 }] },
+        { lineId: 'secondary-2', strungElements: 'not an array' },
+      ],
+      tertiaryBonds: [
+        { pathId: 'tertiary-1', strungElements: [{ textId: 'text-2', d: 4 }, null, { pathId: 'path-2', e: 5 }] },
+      ],
+    });
+
+    expect(drawing.strungElements).toStrictEqual([
+      { textId: 'text-1', a: 1, id: 'text-1', ownerID: 'primary-1' },
+      { circleId: 'circle-1', b: 2, id: 'circle-1', ownerID: 'primary-1' },
+      { pathId: 'path-1', c: 3, id: 'path-1', ownerID: 'secondary-1' },
+      { textId: 'text-2', d: 4, id: 'text-2', ownerID: 'tertiary-1' },
+      { pathId: 'path-2', e: 5, id: 'path-2', ownerID: 'tertiary-1' },
+    ]);
+
+    // legacy bonds without any strung elements
+    var drawing = new VersionlessDrawing({
+      primaryBonds: [{ lineId: 'primary-1' }],
+      secondaryBonds: [{ lineId: 'secondary-1' }],
+      tertiaryBonds: [{ pathId: 'tertiary-1' }],
+    });
+
+    expect(drawing.strungElements).toStrictEqual([]);
+
+    // top-level strung elements take precedence over legacy ones
+    var drawing = new VersionlessDrawing({
+      strungElements,
+      primaryBonds: [{ lineId: 'primary-1', strungElements: [{ textId: 'text-1' }] }],
+    });
+
+    expect(drawing.strungElements).toStrictEqual(strungElements);
   });
 });
 

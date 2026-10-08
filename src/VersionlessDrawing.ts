@@ -187,6 +187,23 @@ export class VersionlessDrawing {
       return this.#savedDrawing.strungElements;
     }
 
-    return [];
+    // strung elements used to be saved within bonds themselves
+    return [
+      ...this.primaryBonds,
+      ...this.secondaryBonds,
+      ...this.tertiaryBonds
+    ].flatMap(bond => {
+      if (!isNonNullObject(bond)) {
+        return [];
+      } else if (!isArray(bond.strungElements)) {
+        return [];
+      } else {
+        return bond.strungElements.filter(isNonNullObject).map(ele => ({
+          ...ele,
+          id: ele.textId ?? ele.circleId ?? ele.pathId,
+          ownerID: bond.lineId ?? bond.pathId,
+        }));
+      }
+    });
   }
 }
