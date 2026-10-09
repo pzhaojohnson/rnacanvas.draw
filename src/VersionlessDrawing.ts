@@ -198,12 +198,58 @@ export class VersionlessDrawing {
       } else if (!isArray(bond.strungElements)) {
         return [];
       } else {
-        return bond.strungElements.filter(isNonNullObject).map(ele => ({
-          ...ele,
-          id: ele.textId ?? ele.circleId ?? ele.pathId,
-          ownerID: bond.lineId ?? bond.pathId,
-        }));
+        return bond.strungElements.flatMap(ele => {
+          try {
+            // convert legacy format to modern format
+            return (new SavedStrungElementLegacy(ele, bond)).modernized();
+          } catch {
+            return [];
+          }
+        });
       }
     });
+  }
+}
+
+class SavedStrungElementLegacy {
+  readonly #savedStrungElement;
+
+  readonly #owner;
+
+  constructor(savedStrungElement: unknown, owner: unknown) {
+    if (!isNonNullObject(savedStrungElement)) {
+      throw new Error(`Saved strung element isn't a non-null object: ${savedStrungElement}.`);
+    }
+
+    this.#savedStrungElement = savedStrungElement;
+
+    if (!isNonNullObject(owner)) {
+      throw new Error(`Saved strung element owner isn't a non-null object: ${owner}.`);
+    }
+
+    this.#owner = owner;
+  }
+
+  modernized() {
+    let type = (
+      this.#savedStrungElement.type == 'StrungText' ? 'text' :
+      this.#savedStrungElement.type == 'StrungCircle' ? 'circle' :
+      this.#savedStrungElement.type == 'StrungRectangle' ? 'rectangle' :
+      this.#savedStrungElement.type == 'StrungTriangle' ? 'triangle' :
+      undefined
+    );
+
+    if (!type) {
+      throw new Error(`Unrecognized strung element type: ${this.#savedStrungElement.type}.`);
+    }
+
+    return {
+      [type]: {
+        ...this.#savedStrungElement,
+        id: this.#savedStrungElement.textId ?? this.#savedStrungElement.circleId ?? this.#savedStrungElement.pathId,
+      },
+
+      ownerID: this.#owner.lineId ?? this.#owner.pathId,
+    };
   }
 }
