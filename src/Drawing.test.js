@@ -75,6 +75,10 @@ beforeAll(() => {
     globalThis.SVGTextElement = SVGElement;
   }
 
+  if (!globalThis.SVGTSpanElement) {
+    globalThis.SVGTSpanElement = SVGElement;
+  }
+
   if (!globalThis.SVGCircleElement) {
     globalThis.SVGCircleElement = SVGElement;
   }
@@ -823,6 +827,31 @@ describe('Drawing class', () => {
 
     // removes the deserialized drawing from any container node used
     expect(drawing3.domNode.parentNode).toBeFalsy();
+
+    var drawing = new Drawing();
+
+    let texts = [1, 2, 3].map(() => document.createElementNS('http://www.w3.org/2000/svg', 'text'));
+
+    texts.forEach((text, i) => {
+      let tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+      ['x', 'y', 'dx', 'dy'].forEach((name, j) => tspan.setAttribute(name, `${j + 1}`));
+      tspan.textContent = `${[...'AUGC'][i]}`;
+
+      text.append(tspan);
+      drawing.domNode.append(text);
+    });
+
+    let savedDrawing = drawing.serialized();
+
+    // flattens text for legacy drawings
+    expect(Drawing.deserialized({ ...savedDrawing, svg: savedDrawing.outerXML, outerXML: undefined }).domNode.innerHTML).toBe(
+      '<text x="1" y="2" dx="3" dy="4">A</text><text x="1" y="2" dx="3" dy="4">U</text><text x="1" y="2" dx="3" dy="4">G</text>'
+    );
+
+    // doesn't flatten text for modern drawings
+    expect(Drawing.deserialized(savedDrawing).domNode.innerHTML).toBe(
+      '<text><tspan x="1" y="2" dx="3" dy="4">A</tspan></text><text><tspan x="1" y="2" dx="3" dy="4">U</tspan></text><text><tspan x="1" y="2" dx="3" dy="4">G</tspan></text>'
+    );
   });
 
   test('`restore()`', () => {

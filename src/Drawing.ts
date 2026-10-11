@@ -46,6 +46,10 @@ import { StrungElementsDrawing } from './StrungElementsDrawing';
 
 import { VersionlessDrawing } from './VersionlessDrawing';
 
+import { isLegacy } from './isLegacy';
+
+import { Texts } from '@rnacanvas/draw.svg';
+
 import { Box } from '@rnacanvas/boxes';
 
 /**
@@ -828,6 +832,18 @@ export class Drawing {
 
     newDrawing.strungElements = oldDrawing.strungElements.map(ele => StrungElement_.recreate(ele, newDrawing));
 
+    // all text elements in the new drawing (including nested ones)
+    let texts = new Texts(newDrawing.domNode);
+
+    // the SVG.js library used to add tspan elements to text elements by default
+    // (but these can mess up user interaction with text elements)
+    if (isLegacy(savedDrawing)) {
+      texts
+        .toArray()
+        .filter(text => text.domNode.childNodes.length == 1 && text.domNode.childNodes[0] instanceof SVGTSpanElement)
+        .forEach(text => (new Text(text.domNode)).flatten());
+    }
+
     newDrawing.domNode.remove();
     container.remove();
 
@@ -882,3 +898,29 @@ export class Drawing {
 
 const defaultWidth = 250;
 const defaultHeight = 250;
+
+class Text {
+  readonly domNode;
+
+  constructor(domNode: SVGTextElement) {
+    this.domNode = domNode;
+  }
+
+  flatten() {
+    var node1 = this.domNode.childNodes[0];
+
+    // transfer positioning attributes (if present)
+    if (node1 instanceof SVGTSpanElement) {
+      (['x', 'y', 'dx', 'dy'] as const).forEach(name => {
+        let value = node1 instanceof SVGTSpanElement ? node1.getAttribute(name) : undefined;
+
+        if (value) {
+          this.domNode.setAttribute(name, value);
+        }
+      });
+    }
+
+    // flatten
+    this.domNode.innerHTML = this.domNode.textContent;
+  }
+}
