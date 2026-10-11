@@ -1,5 +1,3 @@
-import * as SVG from '@svgdotjs/svg.js';
-
 import { OuterXML, InnerXML } from '@rnacanvas/draw.svg';
 
 import { HorizontalClientScaling, VerticalClientScaling } from '@rnacanvas/draw.svg';
@@ -90,7 +88,7 @@ export class Drawing {
   readonly #strungElementsDrawing;
 
   constructor() {
-    this.domNode = (new SVG.Svg()).node;
+    this.domNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
     // needs to be initialized for certain underlying web browser functionality to work
     this.domNode.setAttribute('viewBox', `0 0 ${defaultWidth} ${defaultHeight}`);
