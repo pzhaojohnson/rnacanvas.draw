@@ -59,3 +59,19 @@ var tertiaryBond = drawing.addTertiaryBond(base1, base2);
 tertiaryBond.base1 === base1; // true
 tertiaryBond.base2 === base2; // true
 ```
+
+### `refreshIDs()`
+
+Iterates through elements in the SVG document that is the drawing
+(including all nested elements, as well as the SVG document node itself)
+and assigns a new UUID to any element that previously had an ID assigned to it.
+
+Elements without an ID are left unchanged.
+
+```javascript
+drawing.domNode.id = 'my-drawing';
+
+drawing.refreshIDs();
+
+drawing.domNode.id === 'my-drawing'; // false
+```
