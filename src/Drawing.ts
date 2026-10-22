@@ -903,7 +903,7 @@ export class Drawing {
   refreshIDs(): void {
     [this.domNode, ...this.domNode.querySelectorAll('*')]
       .filter(ele => ele.hasAttribute('id'))
-      .forEach(ele => ele.setAttribute('id', uuidv4()));
+      .forEach(ele => ele.setAttribute('id', 'id-' + uuidv4()));
   }
 }
 

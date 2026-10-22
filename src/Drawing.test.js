@@ -925,8 +925,9 @@ describe('Drawing class', () => {
 
     var newIDs = elements.map(ele => ele.getAttribute('id'));
 
-    // all IDs were replaced with UUIDs
-    newIDs.forEach(id => expect(id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/));
+    // all IDs were replaced with UUIDs prefixed with "id-"
+    // (SVG element IDs must begin with a letter)
+    newIDs.forEach(id => expect(id).toMatch(/^id-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/));
     newIDs.forEach((id, i) => expect(id).not.toBe(oldIDs[i]));
 
     // new IDs are unique
