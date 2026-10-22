@@ -901,4 +901,38 @@ describe('Drawing class', () => {
     expect(drawing2.serialized()).toStrictEqual(drawing1.serialized());
     expect(drawing1.serialized()).toBeTruthy();
   });
+
+  test('`refreshIDs()`', () => {
+    var drawing = new Drawing();
+
+    var nested = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    nested.setAttribute('id', 'nested-1');
+
+    var deeplyNested = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    deeplyNested.setAttribute('id', 'nested-2');
+    nested.append(deeplyNested);
+
+    var noID = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    nested.append(noID);
+
+    drawing.domNode.setAttribute('id', 'root');
+    drawing.domNode.append(nested);
+
+    var elements = [drawing.domNode, nested, deeplyNested];
+    var oldIDs = elements.map(ele => ele.getAttribute('id'));
+
+    drawing.refreshIDs();
+
+    var newIDs = elements.map(ele => ele.getAttribute('id'));
+
+    // all IDs were replaced with UUIDs
+    newIDs.forEach(id => expect(id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/));
+    newIDs.forEach((id, i) => expect(id).not.toBe(oldIDs[i]));
+
+    // new IDs are unique
+    expect((new Set(newIDs)).size).toBe(newIDs.length);
+
+    // elements without IDs were not assigned any
+    expect(noID.hasAttribute('id')).toBe(false);
+  });
 });

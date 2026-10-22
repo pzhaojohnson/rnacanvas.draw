@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { OuterXML, InnerXML } from '@rnacanvas/draw.svg';
 
 import { HorizontalClientScaling, VerticalClientScaling } from '@rnacanvas/draw.svg';
@@ -891,6 +893,17 @@ export class Drawing {
     this.secondaryBonds = secondaryBonds;
     this.tertiaryBonds = tertiaryBonds;
     this.strungElements = strungElements;
+  }
+
+  /**
+   * Iterates through all elements in the SVG document
+   * (including the SVG document itself and all nested elements)
+   * and assigns a new UUID to any element that previously had an ID assigned to it.
+   */
+  refreshIDs(): void {
+    [this.domNode, ...this.domNode.querySelectorAll('*')]
+      .filter(ele => ele.hasAttribute('id'))
+      .forEach(ele => ele.setAttribute('id', uuidv4()));
   }
 }
 
