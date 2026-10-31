@@ -52,6 +52,8 @@ import { Texts } from '@rnacanvas/draw.svg';
 
 import { Box } from '@rnacanvas/boxes';
 
+import { isArray as isArray_ } from '@rnacanvas/value-check';
+
 /**
  * The minimum and maximum X and Y coordinates of a drawing.
  */
@@ -449,7 +451,7 @@ export class Drawing {
   }
 
   set bases(bases) {
-    this.basesDrawing.bases = [...bases];
+    this.basesDrawing.bases = isArray(bases) ? bases : [...bases];
   }
 
   /**
@@ -501,7 +503,7 @@ export class Drawing {
   }
 
   set numberings(numberings) {
-    this.#numberingsDrawing.numberings = [...numberings];
+    this.#numberingsDrawing.numberings = isArray(numberings) ? numberings : [...numberings];
   }
 
   get numberingLines(): Iterable<NumberingLine> {
@@ -509,7 +511,7 @@ export class Drawing {
   }
 
   set numberingLines(numberingLines) {
-    this.#numberingLinesDrawing.numberingLines = [...numberingLines];
+    this.#numberingLinesDrawing.numberingLines = isArray(numberingLines) ? numberingLines : [...numberingLines];
   }
 
   /**
@@ -527,7 +529,7 @@ export class Drawing {
   }
 
   set baseOutlines(baseOutlines) {
-    this.#baseOutlinesDrawing.baseOutlines = [...baseOutlines];
+    this.#baseOutlinesDrawing.baseOutlines = isArray(baseOutlines) ? baseOutlines : [...baseOutlines];
   }
 
   /**
@@ -581,7 +583,7 @@ export class Drawing {
   }
 
   set primaryBonds(primaryBonds) {
-    this.primaryBondsDrawing.primaryBonds = [...primaryBonds];
+    this.primaryBondsDrawing.primaryBonds = isArray(primaryBonds) ? primaryBonds : [...primaryBonds];
   }
 
   /**
@@ -614,7 +616,7 @@ export class Drawing {
   }
 
   set secondaryBonds(secondaryBonds) {
-    this.secondaryBondsDrawing.secondaryBonds = [...secondaryBonds];
+    this.secondaryBondsDrawing.secondaryBonds = isArray(secondaryBonds) ? secondaryBonds : [...secondaryBonds];
   }
 
   /**
@@ -639,7 +641,7 @@ export class Drawing {
   }
 
   set tertiaryBonds(tertiaryBonds) {
-    this.#tertiaryBondsDrawing.tertiaryBonds = [...tertiaryBonds];
+    this.#tertiaryBondsDrawing.tertiaryBonds = isArray(tertiaryBonds) ? tertiaryBonds : [...tertiaryBonds];
   }
 
   /**
@@ -661,11 +663,7 @@ export class Drawing {
   }
 
   set strungElements(strungElements: Iterable<StrungElement>) {
-    if (Array.isArray(strungElements)) {
-      this.#strungElementsDrawing.strungElements = strungElements;
-    } else {
-      this.#strungElementsDrawing.strungElements = [...strungElements];
-    }
+    this.#strungElementsDrawing.strungElements = isArray(strungElements) ? strungElements : [...strungElements];
   }
 
   addStrungElement(type: string, owner: Bond): StrungElement | never {
@@ -934,4 +932,11 @@ class Text {
     // flatten
     this.domNode.innerHTML = this.domNode.textContent;
   }
+}
+
+/**
+ * This `isArray()` function preserves the type of iterated elements.
+ */
+function isArray<T>(iterable: Iterable<T>): iterable is T[] {
+  return isArray_(iterable);
 }

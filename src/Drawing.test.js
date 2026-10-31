@@ -430,6 +430,11 @@ describe('Drawing class', () => {
     expect([...drawing.bases].length).toBe(10);
 
     [...drawing.bases].forEach((b, i) => expect(b).toBe(bases[i]));
+
+    // non-array iterables
+    drawing.bases = [];
+    drawing.bases = new Set(bases);
+    expect([...drawing.bases]).toStrictEqual(bases);
   });
 
   test('appendBase method', () => {
@@ -461,6 +466,42 @@ describe('Drawing class', () => {
     expect(drawing.domNode.contains(line.domNode)).toBeTruthy();
   });
 
+  test('`set numberings`', () => {
+    [...'ACG'].forEach(c => drawing.addBase(c));
+    const bases = [...drawing.bases];
+    const numberings = bases.map(b => drawing.number(b, 1)[0]);
+
+    drawing.numberings = [];
+    expect([...drawing.numberings]).toStrictEqual([]);
+
+    // arrays
+    drawing.numberings = numberings;
+    expect([...drawing.numberings]).toStrictEqual(numberings);
+
+    // non-array iterables
+    drawing.numberings = [];
+    drawing.numberings = new Set(numberings);
+    expect([...drawing.numberings]).toStrictEqual(numberings);
+  });
+
+  test('`set numberingLines`', () => {
+    [...'ACG'].forEach(c => drawing.addBase(c));
+    const bases = [...drawing.bases];
+    const numberingLines = bases.map(b => drawing.number(b, 1)[1]);
+
+    drawing.numberingLines = [];
+    expect([...drawing.numberingLines]).toStrictEqual([]);
+
+    // arrays
+    drawing.numberingLines = numberingLines;
+    expect([...drawing.numberingLines]).toStrictEqual(numberingLines);
+
+    // non-array iterables
+    drawing.numberingLines = [];
+    drawing.numberingLines = new Set(numberingLines);
+    expect([...drawing.numberingLines]).toStrictEqual(numberingLines);
+  });
+
   test('`set baseOutlines`', () => {
     for (let i = 0; i < 10; i++) { drawing.addBase(`${i}`); }
     let bases = [...drawing.bases];
@@ -475,6 +516,11 @@ describe('Drawing class', () => {
     expect([...drawing.baseOutlines].length).toBe(4);
 
     [...drawing.baseOutlines].forEach((bo, i) => expect(bo).toBe(baseOutlines[i]));
+
+    // non-array iterables
+    drawing.baseOutlines = [];
+    drawing.baseOutlines = new Set(baseOutlines);
+    expect([...drawing.baseOutlines]).toStrictEqual(baseOutlines);
   });
 
   test('`get outlines()`', () => {
@@ -618,6 +664,60 @@ describe('Drawing class', () => {
     expect([...drawing.tertiaryBonds].map(tb => [bases.indexOf(tb.base1), bases.indexOf(tb.base2)])).toStrictEqual([[1, 2], [0, 9], [8, 2]]);
   });
 
+  test('`set primaryBonds`', () => {
+    [...'ACG'].forEach(c => drawing.addBase(c));
+    const bases = [...drawing.bases];
+    const primaryBonds = [drawing.addPrimaryBond(bases[0], bases[1]), drawing.addPrimaryBond(bases[1], bases[2])];
+
+    drawing.primaryBonds = [];
+    expect([...drawing.primaryBonds]).toStrictEqual([]);
+
+    // arrays
+    drawing.primaryBonds = primaryBonds;
+    expect([...drawing.primaryBonds]).toStrictEqual(primaryBonds);
+
+    // non-array iterables
+    drawing.primaryBonds = [];
+    drawing.primaryBonds = new Set(primaryBonds);
+    expect([...drawing.primaryBonds]).toStrictEqual(primaryBonds);
+  });
+
+  test('`set secondaryBonds`', () => {
+    [...'ACG'].forEach(c => drawing.addBase(c));
+    const bases = [...drawing.bases];
+    const secondaryBonds = [drawing.addSecondaryBond(bases[0], bases[1]), drawing.addSecondaryBond(bases[1], bases[2])];
+
+    drawing.secondaryBonds = [];
+    expect([...drawing.secondaryBonds]).toStrictEqual([]);
+
+    // arrays
+    drawing.secondaryBonds = secondaryBonds;
+    expect([...drawing.secondaryBonds]).toStrictEqual(secondaryBonds);
+
+    // non-array iterables
+    drawing.secondaryBonds = [];
+    drawing.secondaryBonds = new Set(secondaryBonds);
+    expect([...drawing.secondaryBonds]).toStrictEqual(secondaryBonds);
+  });
+
+  test('`set tertiaryBonds`', () => {
+    [...'ACG'].forEach(c => drawing.addBase(c));
+    const bases = [...drawing.bases];
+    const tertiaryBonds = [drawing.addTertiaryBond(bases[0], bases[1]), drawing.addTertiaryBond(bases[1], bases[2])];
+
+    drawing.tertiaryBonds = [];
+    expect([...drawing.tertiaryBonds]).toStrictEqual([]);
+
+    // arrays
+    drawing.tertiaryBonds = tertiaryBonds;
+    expect([...drawing.tertiaryBonds]).toStrictEqual(tertiaryBonds);
+
+    // non-array iterables
+    drawing.tertiaryBonds = [];
+    drawing.tertiaryBonds = new Set(tertiaryBonds);
+    expect([...drawing.tertiaryBonds]).toStrictEqual(tertiaryBonds);
+  });
+
   test('`addTertiaryBond()`', () => {
     var drawing = new Drawing();
 
@@ -658,6 +758,13 @@ describe('Drawing class', () => {
 
     // re-register
     drawing.strungElements = [ele1, ele2];
+
+    expect([...drawing.strungElements]).toStrictEqual([ele1, ele2]);
+    expect(drawing.strungElements.toArray()).toStrictEqual([ele1, ele2]);
+
+    // non-array iterables
+    drawing.strungElements = [];
+    drawing.strungElements = new Set([ele1, ele2]);
 
     expect([...drawing.strungElements]).toStrictEqual([ele1, ele2]);
     expect(drawing.strungElements.toArray()).toStrictEqual([ele1, ele2]);
