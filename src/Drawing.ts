@@ -446,11 +446,21 @@ export class Drawing {
    *
    * The ordering of bases in the returned iterable is the ordering of bases in the drawing.
    */
-  get bases(): Iterable<Nucleobase> {
-    return this.basesDrawing.bases;
+  get bases() {
+    const toArray = () => this.basesDrawing.bases;
+
+    const bases = {
+      [Symbol.iterator]() {
+        return toArray().values();
+      },
+
+      toArray,
+    };
+
+    return bases;
   }
 
-  set bases(bases) {
+  set bases(bases: Iterable<Nucleobase>) {
     this.basesDrawing.bases = isArray(bases) ? bases : [...bases];
   }
 
@@ -498,19 +508,39 @@ export class Drawing {
     return [text, line];
   }
 
-  get numberings(): Iterable<Numbering> {
-    return this.#numberingsDrawing.numberings;
+  get numberings() {
+    const toArray = () => this.#numberingsDrawing.numberings;
+
+    const numberings = {
+      [Symbol.iterator]() {
+        return toArray().values();
+      },
+
+      toArray,
+    };
+
+    return numberings;
   }
 
-  set numberings(numberings) {
+  set numberings(numberings: Iterable<Numbering>) {
     this.#numberingsDrawing.numberings = isArray(numberings) ? numberings : [...numberings];
   }
 
-  get numberingLines(): Iterable<NumberingLine> {
-    return this.#numberingLinesDrawing.numberingLines;
+  get numberingLines() {
+    const toArray = () => this.#numberingLinesDrawing.numberingLines;
+
+    const numberingLines = {
+      [Symbol.iterator]() {
+        return toArray().values();
+      },
+
+      toArray,
+    };
+
+    return numberingLines;
   }
 
-  set numberingLines(numberingLines) {
+  set numberingLines(numberingLines: Iterable<NumberingLine>) {
     this.#numberingLinesDrawing.numberingLines = isArray(numberingLines) ? numberingLines : [...numberingLines];
   }
 
@@ -524,11 +554,21 @@ export class Drawing {
   /**
    * The base outlines in the drawing.
    */
-  get baseOutlines(): Iterable<BaseOutline> {
-    return this.#baseOutlinesDrawing.baseOutlines;
+  get baseOutlines() {
+    const toArray = () => this.#baseOutlinesDrawing.baseOutlines;
+
+    const baseOutlines = {
+      [Symbol.iterator]() {
+        return toArray().values();
+      },
+
+      toArray,
+    };
+
+    return baseOutlines;
   }
 
-  set baseOutlines(baseOutlines) {
+  set baseOutlines(baseOutlines: Iterable<BaseOutline>) {
     this.#baseOutlinesDrawing.baseOutlines = isArray(baseOutlines) ? baseOutlines : [...baseOutlines];
   }
 
@@ -578,11 +618,21 @@ export class Drawing {
    *
    * The returned iterable also specifies the order of primary bonds in the drawing.
    */
-  get primaryBonds(): Iterable<PrimaryBond> {
-    return this.primaryBondsDrawing.primaryBonds;
+  get primaryBonds() {
+    const toArray = () => this.primaryBondsDrawing.primaryBonds;
+
+    const primaryBonds = {
+      [Symbol.iterator]() {
+        return toArray().values();
+      },
+
+      toArray,
+    };
+
+    return primaryBonds;
   }
 
-  set primaryBonds(primaryBonds) {
+  set primaryBonds(primaryBonds: Iterable<PrimaryBond>) {
     this.primaryBondsDrawing.primaryBonds = isArray(primaryBonds) ? primaryBonds : [...primaryBonds];
   }
 
@@ -611,11 +661,21 @@ export class Drawing {
    *
    * The returned iterable also specifies the order of secondary bonds in the drawing.
    */
-  get secondaryBonds(): Iterable<SecondaryBond> {
-    return this.secondaryBondsDrawing.secondaryBonds;
+  get secondaryBonds() {
+    const toArray = () => this.secondaryBondsDrawing.secondaryBonds;
+
+    const secondaryBonds = {
+      [Symbol.iterator]() {
+        return toArray().values();
+      },
+
+      toArray,
+    };
+
+    return secondaryBonds;
   }
 
-  set secondaryBonds(secondaryBonds) {
+  set secondaryBonds(secondaryBonds: Iterable<SecondaryBond>) {
     this.secondaryBondsDrawing.secondaryBonds = isArray(secondaryBonds) ? secondaryBonds : [...secondaryBonds];
   }
 
@@ -636,11 +696,21 @@ export class Drawing {
     return this.secondaryBondsDrawing.add(base1, base2);
   }
 
-  get tertiaryBonds(): Iterable<TertiaryBond> {
-    return this.#tertiaryBondsDrawing.tertiaryBonds;
+  get tertiaryBonds() {
+    const toArray = () => this.#tertiaryBondsDrawing.tertiaryBonds;
+
+    const tertiaryBonds = {
+      [Symbol.iterator]() {
+        return toArray().values();
+      },
+
+      toArray,
+    };
+
+    return tertiaryBonds;
   }
 
-  set tertiaryBonds(tertiaryBonds) {
+  set tertiaryBonds(tertiaryBonds: Iterable<TertiaryBond>) {
     this.#tertiaryBondsDrawing.tertiaryBonds = isArray(tertiaryBonds) ? tertiaryBonds : [...tertiaryBonds];
   }
 
