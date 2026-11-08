@@ -446,7 +446,7 @@ export class Drawing {
    *
    * The ordering of bases in the returned iterable is the ordering of bases in the drawing.
    */
-  get bases() {
+  get bases(): Elements<Nucleobase> {
     const toArray = () => this.basesDrawing.bases;
 
     const bases = {
@@ -508,7 +508,7 @@ export class Drawing {
     return [text, line];
   }
 
-  get numberings() {
+  get numberings(): Elements<Numbering> {
     const toArray = () => this.#numberingsDrawing.numberings;
 
     const numberings = {
@@ -526,7 +526,7 @@ export class Drawing {
     this.#numberingsDrawing.numberings = isArray(numberings) ? numberings : [...numberings];
   }
 
-  get numberingLines() {
+  get numberingLines(): Elements<NumberingLine> {
     const toArray = () => this.#numberingLinesDrawing.numberingLines;
 
     const numberingLines = {
@@ -554,7 +554,7 @@ export class Drawing {
   /**
    * The base outlines in the drawing.
    */
-  get baseOutlines() {
+  get baseOutlines(): Elements<BaseOutline> {
     const toArray = () => this.#baseOutlinesDrawing.baseOutlines;
 
     const baseOutlines = {
@@ -618,7 +618,7 @@ export class Drawing {
    *
    * The returned iterable also specifies the order of primary bonds in the drawing.
    */
-  get primaryBonds() {
+  get primaryBonds(): Elements<PrimaryBond> {
     const toArray = () => this.primaryBondsDrawing.primaryBonds;
 
     const primaryBonds = {
@@ -661,7 +661,7 @@ export class Drawing {
    *
    * The returned iterable also specifies the order of secondary bonds in the drawing.
    */
-  get secondaryBonds() {
+  get secondaryBonds(): Elements<SecondaryBond> {
     const toArray = () => this.secondaryBondsDrawing.secondaryBonds;
 
     const secondaryBonds = {
@@ -696,7 +696,7 @@ export class Drawing {
     return this.secondaryBondsDrawing.add(base1, base2);
   }
 
-  get tertiaryBonds() {
+  get tertiaryBonds(): Elements<TertiaryBond> {
     const toArray = () => this.#tertiaryBondsDrawing.tertiaryBonds;
 
     const tertiaryBonds = {
@@ -845,13 +845,13 @@ export class Drawing {
   serialized() {
     return {
       outerXML: this.outerXML,
-      bases: [...this.bases].map(b => b.serialized()),
-      numberings: [...this.numberings].map(bn => bn.serialized()),
-      numberingLines: [...this.numberingLines].map(line => line.serialized()),
-      baseOutlines: [...this.baseOutlines].map(bo => bo.serialized()),
-      primaryBonds: [...this.primaryBonds].map(pb => pb.serialized()),
-      secondaryBonds: [...this.secondaryBonds].map(sb => sb.serialized()),
-      tertiaryBonds: [...this.tertiaryBonds].map(tb => tb.save()),
+      bases: this.bases.toArray().map(b => b.serialized()),
+      numberings: this.numberings.toArray().map(bn => bn.serialized()),
+      numberingLines: this.numberingLines.toArray().map(line => line.serialized()),
+      baseOutlines: this.baseOutlines.toArray().map(bo => bo.serialized()),
+      primaryBonds: this.primaryBonds.toArray().map(pb => pb.serialized()),
+      secondaryBonds: this.secondaryBonds.toArray().map(sb => sb.serialized()),
+      tertiaryBonds: this.tertiaryBonds.toArray().map(tb => tb.save()),
       strungElements: this.strungElements.toArray().map(ele => ele.save()),
     };
   }
@@ -941,7 +941,7 @@ export class Drawing {
     let primaryBonds = [...deserializedDrawing.primaryBonds];
     let secondaryBonds = [...deserializedDrawing.secondaryBonds];
     let tertiaryBonds = [...deserializedDrawing.tertiaryBonds];
-    let strungElements = deserializedDrawing.strungElements.toArray();
+    let strungElements = [...deserializedDrawing.strungElements];
 
     this.reset();
 
@@ -977,6 +977,12 @@ export class Drawing {
 
 const defaultWidth = 250;
 const defaultHeight = 250;
+
+interface Elements<T> {
+  [Symbol.iterator](): Iterator<T>;
+
+  toArray(): T[];
+}
 
 class Text {
   readonly domNode;
