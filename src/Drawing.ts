@@ -851,8 +851,8 @@ export class Drawing {
       baseOutlines: this.baseOutlines.toArray().map(bo => bo.serialized()),
       primaryBonds: this.primaryBonds.toArray().map(pb => pb.serialized()),
       secondaryBonds: this.secondaryBonds.toArray().map(sb => sb.serialized()),
-      tertiaryBonds: this.tertiaryBonds.toArray().map(tb => tb.save()),
-      strungElements: this.strungElements.toArray().map(ele => ele.save()),
+      tertiaryBonds: this.tertiaryBonds.toArray().map(tb => tb.serialized()),
+      strungElements: this.strungElements.toArray().map(ele => ele.serialized()),
     };
   }
 
