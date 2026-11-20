@@ -75,19 +75,33 @@ export class Drawing {
    */
   readonly domNode: SVGSVGElement;
 
+  readonly Nucleobase = Nucleobase;
+
   private basesDrawing: BasesDrawing;
+
+  readonly Numbering = GenericNumbering;
 
   #numberingsDrawing;
 
+  readonly NumberingLine = GenericNumberingLine;
+
   #numberingLinesDrawing;
 
+  readonly BaseOutline = GenericBaseOutline;
+
   #baseOutlinesDrawing: BaseOutlinesDrawing;
+
+  readonly StraightBond = StraightBond;
 
   private primaryBondsDrawing: PrimaryBondsDrawing;
 
   private secondaryBondsDrawing: SecondaryBondsDrawing;
 
+  readonly CurvedBond = CurvedBond;
+
   readonly #tertiaryBondsDrawing;
+
+  readonly StrungElement = StrungElement_;
 
   readonly #strungElementsDrawing;
 
